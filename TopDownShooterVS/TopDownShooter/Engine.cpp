@@ -47,10 +47,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 	Shader myShader("shader.vs", "shader.frag");
-
-
-	
-
+ 
 	// Adding vertex data
 	GLfloat vertices[] = {
 		// Positions          // Colors           // Texture Coords
@@ -60,14 +57,12 @@ int main()
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left 
 	};
 
+	GLint elements[] = {
+
+	};
 
 	// Creating vertex Buffers
 	GLuint VBOs[1], VAOs[1], Ts[1];
-
-	glGenVertexArrays(1, VAOs);
-	glGenTextures(1, Ts); // generating textures
-	glGenBuffers(1, VBOs); // generates buffers
-	glBindVertexArray(VAOs[0]); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
 	// Importing Textures
 	int imgWidth, imgHeight;
 	unsigned char* myImage = SOIL_load_image("Textures\Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
@@ -78,6 +73,11 @@ int main()
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(myImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glGenVertexArrays(1, VAOs);
+	glGenTextures(1, Ts); // generating textures
+	glGenBuffers(1, VBOs); // generates buffers
+	glBindVertexArray(VAOs[0]); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]); // Binds buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// Specifying vertexAttribPointers
