@@ -1,16 +1,13 @@
-//Unimportant comment to commit
+// OpenGl Imports
+#define GLEW_STATIC // GLEW
+#include <GL/glew.h>
+#include <GLFW/glfw3.h> // GLFW
+#include <SOIL/SOIL.h>
 
+// Other Imports
 #include <iostream>
 #include <vector>
-
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
 #include "Shader.h"
-
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
