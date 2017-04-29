@@ -57,27 +57,21 @@ int main()
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left 
 	};
 
-	GLint elements[] = {
-
+	GLuint indices[] = {
+		0, 1, 3, // First Triangle
+		1, 2, 3 // Second Triangle
 	};
 
 	// Creating vertex Buffers
-	GLuint VBOs[1], VAOs[1], Ts[1];
-	// Importing Textures
-	int imgWidth, imgHeight;
-	unsigned char* myImage = SOIL_load_image("Textures\Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glBindTexture(GL_TEXTURE_2D, Ts[0]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // Sets wrapping options
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(myImage);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	GLuint VBOs[1], VAOs[1], EBOs[1], Ts[1];
+
+	// VertexArray;
 	glGenVertexArrays(1, VAOs);
-	glGenTextures(1, Ts); // generating textures
+	glGenBuffers(1, EBOs);
 	glGenBuffers(1, VBOs); // generates buffers
 	glBindVertexArray(VAOs[0]); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]); // Binds buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// Specifying vertexAttribPointers
@@ -87,8 +81,21 @@ int main()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat))); // Texture Coordinates
 	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
 	glBindVertexArray(0);
+
+	// Importing Textures
+	glGenTextures(1, Ts); // generating textures
+	glBindTexture(GL_TEXTURE_2D, Ts[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	int imgWidth, imgHeight;
+	unsigned char* myImage = SOIL_load_image("Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(myImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -102,13 +109,15 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Update
+		glBindTexture(GL_TEXTURE_2D, Ts[0]);
+
 		// Activates Shaders
 		myShader.Use();
-		glUniform3f(glGetUniformLocation(myShader.Program, "positionOffset"), 0.5f, 0.5f, 0.5f);
+		glUniform3f(glGetUniformLocation(myShader.Program, "positionOffset"), 0.0f, 0.0f, 0.0f);
 
 		// Draw first triangle
 		glBindVertexArray(VAOs[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		// Swap the screen buffers
@@ -117,6 +126,7 @@ int main()
 
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, VAOs);
+	glDeleteBuffers(1, EBOs);
 	glDeleteBuffers(1, VBOs);
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
