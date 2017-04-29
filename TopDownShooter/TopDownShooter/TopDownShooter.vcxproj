@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

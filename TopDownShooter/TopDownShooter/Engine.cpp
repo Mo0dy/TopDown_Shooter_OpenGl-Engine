@@ -88,6 +88,7 @@ int main()
 		// Update
 		// Activates Shaders
 		myShader.Use();
+		glUniform3f(glGetUniformLocation(myShader.Program, "positionOffset"), 0.5f, 0.5f, 0.5f);
 
 		// Draw first triangle
 		glBindVertexArray(VAOs[0]);
