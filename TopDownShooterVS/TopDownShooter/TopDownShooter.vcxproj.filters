@@ -18,6 +18,9 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
+    <ClCompile Include="Entity.cpp">
+
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -26,6 +29,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+
+    <ClInclude Include="Entity.h">
+=======
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>

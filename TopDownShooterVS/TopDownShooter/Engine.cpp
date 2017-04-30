@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // Other Imports
+
 #include <iostream>
 #include <vector>
 #include "Shader.h"
@@ -18,9 +19,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 
+
+// Game variables
+std::vector<float> pos{ 0.5f, 0.7f };
+
 // Game vatiables
 std::vector<float> pos{ 0.0f, 0.0f };
 float mixValue = 0.5;
+
 
 
 // The MAIN function, from here we start the application and run the game loop

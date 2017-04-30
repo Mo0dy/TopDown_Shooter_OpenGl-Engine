@@ -1,0 +1,7 @@
+Entity::Entity()
+{
+}
+
+Entity::~Entity()
+{
+}
