@@ -16,7 +16,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 // Game vatiables
-std::vector<float> pos{ 0.5f, 0.7f };
+std::vector<float> pos{ 0.0f, 0.0f };
+float mixValue = 0.5;
+
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -71,9 +73,9 @@ int main()
 	glGenBuffers(1, VBOs); // generates buffers
 	glBindVertexArray(VAOs[0]); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[0]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]); // Binds buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	// Specifying vertexAttribPointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0); // Vertices
 	glEnableVertexAttribArray(0);
@@ -91,9 +93,9 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, Ts[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	myImage = SOIL_load_image("Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	myImage = SOIL_load_image("Textures\\Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(myImage);
@@ -102,9 +104,9 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, Ts[1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	myImage = SOIL_load_image("awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	myImage = SOIL_load_image("Textures\\awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(myImage);
@@ -122,6 +124,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Update
+		glUniform1f(glGetUniformLocation(myShader.Program, "mixValue"), mixValue);
+		glUniform2f(glGetUniformLocation(myShader.Program, "positionOffset"), pos[0], pos[1]);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Ts[0]);
 		glUniform1i(glGetUniformLocation(myShader.Program, "texture1"), 0);
@@ -160,6 +165,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (action == GLFW_PRESS) {
 		switch (key) {
 		case GLFW_KEY_ESCAPE: glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
+		case GLFW_KEY_UP: if (mixValue < 1) { mixValue += 0.1; }
+						  break;
+		case GLFW_KEY_DOWN: if (mixValue > 0) { mixValue -= 0.1; }
+							break;
+		case GLFW_KEY_W: pos[1] += 0.05;
+			break;
+		case GLFW_KEY_S: pos[1] -= 0.05;
+			break;
+		case GLFW_KEY_A: pos[0] -= 0.05;
+			break;
+		case GLFW_KEY_D: pos[0] += 0.05;
 			break;
 		}
 	}
