@@ -47,7 +47,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 	Shader myShader("shader.vs", "shader.frag");
- 
+
 	// Adding vertex data
 	GLfloat vertices[] = {
 		// Positions          // Colors           // Texture Coords
@@ -63,7 +63,7 @@ int main()
 	};
 
 	// Creating vertex Buffers
-	GLuint VBOs[1], VAOs[1], EBOs[1], Ts[1];
+	GLuint VBOs[1], VAOs[1], EBOs[1], Ts[2];
 
 	// VertexArray;
 	glGenVertexArrays(1, VAOs);
@@ -84,14 +84,27 @@ int main()
 	glBindVertexArray(0);
 
 	// Importing Textures
-	glGenTextures(1, Ts); // generating textures
+	glGenTextures(2, Ts); // generating textures
+	int imgWidth, imgHeight;
+	unsigned char* myImage;
+
 	glBindTexture(GL_TEXTURE_2D, Ts[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	int imgWidth, imgHeight;
-	unsigned char* myImage = SOIL_load_image("Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	myImage = SOIL_load_image("Test_IMG_container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(myImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, Ts[1]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	myImage = SOIL_load_image("awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, myImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(myImage);
@@ -109,7 +122,13 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Update
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Ts[0]);
+		glUniform1i(glGetUniformLocation(myShader.Program, "texture1"), 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, Ts[1]);
+		glUniform1i(glGetUniformLocation(myShader.Program, "texture2"), 1);
+
 
 		// Activates Shaders
 		myShader.Use();
