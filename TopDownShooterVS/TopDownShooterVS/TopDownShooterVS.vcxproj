@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{A282CC25-4FB2-4C30-8DD0-BBB138DD2DC2}</ProjectGuid>
-    <RootNamespace>TopDownShooter</RootNamespace>
+    <ProjectGuid>{82B2149D-EFAE-4134-A6ED-CF21BA2B450D}</ProjectGuid>
+    <RootNamespace>TopDownShooterVS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -118,19 +118,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
-
     <ClCompile Include="Entity.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Entity.h" />
-
     <ClCompile Include="RenderObj.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="RenderObj.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="World.h" />
-
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.frag" />
+    <None Include="shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

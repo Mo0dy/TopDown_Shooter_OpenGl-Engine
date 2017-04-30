@@ -1,7 +1,0 @@
-Entity::Entity()
-{
-}
-
-Entity::~Entity()
-{
-}

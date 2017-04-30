@@ -19,11 +19,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-
 // Game variables
-std::vector<float> pos{ 0.5f, 0.7f };
-
-// Game vatiables
 std::vector<float> pos{ 0.0f, 0.0f };
 float mixValue = 0.5;
 
