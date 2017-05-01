@@ -8,24 +8,28 @@ Game::Game(GLuint width, GLuint height): State(GAME_ACTIVE), Width(width), Heigh
 Game::~Game()
 {
 	delete renderer;
-	delete entity;
+	for (Entity *e : entities) {
+		delete e;
+	}
 }
 
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadTexture("awesomeface.png", GL_TRUE, "awesomeface");
 
-	entity = new Entity("awesomeface");
+	entities.push_back(new Entity("awesomeface"));
 	renderer = new Renderer("basicShader");
+	camera = new Camera;
 }
 
 void Game::ProcessInput(GLfloat dt) {
+
 }
 
 void Game::Update(GLfloat dt) {
-
+	camera->updatePos();
 }
 
 void Game::Render() {
-	renderer->DrawEntity(*entity);
+	renderer->DrawEntity(*entities.back());
 }

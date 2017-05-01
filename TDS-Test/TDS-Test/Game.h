@@ -8,8 +8,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <vector>
 #include "Renderer.h"
 #include "Entity.h"
+#include "Camera.h"
+
 
 enum GameState {
 	GAME_ACTIVE,
@@ -30,8 +33,9 @@ public:
 	void Update(GLfloat dt);
 	void Render();
 
+	std::vector<Entity*> entities;
 private:
+	Camera *camera;
 	Renderer *renderer;
-	Entity *entity;
 };
 

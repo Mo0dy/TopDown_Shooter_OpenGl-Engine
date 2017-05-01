@@ -12,6 +12,7 @@
 #include "Texture2D.h"
 #include "Shader.h"
 #include "Texture2D.h"
+
 class Entity
 {
 public:
@@ -21,6 +22,8 @@ public:
 	void initRenderData();
 	GLuint const getVAO();
 	std::string const getTexture();
+	glm::vec2 pos;
+	GLfloat angle;
 private:
 	std::string myTexture;
 	GLuint quadVAO;
