@@ -14,10 +14,10 @@ public:
 
 	static std::map<std::string, Shader> Shaders;
 
-	static void LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string name);
+	static Shader LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string name);
 	static Shader GetShader(std::string name);
 
-	static void LoadTexture(const GLchar *file, GLboolean alpha, std::string name);
+	static Texture2D LoadTexture(const GLchar *file, GLboolean alpha, std::string name);
 	static Texture2D GetTexture(std::string name);
 
 	static void Clear();

@@ -8,6 +8,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Renderer.h"
+#include "Entity.h"
+
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,
@@ -28,5 +31,7 @@ public:
 	void Render();
 
 private:
+	Renderer *renderer;
+	Entity *entity;
 };
 

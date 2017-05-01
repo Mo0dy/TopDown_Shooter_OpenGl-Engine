@@ -10,6 +10,8 @@
 
 #include <string>
 #include "Texture2D.h"
+#include "Shader.h"
+#include "Texture2D.h"
 class Entity
 {
 public:
@@ -18,9 +20,9 @@ public:
 
 	void initRenderData();
 	GLuint const getVAO();
-	std::string myTexture;
-
+	std::string const getTexture();
 private:
+	std::string myTexture;
 	GLuint quadVAO;
 };
 

@@ -2,21 +2,15 @@
 #include "ResourceManager.h"
 
 
-Renderer::Renderer(const Shader &shader):shader(shader)
-{
-}
-
-
-Renderer::~Renderer()
+Renderer::Renderer(std::string shader):myShader(shader)
 {
 }
 
 void Renderer::DrawEntity(Entity &entity) {
-	shader.Use();
+	ResourceManager::GetShader(myShader).Use();
 
 	glActiveTexture(GL_TEXTURE0);
-	Texture2D testTex = ResourceManager::GetTexture(entity.myTexture);
-	testTex.Bind();
+	ResourceManager::GetTexture(entity.getTexture()).Bind();
 
 	glBindVertexArray(entity.getVAO());
 	glDrawArrays(GL_TRIANGLES, 0, 6); // This needs to be modified when we start using vectors to store vertex data in entities

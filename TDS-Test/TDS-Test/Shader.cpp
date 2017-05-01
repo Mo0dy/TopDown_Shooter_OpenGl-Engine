@@ -20,7 +20,7 @@ void Shader::Compile(const GLchar *vertexSource, const GLchar *fragmentSource) {
 	// Shader Program
 	Program = glCreateProgram();
 	glAttachShader(Program, sVertex);
-	glAttachShader(Program, sVertex);
+	glAttachShader(Program, sFragment);
 	glLinkProgram(Program);
 	checkCompileErrors(Program, "PROGRAM");
 	glDeleteShader(sVertex);

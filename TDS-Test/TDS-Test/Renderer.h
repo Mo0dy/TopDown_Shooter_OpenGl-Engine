@@ -5,11 +5,9 @@
 class Renderer
 {
 public:
-	Renderer(const Shader &shader);
-	~Renderer();
-
+	Renderer(std::string shader);
 	void DrawEntity(Entity &entity);
 private:
-	Shader shader;
+	std::string myShader;
 };
 

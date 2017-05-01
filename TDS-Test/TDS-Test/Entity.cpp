@@ -39,3 +39,4 @@ void Entity::initRenderData() {
 }
 
 GLuint const Entity::getVAO() { return quadVAO; }
+std::string const Entity::getTexture() { return myTexture;  }
