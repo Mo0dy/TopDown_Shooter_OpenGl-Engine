@@ -4,6 +4,7 @@
 
 Entity::Entity()
 {
+	initRenderData();
 }
 
 
@@ -25,13 +26,11 @@ void Entity::initRenderData() {
 		0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
 	};
 
-	glGenVertexArrays(1, &this->quadVAO);
+	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &VBO);
-
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindVertexArray(this->quadVAO);
+	glBindVertexArray(quadVAO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);

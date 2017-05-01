@@ -6,6 +6,6 @@ out vec3 vertexColor;
 
 void main()
 {
-gl_Position = vec4(positions, 0.0, 1.0);
+gl_Position = vec4(positions, 0.0f, 1.0f);
 vertexColor = color;
 }

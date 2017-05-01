@@ -142,6 +142,10 @@
   <ItemGroup>
     <ResourceCompile Include="TDS-Test.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="myShader.frag" />
+    <None Include="myShader.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

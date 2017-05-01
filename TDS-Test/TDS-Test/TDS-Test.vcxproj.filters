@@ -59,4 +59,8 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="myShader.frag" />
+    <None Include="myShader.vs" />
+  </ItemGroup>
 </Project>
