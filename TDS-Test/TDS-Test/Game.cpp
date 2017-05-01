@@ -19,7 +19,9 @@ void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::GetShader("basicShader").Use();
 
-	entity = new Entity();
+	ResourceManager::LoadTexture("awesomeface.png", GL_TRUE, "awesomeface");
+
+	entity = new Entity("awesomeface");
 	renderer = new Renderer(ResourceManager::GetShader("basicShader"));
 }
 

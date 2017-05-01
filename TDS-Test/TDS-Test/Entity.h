@@ -8,14 +8,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <string>
+#include "Texture2D.h"
 class Entity
 {
 public:
-	Entity();
+	Entity(std::string texture);
 	~Entity();
 
 	void initRenderData();
 	GLuint const getVAO();
+	std::string myTexture;
+
 private:
 	GLuint quadVAO;
 };

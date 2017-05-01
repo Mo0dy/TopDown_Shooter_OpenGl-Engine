@@ -1,8 +1,11 @@
 #version 330 core
+
+in vec2 TexCoord;
 out vec4 color;
-in vec3 vertexColor;
+
+uniform sampler2D image;
 
 void main()
 {
-color = vec4(vertexColor, 1.0f);
+color = texture(image, TexCoord);
 }
