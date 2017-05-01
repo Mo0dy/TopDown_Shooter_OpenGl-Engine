@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 
 
-Entity::Entity(std::string texture): myTexture(texture)
+Entity::Entity(std::string texture): myTexture(texture), pos(glm::vec2(0,0)), angle(0)
 {
 	initRenderData();
 }
@@ -15,15 +15,15 @@ Entity::~Entity()
 void Entity::initRenderData() {
 	// Configure VAO/VBO
 	GLuint VBO;
-	GLfloat vertices[] = {
+	GLfloat vertices[] = { // in cm
 		// Pos      // Tex
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 100.0f, 0.0f, 1.0f,
+		100.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
 
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
+		0.0f, 100.0f, 0.0f, 1.0f,
+		100.0f, 100.0f, 1.0f, 1.0f,
+		100.0, 0.0f, 1.0f, 0.0f
 	};
 
 	glGenVertexArrays(1, &quadVAO);

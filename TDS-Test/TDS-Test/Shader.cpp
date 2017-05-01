@@ -27,6 +27,10 @@ void Shader::Compile(const GLchar *vertexSource, const GLchar *fragmentSource) {
 	glDeleteShader(sFragment);
 }
 
+void Shader::SetMatrix4(const GLchar *name, const glm::mat4 &matrix) {
+	glUniformMatrix4fv(glGetUniformLocation(Program, name), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
 void Shader::checkCompileErrors(GLuint object, std::string type)
 {
 	GLint success;

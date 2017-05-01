@@ -31,5 +31,5 @@ void Game::Update(GLfloat dt) {
 }
 
 void Game::Render() {
-	renderer->DrawEntity(*entities.back());
+	renderer->DrawEntity(*entities.back(), *camera);
 }
