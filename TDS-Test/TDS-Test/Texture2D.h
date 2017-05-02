@@ -15,16 +15,16 @@ public:
 	GLuint Tex;
 	// Texture image dimensions
 	GLuint Width, Height; // Width and height of loaded image in pixels
-						  // Texture Format
+	// Texture Format
 	GLuint Internal_Format; // Format of texture object
 	GLuint Image_Format; // Format of loaded image
-						 // Texture configuration
+	// Texture configuration
 	GLuint Wrap_S; // Wrapping mode on S axis
 	GLuint Wrap_T; // Wrapping mode on T axis
 	GLuint Filter_Min; // Filtering mode if texture pixels < screen pixels
 	GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
 
-	Texture2D();
+	Texture2D(); // ID of the texture
 	// Generates texture from image data
 	void Generate(GLuint width, GLuint height, unsigned char* data);
 	// Binds the texture as the current active GL_TEXTURE_2D texture object

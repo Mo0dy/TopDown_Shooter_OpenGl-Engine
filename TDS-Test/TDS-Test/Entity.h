@@ -16,13 +16,12 @@
 class Entity
 {
 public:
-	Entity(std::string texture);
-	~Entity();
-
-	std::string myTexture;
-	glm::vec2 size;
-	glm::vec2 pos;
-	GLfloat angle;
+	Entity(std::string texture); // The name under which the corresponding texture was loaded into the RecourceManager
+	virtual ~Entity();
+	std::string myTexture; 
+	glm::vec2 size; // The size of the entities sprite in WCO coordinates (rectangle with the diagonal of size)
+	glm::vec2 pos; // The position in WCS coordinates
+	GLfloat angle; // The angle of the entitie in degrees
 	
 private:
 };

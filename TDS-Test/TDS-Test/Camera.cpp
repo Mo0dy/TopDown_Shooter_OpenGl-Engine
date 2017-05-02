@@ -9,8 +9,10 @@ Camera::~Camera()
 {
 }
 
-void Camera::updatePos(float width, float height) {
-	float scale = 2 / height;
+void Camera::updatePos(float width, float height, glm::vec2 goalPos) {
+	float scale = 10 / height;
 	size = glm::vec2(scale * width, scale * height);
+
+	pos = goalPos - glm::vec2(5, 5);
 }
 
