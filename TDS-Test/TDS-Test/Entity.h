@@ -19,13 +19,11 @@ public:
 	Entity(std::string texture);
 	~Entity();
 
-	void initRenderData();
-	GLuint const getVAO();
-	std::string const getTexture();
+	std::string myTexture;
+	glm::vec2 size;
 	glm::vec2 pos;
 	GLfloat angle;
+	
 private:
-	std::string myTexture;
-	GLuint quadVAO;
 };
 

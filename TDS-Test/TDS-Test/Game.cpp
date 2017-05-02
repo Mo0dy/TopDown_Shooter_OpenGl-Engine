@@ -17,9 +17,10 @@ void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadTexture("awesomeface.png", GL_TRUE, "awesomeface");
 
-	entities.push_back(new Entity("awesomeface"));
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
+
+	entities.push_back(new Entity("awesomeface"));
 }
 
 void Game::ProcessInput(GLfloat dt) {
@@ -31,5 +32,5 @@ void Game::Update(GLfloat dt) {
 }
 
 void Game::Render() {
-	renderer->DrawEntity(*entities.back(), *camera);
+	renderer->RenderSprite(*entities.back(), *camera);
 }
