@@ -13,8 +13,6 @@
 #include "Entity.h"
 #include "Camera.h"
 
-const float ENTITY_SCALE = 0.01;
-
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,

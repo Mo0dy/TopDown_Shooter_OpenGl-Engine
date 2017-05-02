@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera():pos(0.0f, 0.0f, 1.0f)
+Camera::Camera():pos(0.0f, 0.0f)
 {
 }
 
@@ -9,10 +9,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::updatePos() {
-
+void Camera::updatePos(float width, float height) {
+	size = glm::vec2(1, 1);
 }
 
-glm::vec3 Camera::getPos() {
-	return pos;
-}

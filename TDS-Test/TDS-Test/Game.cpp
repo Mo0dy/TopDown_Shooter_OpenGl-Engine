@@ -28,7 +28,7 @@ void Game::ProcessInput(GLfloat dt) {
 }
 
 void Game::Update(GLfloat dt) {
-	camera->updatePos();
+	camera->updatePos(Width, Height);
 }
 
 void Game::Render() {

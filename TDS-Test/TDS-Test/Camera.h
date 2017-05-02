@@ -11,9 +11,9 @@ class Camera
 public:
 	Camera();
 	~Camera();
-	void updatePos();
-	glm::vec3 getPos();
+	void updatePos(float width, float height);
+	glm::vec2 pos;
+	glm::vec2 size;
 private:
-	glm::vec3 pos;
 };
 
