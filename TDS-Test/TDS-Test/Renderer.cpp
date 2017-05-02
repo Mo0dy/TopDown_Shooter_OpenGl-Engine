@@ -36,13 +36,12 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	// Calculating transformation matrix
 	glm::mat4 model;
 	// Transform to Camera
-
-	model = glm::scale(model, glm::vec3(cam.pos, 1.0f));
+	model = glm::ortho(0.0f, cam.size.x, 0.0f, cam.size.y, -1.0f, 1.0f);
+	model = glm::translate(model, glm::vec3(-cam.pos, 0.0f));
 	// Transform to WCO
 	model = glm::translate(model, glm::vec3(entity.pos, 0.0f));
 	model = glm::rotate(model, entity.angle, glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * entity.size.x, -0.5f * entity.size.y, 0.0f));
-
 	model = glm::scale(model, glm::vec3(entity.size, 1.0f));
 
 	ResourceManager::GetShader(myShader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
