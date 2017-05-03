@@ -12,7 +12,7 @@
 #include "Texture2D.h"
 #include "Shader.h"
 #include "Texture2D.h"
-#include "Game.h"
+#include "Constants.h"
 
 class Entity
 {

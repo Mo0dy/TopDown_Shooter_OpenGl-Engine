@@ -21,7 +21,8 @@ protected:
 
 	glm::vec2 force; // force in N
 	glm::vec2 vel; // velocity in m/s
-	glm::vec2 fricRes(); // calculates (linear) motion opposing force. Is needed to limit max speed;
+	glm::vec2 fricRes(); // calculates friction
+	glm::vec2 airRes(); // calculates air resistance
 
 };
 

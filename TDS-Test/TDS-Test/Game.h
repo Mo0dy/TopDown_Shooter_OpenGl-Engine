@@ -16,8 +16,6 @@
 #include "DynE.h"
 #include "Player.h"
 
-static const float GRAV_ACC = 9.81f;
-
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,

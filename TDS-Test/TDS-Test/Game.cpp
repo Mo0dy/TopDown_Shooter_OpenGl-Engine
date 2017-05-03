@@ -39,31 +39,31 @@ void Game::Init() {
 void Game::ProcessInput(GLfloat dt) {
 	Players.back()->movState = STOPPING;
 	if (Keys[GLFW_KEY_W] == GL_TRUE) {
-		Players.back()->addForce(glm::vec2(0, Players.back()->getSelfPropForce()));
+		Players.back()->addForce(glm::vec2(0, Players.back()->inherentForce));
 		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_S] == GL_TRUE) {
-		Players.back()->addForce(glm::vec2(0, -Players.back()->getSelfPropForce()));
+		Players.back()->addForce(glm::vec2(0, -Players.back()->inherentForce));
 		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_D] == GL_TRUE) {
-		Players.back()->addForce(glm::vec2(Players.back()->getSelfPropForce(), 0));
+		Players.back()->addForce(glm::vec2(Players.back()->inherentForce, 0));
 		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_A] == GL_TRUE) {
-		Players.back()->addForce(glm::vec2(-Players.back()->getSelfPropForce(), 0));
+		Players.back()->addForce(glm::vec2(-Players.back()->inherentForce, 0));
 		Players.back()->movState = RUNNING;
 	}
 }
 
 void Game::Update(GLfloat dt) {
-	LOG("FPS = " << 1 / dt);
+	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players.back()->pos);
 	for (DynE *e : dynEntities) {
 		e->updateE(dt);
 	}
 	for (Player *e : Players) {
-		e->updatePlayer(dt);
+		e->updateE(dt);
 	}
 }
 

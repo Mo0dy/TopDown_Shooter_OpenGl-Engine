@@ -126,6 +126,7 @@
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="DynE.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
