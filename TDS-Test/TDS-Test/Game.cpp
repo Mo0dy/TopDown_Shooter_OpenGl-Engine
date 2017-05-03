@@ -60,7 +60,7 @@ void Game::Update(GLfloat dt) {
 	LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players.back()->pos);
 	for (DynE *e : dynEntities) {
-		e->doStep(dt);
+		e->updateE(dt);
 	}
 	for (Player *e : Players) {
 		e->updatePlayer(dt);

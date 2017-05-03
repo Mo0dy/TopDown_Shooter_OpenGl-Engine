@@ -13,5 +13,5 @@ Player::~Player()
 
 // It would be better to just extend the doStep function. 
 void Player::updatePlayer(GLfloat dt) {
-	doStep(dt);
+	updateE(dt);
 }
