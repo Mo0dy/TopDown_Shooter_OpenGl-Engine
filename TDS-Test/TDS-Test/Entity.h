@@ -23,6 +23,6 @@ public:
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
 	
-private:
+protected:
 };
 

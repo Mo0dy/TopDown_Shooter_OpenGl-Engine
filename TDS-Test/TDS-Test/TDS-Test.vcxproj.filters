@@ -42,6 +42,9 @@
     <ClInclude Include="DynE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -74,6 +77,9 @@
     <ClCompile Include="DynE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TDS-Test.rc">
@@ -81,7 +87,9 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="myShader.frag" />
     <None Include="myShader.vs" />
+    <None Include="myShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

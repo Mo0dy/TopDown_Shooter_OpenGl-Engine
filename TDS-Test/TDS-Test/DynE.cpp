@@ -3,7 +3,7 @@
 #include <iostream>
 #define LOG(x) std::cout << x << std::endl;
 
-DynE::DynE(std::string texture) : Entity(texture), mass(1), force(0, 0), vel(0, 0), selfPropForce(10), stopFlag(true)
+DynE::DynE(std::string texture) : Entity(texture), mass(1), force(0, 0), vel(0, 0), selfPropForce(0), movState(STOPPING), fricCoeff(-0.1f)
 {
 }
 
@@ -13,9 +13,9 @@ DynE::~DynE()
 }
 
 glm::vec2 DynE::fricRes() {
-	GLfloat resMag = glm::pow(glm::length(vel), 2) * COEFF_FRICT; // quadratic resistance function limits max speeds
-	if (stopFlag) {
-		resMag += selfPropForce;
+	GLfloat resMag = glm::pow(glm::length(vel), 2) * fricCoeff; // quadratic resistance function limits max speeds
+	if (movState == STOPPING) {
+		resMag -= selfPropForce;
 	}
 	return vel * resMag;
 }

@@ -2,6 +2,14 @@
 
 #include "Entity.h"
 
+// Inital fricion still missing (High amount of Friction that only affects bodies at very low speeds)
+
+enum MovementState {
+	RUNNING,
+	SPRINTING,
+	STOPPING
+};
+
 class DynE : public Entity // Dynamic entity
 {
 public:
@@ -9,12 +17,12 @@ public:
 	~DynE();
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
 	void doStep(float dt); // call this function every update
-	GLboolean stopFlag; // if true entity will try to stop using it's own force
 	GLfloat getSelfPropForce(); // the enteties own force
-private:
+	MovementState movState;
+protected:
 	GLfloat mass; // mass in kg
 	GLfloat selfPropForce; // The force with wich the object propells it selfe
-	const GLfloat COEFF_FRICT = -0.1f; // Coefficent of friction needs to be negative to counteract causing forces
+	GLfloat fricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 
 	glm::vec2 force; // force in N
 	glm::vec2 vel; // velocity in m/s

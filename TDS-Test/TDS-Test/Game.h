@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "Background.h"
 #include "DynE.h"
+#include "Player.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -36,6 +37,7 @@ public:
 
 	std::vector<Entity*> statEntities; // a vector that includes all static entities
 	std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
+	std::vector<Player*> Players;
 private:
 	Camera *camera;
 	Renderer *renderer;

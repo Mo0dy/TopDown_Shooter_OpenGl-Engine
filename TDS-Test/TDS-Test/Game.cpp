@@ -11,10 +11,14 @@ Game::Game(GLuint width, GLuint height): State(GAME_ACTIVE), Width(width), Heigh
 Game::~Game()
 {
 	delete renderer;
+	// combine this in one function (by combining all vectors)
 	for (Entity *e : statEntities) {
 		delete e;
 	}
 	for (Entity *e : dynEntities) {
+		delete e;
+	}
+	for (Entity *e : Players) {
 		delete e;
 	}
 	ResourceManager::Clear();
@@ -29,42 +33,49 @@ void Game::Init() {
 	camera = new Camera;
 
 	statEntities.push_back(new Background("background", 100));
-	dynEntities.push_back(new DynE("awesomeface"));
+	Players.push_back(new Player("awesomeface"));
 }
 
 void Game::ProcessInput(GLfloat dt) {
-	dynEntities.back()->stopFlag = true;
+	Players.back()->movState = STOPPING;
 	if (Keys[GLFW_KEY_W] == GL_TRUE) {
-		dynEntities.back()->addForce(glm::vec2(0, dynEntities.back()->getSelfPropForce()));
-		dynEntities.back()->stopFlag = false;
+		Players.back()->addForce(glm::vec2(0, Players.back()->getSelfPropForce()));
+		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_S] == GL_TRUE) {
-		dynEntities.back()->addForce(glm::vec2(0, -dynEntities.back()->getSelfPropForce()));
-		dynEntities.back()->stopFlag = false;
+		Players.back()->addForce(glm::vec2(0, -Players.back()->getSelfPropForce()));
+		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_D] == GL_TRUE) {
-		dynEntities.back()->addForce(glm::vec2(dynEntities.back()->getSelfPropForce(), 0));
-		dynEntities.back()->stopFlag = false;
+		Players.back()->addForce(glm::vec2(Players.back()->getSelfPropForce(), 0));
+		Players.back()->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_A] == GL_TRUE) {
-		dynEntities.back()->addForce(glm::vec2(-dynEntities.back()->getSelfPropForce(), 0));
-		dynEntities.back()->stopFlag = false;
+		Players.back()->addForce(glm::vec2(-Players.back()->getSelfPropForce(), 0));
+		Players.back()->movState = RUNNING;
 	}
 }
 
 void Game::Update(GLfloat dt) {
 	LOG("FPS = " << 1 / dt);
-	camera->updatePos(Width, Height, dynEntities.back()->pos);
+	camera->updatePos(Width, Height, Players.back()->pos);
 	for (DynE *e : dynEntities) {
 		e->doStep(dt);
+	}
+	for (Player *e : Players) {
+		e->updatePlayer(dt);
 	}
 }
 
 void Game::Render() {
+	// combine this in one function (by combining all vectors)
 	for (Entity* e : statEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Entity* e : dynEntities) {
+		renderer->RenderSprite(*e, *camera);
+	}
+	for (Entity* e : Players) {
 		renderer->RenderSprite(*e, *camera);
 	}
 }
