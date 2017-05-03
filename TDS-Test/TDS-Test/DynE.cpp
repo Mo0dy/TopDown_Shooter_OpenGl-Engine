@@ -15,7 +15,7 @@ void DynE::updateE(float dt) {
 	glm::vec2 dV = dt * (force + fricRes() + airRes()) / mass;
 
 	// safeguard for wiggeling close to 0v
-	if (dV.x * vel.x <= 0 && dV.y * vel.y <= 0) {
+	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
 		vel = glm::vec2(0, 0);
 	} else {
 		vel += dV;
