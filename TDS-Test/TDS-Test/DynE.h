@@ -18,9 +18,10 @@ protected:
 	GLfloat dynFricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 	GLfloat statFricCoeff;
 	GLfloat airFricCoeff;
-
 	glm::vec2 force; // force in N
 	glm::vec2 vel; // velocity in m/s
+
+	// Utility functions
 	glm::vec2 fricRes(); // calculates friction
 	glm::vec2 airRes(); // calculates air resistance
 

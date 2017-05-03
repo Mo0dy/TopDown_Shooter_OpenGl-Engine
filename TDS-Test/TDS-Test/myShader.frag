@@ -6,6 +6,9 @@ in vec2 TexCoord;
 uniform sampler2D image;
 
 void main()
-{
-	color = texture(image, TexCoord);
+{	
+	vec4 texColor = texture(image, TexCoord);
+	if (texColor.a < 0.1)
+		discard;
+	color = texColor;
 }

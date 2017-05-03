@@ -27,13 +27,14 @@ Game::~Game()
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
+	ResourceManager::LoadTexture("Textures\\Player.png", GL_TRUE, "player1");
 	ResourceManager::LoadTexture("Textures\\HighResBackground.jpg", GL_TRUE, "background");
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 
 	statEntities.push_back(new Background("background", 100));
-	Players.push_back(new Player("awesomeface"));
+	Players.push_back(new Player("player1"));
 }
 
 void Game::ProcessInput(GLfloat dt) {

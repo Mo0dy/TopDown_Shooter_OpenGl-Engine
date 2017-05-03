@@ -1,12 +1,12 @@
 #include "Player.h"
 
-Player::Player(std::string texture) : DynE(texture), inherentForce(1000), movState(STOPPING)
+Player::Player(std::string texture) : DynE(texture), inherentForce(1400), movState(STOPPING)
 {
 	mass = 80;
-	airFricCoeff = -5; // substitues for other resistances
+	airFricCoeff = -200; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
-	size = glm::vec2(1.0f, 0.8f);
+	size = glm::vec2(0.867f, 1.0f);
 }
 
 Player::~Player()

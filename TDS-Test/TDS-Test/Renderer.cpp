@@ -49,7 +49,7 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	// Rendering
 	ResourceManager::GetShader(myShader).Use();
 	glActiveTexture(GL_TEXTURE0);
-	ResourceManager::GetTexture(entity.myTexture).Bind();
+	ResourceManager::GetTexture(entity.tex).Bind();
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6); // This needs to be modified when we start using vectors to store vertex data in entities
 	glBindVertexArray(0);

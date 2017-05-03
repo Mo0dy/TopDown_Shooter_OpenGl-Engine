@@ -12,7 +12,7 @@ DynE::~DynE()
 }
 
 void DynE::updateE(float dt) {
-	vel += dt * (force + fricRes() + airRes() / mass);
+	vel += dt * (force + fricRes() + airRes()) / mass;
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 	force = glm::vec2(0, 0);
 }
@@ -20,15 +20,23 @@ void DynE::updateE(float dt) {
 // Utitlity functions
 glm::vec2 DynE::fricRes() {
 	if (glm::length(vel) > 0) {
-		return vel * dynFricCoeff * mass * GRAV_ACC; // Dynamic Friction
+		return glm::normalize(vel) * dynFricCoeff * mass * GRAV_ACC; // Dynamic Friction
 	}
 	else {
-		return vel * statFricCoeff * mass * GRAV_ACC; // Static Friction
+		if (glm::length(force) > 0) {
+			return glm::normalize(force) * statFricCoeff * mass * GRAV_ACC; // Static Friction
+		}
+		else {
+			return glm::vec2(0, 0);
+		}
 	}
 }
 
 glm::vec2 DynE::airRes() {
-	return vel * glm::pow(glm::length(vel), 2) * airFricCoeff; // Air resistance
+	if (glm::length(vel) > 0) {
+		return glm::normalize(vel) * glm::pow(glm::length(vel), 2) * airFricCoeff;
+	}
+	return glm::vec2(0,0);
 }
 
 // Getters and Setters
