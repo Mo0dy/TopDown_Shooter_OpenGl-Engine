@@ -13,10 +13,13 @@ class Player : public DynE
 public:
 	Player(std::string texture);	
 	~Player();
-
 	void updateE(GLfloat dt);
-
-	float inherentForce;
-	float movState;
+	MovementState movState;
+	glm::vec2 movDir;
+	// Getters and setters:
+	GLfloat getInherentF();
+protected:
+	GLfloat inherentForce;
+	GLfloat sprintMod;
 };
 

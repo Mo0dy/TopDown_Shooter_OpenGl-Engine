@@ -1,9 +1,9 @@
 #include "Player.h"
 
-Player::Player(std::string texture) : DynE(texture), inherentForce(1400), movState(STOPPING)
+Player::Player(std::string texture) : DynE(texture), inherentForce(2500), movState(STOPPING), sprintMod(4)
 {
 	mass = 80;
-	airFricCoeff = -200; // substitues for other resistances
+	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
 	size = glm::vec2(0.867f, 1.0f);
@@ -16,10 +16,20 @@ Player::~Player()
 // It would be better to just extend the doStep function.
 void Player::updateE(GLfloat dt) {
 	force += airRes();
-	if (movState == STOPPING) {
-		force += fricRes();
+
+	if (glm::length(movDir) > 0) {
+		movDir = glm::normalize(movDir);
 	}
-	
+
+	switch(movState) {
+	case STOPPING: force += fricRes();
+		break;
+	case RUNNING: force += movDir * inherentForce;
+		break;
+	case SPRINTING: force += movDir * inherentForce * sprintMod;
+		break;
+	}
+	 
 	glm::vec2 dV = dt * force / mass;
 
 	// safeguard for wiggeling close to 0v
@@ -31,4 +41,10 @@ void Player::updateE(GLfloat dt) {
 
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 	force = glm::vec2(0, 0);
+	movDir = glm::vec2(0, 0);
+}
+
+// Getters and setters
+GLfloat Player::getInherentF() {
+	return inherentForce;
 }
