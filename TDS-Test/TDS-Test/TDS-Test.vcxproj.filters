@@ -98,5 +98,7 @@
   <ItemGroup>
     <None Include="myShader.vs" />
     <None Include="myShader.frag" />
+    <None Include="quadShader.frag" />
+    <None Include="quadShader.vs" />
   </ItemGroup>
 </Project>

@@ -27,7 +27,6 @@ public:
 
 	// for test
 	GLboolean collision;
-
 protected:
 };
 

@@ -11,6 +11,7 @@
 #include <vector>
 #include "Entity.h"
 #include "DynE.h"
+#include "Camera.h"
 
 class CollisionDetector
 {

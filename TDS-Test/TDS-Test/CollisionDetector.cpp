@@ -1,4 +1,5 @@
 #include "CollisionDetector.h"
+#include "Renderer.h"
 
 CollisionDetector::CollisionDetector()
 {
@@ -79,7 +80,7 @@ GLboolean CollisionDetector::doSingleCheck(Entity* E1, Entity* E2) {
 			if (dotProduct > E2dist[1]) {
 				E2dist[1] = dotProduct;
 			}
-			else if (dotProduct < E1dist[0]) {
+			else if (dotProduct < E2dist[0]) {
 				E2dist[0] = dotProduct;
 			}
 		}

@@ -28,7 +28,9 @@ Game::~Game()
 
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
-	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
+	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
+
+	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
 	ResourceManager::LoadTexture("Textures\\DrawnChar2.png", GL_TRUE, "DrawnChar2");
 	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
