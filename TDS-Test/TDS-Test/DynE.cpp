@@ -11,7 +11,7 @@ DynE::~DynE()
 {
 }
 
-void DynE::updateE(float dt) {
+GLboolean DynE::updateE(float dt) {
 	glm::vec2 dV = dt * (force + fricRes() + airRes()) / mass;
 
 	// safeguard for wiggeling close to 0v
@@ -22,6 +22,7 @@ void DynE::updateE(float dt) {
 	}
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 	force = glm::vec2(0, 0);
+	return glm::length(vel) > 0;
 }
 
 // Utitlity functions

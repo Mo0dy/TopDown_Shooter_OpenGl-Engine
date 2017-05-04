@@ -25,5 +25,6 @@ public:
 	GLfloat angle; // The angle of the entitie in degrees
 	
 protected:
+	glm::vec2 hitbox;
 };
 

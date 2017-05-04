@@ -15,6 +15,7 @@
 #include "Background.h"
 #include "DynE.h"
 #include "Player.h"
+#include "CollisionDetector.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -41,5 +42,6 @@ public:
 private:
 	Camera *camera;
 	Renderer *renderer;
+	CollisionDetector *colDec;
 };
 

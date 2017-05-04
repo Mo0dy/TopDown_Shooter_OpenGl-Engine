@@ -9,12 +9,20 @@ Player::Player(std::string texture) : DynE(texture), inherentForce(2500), movSta
 	size = glm::vec2(0.867f, 1.0f);
 }
 
+Player::Player(std::string texture, glm::vec2 s) : DynE(texture), inherentForce(2500), movState(STOPPING), sprintMod(4), turnSpeed(10) {
+	mass = 80;
+	airFricCoeff = -100; // substitues for other resistances
+	dynFricCoeff = -3;
+	statFricCoeff = -5;
+	size = s;
+}
+
 Player::~Player()
 {
 }
 
 // It would be better to just extend the doStep function.
-void Player::updateE(GLfloat dt) {
+GLboolean Player::updateE(GLfloat dt) {
 	force += airRes();
 
 	if (glm::length(movDir) > 0) {
@@ -43,6 +51,7 @@ void Player::updateE(GLfloat dt) {
 	calcAngle(dt);
 	force = glm::vec2(0, 0);
 	movDir = glm::vec2(0, 0);
+	return glm::length(vel) > 0;
 }
 
 void Player::calcAngle(GLfloat dt) {

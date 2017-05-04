@@ -12,8 +12,9 @@ class Player : public DynE
 {
 public:
 	Player(std::string texture);	
+	Player(std::string texture, glm::vec2 s);
 	~Player();
-	void updateE(GLfloat dt);
+	GLboolean updateE(GLfloat dt);
 	MovementState movState;
 	glm::vec2 movDir;
 	// Getters and setters:

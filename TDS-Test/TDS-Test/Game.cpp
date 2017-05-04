@@ -11,6 +11,8 @@ Game::Game(GLuint width, GLuint height): State(GAME_ACTIVE), Width(width), Heigh
 Game::~Game()
 {
 	delete renderer;
+	delete camera;
+	delete colDec;
 	// combine this in one function (by combining all vectors)
 	for (Entity *e : statEntities) {
 		delete e;
@@ -27,15 +29,17 @@ Game::~Game()
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
-	ResourceManager::LoadTexture("Textures\\Player.png", GL_TRUE, "player");
-	ResourceManager::LoadTexture("Textures\\HighResBackground.jpg", GL_TRUE, "background");
+	ResourceManager::LoadTexture("Textures\\Player.png", GL_TRUE, "Player");
+	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
+	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
+	colDec = new CollisionDetector;
 
-	statEntities.push_back(new Background("background", 100));
-	Players.push_back(new Player("player"));
-	Players.push_back(new Player("player"));
+	statEntities.push_back(new Background("background", 200));
+	Players.push_back(new Player("Player"));
+	Players.push_back(new Player("DrawnChar", glm::vec2(1, 0.56758)));
 }
 
 void Game::ProcessInput(GLfloat dt) {
@@ -53,7 +57,7 @@ void Game::ProcessInput(GLfloat dt) {
 		Players[0]->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_D]) {
-		Players[0]->movDir += glm::vec2(10, 0);
+		Players[0]->movDir += glm::vec2(1, 0);
 		Players[0]->movState = RUNNING;
 	}
 	if (Keys[GLFW_KEY_A]) {
@@ -87,11 +91,23 @@ void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
 	for (DynE *e : dynEntities) {
-		e->updateE(dt);
+		if (e->updateE(dt)) {
+			colDec->addMovedE(e);
+		}
 	}
 	for (Player *e : Players) {
-		e->updateE(dt);
+		if (e->updateE(dt)) {
+			colDec->addMovedE(e);
+		}
 	}
+
+	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
+	std::vector<Entity*> colE;
+	colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
+	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
+	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
+	colE.insert(colE.end(), Players.begin(), Players.end());
+	colDec->doCCheck(colE);
 }
 
 void Game::Render() {
