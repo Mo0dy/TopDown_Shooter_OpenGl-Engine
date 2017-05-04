@@ -31,7 +31,9 @@ void Game::Init() {
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
-	ResourceManager::LoadTexture("Textures\\DrawnChar2.png", GL_TRUE, "DrawnChar2");
+	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
+	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
+	ResourceManager::LoadTexture("Textures\\U_Bot_Hand.png", GL_TRUE, "U_Bot_Hand");
 	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
 	ResourceManager::LoadTexture("Textures\\TracksMoving.png", GL_TRUE, "TracksMoving");
@@ -42,13 +44,17 @@ void Game::Init() {
 	colDec = new CollisionDetector;
 
 	statEntities.push_back(new Background("background", 200));
-	Players.push_back(new Player("DrawnChar", glm::vec2(1, 0.56758), "Tracks", 0.7f * glm::vec2(1, 0.93246)));
-	Players.push_back(new Player("DrawnChar2", glm::vec2(1, 0.76836)));
+	Players.push_back(new Player("DrawnChar", "DrawnChar", 0.85, "Tracks", 1.2));
+	Players.push_back(new Player("U_Bot", "U_Bot_Hand", 1.530925, "D_Bot", 1.530925));
 }
+
+GLboolean Press_P_Flag = false;
+GLboolean Press_O_Flag = false;
 
 void Game::ProcessInput(GLfloat dt) {
 	for (Player* p : Players) {
 		p->movState = STOPPING;
+		p->wepState = NORMAL;
 	}
 
 	// Player0
@@ -89,16 +95,33 @@ void Game::ProcessInput(GLfloat dt) {
 		Players[1]->movDir += glm::vec2(-1, 0);
 		Players[1]->movState = RUNNING;
 	}
+	if (Keys[GLFW_KEY_P]) {
+		Press_P_Flag = true;
+	}
+	if (!Keys[GLFW_KEY_P] && Press_P_Flag) {
+		Press_P_Flag = false;
+		Players[1]->angle -= 0.5;
+	}
+	if (Keys[GLFW_KEY_O]) {
+		Press_O_Flag = true;
+	}
+	if (!Keys[GLFW_KEY_O] && Press_O_Flag) {
+		Press_O_Flag = false;
+		Players[1]->angle += 0.5;
+	}
+	if (Keys[GLFW_KEY_RIGHT_CONTROL]) {
+		Players[1]->wepState = AIMING;
+	}
 }
 
 void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
-	//for (DynE *e : dynEntities) {
-	//	if (e->updateE(dt)) {
-	//		colDec->addMovedE(e);
-	//	}
-	//}
+	for (DynE *e : dynEntities) {
+		if (e->updateE(dt)) {
+			colDec->addMovedE(e);
+		}
+	}
 	for (Player *e : Players) {
 		if (e->updateE(dt)) {
 			
@@ -112,7 +135,9 @@ void Game::Update(GLfloat dt) {
 	//colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
 	//colE.insert(colE.end(), statEntities.begin(), statEntities.end());
 	//colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	colE.insert(colE.end(), Players.begin(), Players.end());
+	for (Player* p : Players) {
+		colE.push_back(p);
+	}
 	colDec->doCCheck(colE);
 }
 

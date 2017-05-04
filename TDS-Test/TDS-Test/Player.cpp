@@ -1,18 +1,19 @@
 #include "Player.h"
 
-Player::Player(std::string tex, glm::vec2 s) : DynE(tex, s), inherentForce(2500), movState(STOPPING), sprintMod(4), turnSpeed(10) {
+Player::Player(std::string tex, GLfloat height) : DynE(tex, height), inherentForce(2500), movState(STOPPING), sprintMod(4), turnSpeed(10) {
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
-	legs = new Entity("", glm::vec2(0, 0));
+	legs = new Entity("", 0);
 }
 
-Player::Player(std::string bodyTex, glm::vec2 bodyS, std::string legTex, glm::vec2 legS) : DynE(bodyTex, bodyS), inherentForce(2500), movState(STOPPING), sprintMod(4), turnSpeed(10) {
+Player::Player(std::string bodyTexure, std::string aimTexture, GLfloat bodyHeight, std::string legTex, GLfloat legHeight) : DynE(bodyTexure, bodyHeight), aimTex(aimTexture), inherentForce(2500), movState(STOPPING), sprintMod(4), turnSpeed(10) {
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
-	legs = new Entity(legTex, legS);
+	legs = new Entity(legTex, legHeight);
+	standardTex = bodyTexure;
 }
 
 Player::~Player()
@@ -37,6 +38,13 @@ GLboolean Player::updateE(GLfloat dt) {
 		break;
 	}
 	 
+	switch (wepState) {
+	case NORMAL: tex = standardTex;
+		break;
+	case AIMING: tex = aimTex;
+		break;
+	}
+
 	glm::vec2 dV = dt * force / mass;
 
 	// safeguard for wiggeling close to 0v
@@ -59,7 +67,6 @@ void Player::setLegAngle(GLfloat dt) {
 
 	// you have to check the if vel is longer then 0 otherwise you will divide by 0 while normalizing
 	if (glm::length(vel) > 0) {
-		legs->tex = "TracksMoving";
 		// this returns the absolute angle between the y axix and the player ?negative if counter clockwise rotation positive if clockwise? <-- not sure about this you have to try it out
 		if (vel.x > 0) {
 			gAngle = -acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (negative)
@@ -67,9 +74,6 @@ void Player::setLegAngle(GLfloat dt) {
 		else {
 			gAngle = acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (positive)
 		}
-	}
-	else {
-		legs->tex = "Tracks";
 	}
 
 	// I would propose that you only change the stuff below this comment

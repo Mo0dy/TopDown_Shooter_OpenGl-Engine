@@ -8,14 +8,20 @@ enum MovementState {
 	STOPPING
 };
 
+enum WeaponState {
+	NORMAL,
+	AIMING
+};
+
 class Player : public DynE
 {
 public:
-	Player(std::string texture, glm::vec2 s);
-	Player(std::string bodyTex, glm::vec2 bodyS, std::string legTex, glm::vec2 legS);
+	Player(std::string texture, GLfloat height);
+	Player(std::string bodyTexture, std::string aimTexture, GLfloat bodyHeight, std::string legTex, GLfloat legHeight);
 	~Player();
 	GLboolean updateE(GLfloat dt);
 	MovementState movState;
+	WeaponState wepState;
 	glm::vec2 movDir;
 
 	// Getters and setters:
@@ -23,6 +29,8 @@ public:
 	Entity* getLegs();
 
 protected:
+	std::string standardTex;
+	std::string aimTex;
 	Entity* legs;
 	GLfloat inherentForce;
 	GLfloat sprintMod; // inherentForce multiplayer while sprinting

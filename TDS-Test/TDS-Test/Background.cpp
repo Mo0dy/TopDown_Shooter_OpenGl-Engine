@@ -1,6 +1,6 @@
 #include "Background.h"
 
-Background::Background(std::string texture, float z): Entity(texture, glm::vec2(z, z))
+Background::Background(std::string texture, float z): Entity(texture, z)
 {
 }
 
