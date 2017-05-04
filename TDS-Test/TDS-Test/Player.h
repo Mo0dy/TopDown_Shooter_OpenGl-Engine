@@ -20,6 +20,9 @@ public:
 	GLfloat getInherentF();
 protected:
 	GLfloat inherentForce;
-	GLfloat sprintMod;
+	GLfloat sprintMod; // inherentForce multiplayer while sprinting
+	GLfloat turnSpeed; // degrees per second
+
+	void calcAngle(GLfloat dt);
 };
 
