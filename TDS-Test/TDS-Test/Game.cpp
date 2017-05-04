@@ -32,6 +32,7 @@ void Game::Init() {
 	ResourceManager::LoadTexture("Textures\\DrawnChar2.png", GL_TRUE, "DrawnChar2");
 	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
+	ResourceManager::LoadTexture("Textures\\TracksMoving.png", GL_TRUE, "TracksMoving");
 	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
 
 	renderer = new Renderer("basicShader");
@@ -91,11 +92,11 @@ void Game::ProcessInput(GLfloat dt) {
 void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
-	for (DynE *e : dynEntities) {
-		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
-		}
-	}
+	//for (DynE *e : dynEntities) {
+	//	if (e->updateE(dt)) {
+	//		colDec->addMovedE(e);
+	//	}
+	//}
 	for (Player *e : Players) {
 		if (e->updateE(dt)) {
 			colDec->addMovedE(e);
@@ -104,9 +105,9 @@ void Game::Update(GLfloat dt) {
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
 	std::vector<Entity*> colE;
-	colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
-	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
-	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
+	//colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
+	//colE.insert(colE.end(), statEntities.begin(), statEntities.end());
+	//colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
 	colE.insert(colE.end(), Players.begin(), Players.end());
 	colDec->doCCheck(colE);
 }

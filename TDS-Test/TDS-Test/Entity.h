@@ -23,8 +23,7 @@ public:
 	glm::vec2 size; // The size of the entities sprite in WCO coordinates (rectangle with the diagonal of size)
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
-	
-protected:
 	glm::vec2 hitbox;
+protected:
 };
 

@@ -59,6 +59,7 @@ void Player::setLegAngle(GLfloat dt) {
 
 	// you have to check the if vel is longer then 0 otherwise you will divide by 0 while normalizing
 	if (glm::length(vel) > 0) {
+		legs->tex = "TracksMoving";
 		// this returns the absolute angle between the y axix and the player ?negative if counter clockwise rotation positive if clockwise? <-- not sure about this you have to try it out
 		if (vel.x > 0) {
 			gAngle = -acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (negative)
@@ -66,6 +67,9 @@ void Player::setLegAngle(GLfloat dt) {
 		else {
 			gAngle = acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (positive)
 		}
+	}
+	else {
+		legs->tex = "Tracks";
 	}
 
 	// I would propose that you only change the stuff below this comment
