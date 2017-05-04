@@ -29,8 +29,9 @@ Game::~Game()
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
-	ResourceManager::LoadTexture("Textures\\Player.png", GL_TRUE, "Player");
+	ResourceManager::LoadTexture("Textures\\DrawnChar2.png", GL_TRUE, "DrawnChar2");
 	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
+	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
 	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
 
 	renderer = new Renderer("basicShader");
@@ -38,8 +39,8 @@ void Game::Init() {
 	colDec = new CollisionDetector;
 
 	statEntities.push_back(new Background("background", 200));
-	Players.push_back(new Player("Player"));
-	Players.push_back(new Player("DrawnChar", glm::vec2(1, 0.56758)));
+	Players.push_back(new Player("DrawnChar", glm::vec2(1, 0.56758), "Tracks", 0.7f * glm::vec2(1, 0.93246)));
+	Players.push_back(new Player("DrawnChar2", glm::vec2(1, 0.76836)));
 }
 
 void Game::ProcessInput(GLfloat dt) {
@@ -118,7 +119,8 @@ void Game::Render() {
 	for (Entity* e : dynEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : Players) {
-		renderer->RenderSprite(*e, *camera);
+	for (Player* p : Players) {
+		renderer->RenderSprite(*(p->getLegs()), *camera);
+		renderer->RenderSprite(*p, *camera);
 	}
 }

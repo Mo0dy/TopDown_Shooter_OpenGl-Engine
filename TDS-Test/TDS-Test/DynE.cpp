@@ -3,7 +3,7 @@
 #include <iostream>
 #define LOG(x) std::cout << x << std::endl;
 
-DynE::DynE(std::string texture) : Entity(texture), mass(1), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-0.1f)
+DynE::DynE(std::string texture, glm::vec2 s) : Entity(texture, s), mass(1), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-0.1f)
 {
 }
 

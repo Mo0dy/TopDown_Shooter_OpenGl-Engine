@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 
-Entity::Entity(std::string texture) : tex(texture), size(1, 1), pos(glm::vec2(0.0f, 0.0f)), angle(0), hitbox()
+Entity::Entity(std::string texture, glm::vec2 s) : tex(texture), size(s), pos(glm::vec2(0.0f, 0.0f)), angle(0), hitbox(size)
 {
 	
 }

@@ -7,7 +7,7 @@
 class DynE : public Entity // Dynamic entity
 {
 public:
-	DynE(std::string texture);
+	DynE(std::string texture, glm::vec2 s);
 	~DynE();
 
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity

@@ -97,8 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="myShader.vs" />
-    <None Include="myShader.frag">
-      <Filter>Source Files</Filter>
-    </None>
+    <None Include="myShader.frag" />
   </ItemGroup>
 </Project>

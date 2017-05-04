@@ -15,7 +15,9 @@ public:
 	// Getters and setters
 	void addMovedE(DynE* dE);
 protected:
-	std::vector<Entity*> e; // Stores entities
-	std::vector<DynE*> d; // Store moved entities
+	void doSingleCheck(Entity* E1, Entity* E2);
+
+	std::vector<Entity*> allE; // Stores entities
+	std::vector<DynE*> movedE; // Store moved entities
 };
 
