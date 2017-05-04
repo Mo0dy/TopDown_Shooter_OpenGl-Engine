@@ -16,6 +16,7 @@ public:
 	void Compile(const GLchar *vertexSource, const GLchar *fragmentSource);
 
 	// Utility functions add more if you need them
+	void SetVector3f(const GLchar *name, const glm::vec3 &value);
 	void SetMatrix4(const GLchar *name, const glm::mat4 &matrix); // Sets matrix4 Uniform "name" to matrix
 
 private:

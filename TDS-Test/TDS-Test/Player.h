@@ -21,6 +21,7 @@ public:
 	// Getters and setters:
 	GLfloat getInherentF();
 	Entity* getLegs();
+
 protected:
 	Entity* legs;
 	GLfloat inherentForce;

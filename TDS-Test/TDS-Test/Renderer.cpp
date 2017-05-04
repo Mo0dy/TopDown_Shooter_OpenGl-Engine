@@ -45,7 +45,13 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	model = glm::scale(model, glm::vec3(entity.size, 1.0f));
 
 	ResourceManager::GetShader(myShader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
-
+	if (entity.collision) {
+		ResourceManager::GetShader(myShader).SetVector3f("spriteColor", glm::vec3(1.0f, 0.4f, 0.4f));
+	}
+	else {
+		ResourceManager::GetShader(myShader).SetVector3f("spriteColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	}
+	
 	// Rendering
 	ResourceManager::GetShader(myShader).Use();
 	glActiveTexture(GL_TEXTURE0);

@@ -15,8 +15,10 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities) {
 		for (Entity *cE : entities) {
 			if (cE != mE) {
 				if (doSingleCheck(mE, cE)) {
-					interator++;
-					LOG(interator);
+					mE->collision = GL_TRUE;
+					cE->collision = GL_TRUE;
+
+					// We should probably remove cE from mE now????? 
 				}
 			}
 		}
@@ -45,14 +47,14 @@ GLboolean CollisionDetector::doSingleCheck(Entity* E1, Entity* E2) {
 	glm::vec2 E1corners[4];
 	E1corners[0] = E1->pos + 0.5f * WCS_hitBoxE1;
 	E1corners[1] = E1->pos - 0.5f * WCS_hitBoxE1;
-	E1corners[2] = E1->pos + 0.5f * glm::vec2(-1, -1) * WCS_hitBoxE1;
-	E1corners[3] = E1->pos - 0.5f * glm::vec2(-1, -1) * WCS_hitBoxE1;
+	E1corners[2] = E1->pos + 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE1;
+	E1corners[3] = E1->pos - 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE1;
 
 	glm::vec2 E2corners[4];
 	E2corners[0] = E2->pos + 0.5f * WCS_hitBoxE2;
 	E2corners[1] = E2->pos - 0.5f * WCS_hitBoxE2;
-	E2corners[2] = E2->pos + 0.5f * glm::vec2(-1, -1) * WCS_hitBoxE2;
-	E2corners[3] = E2->pos - 0.5f * glm::vec2(-1, -1) * WCS_hitBoxE2;
+	E2corners[2] = E2->pos + 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE2;
+	E2corners[3] = E2->pos - 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE2;
 
 	// Check for every axis
 	for (glm::vec2 axis : Axis) {

@@ -99,8 +99,10 @@ void Game::Update(GLfloat dt) {
 	//}
 	for (Player *e : Players) {
 		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
+			
 		}
+		e->collision = GL_FALSE;
+		colDec->addMovedE(e);
 	}
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed

@@ -24,6 +24,10 @@ public:
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
 	glm::vec2 hitbox;
+
+	// for test
+	GLboolean collision;
+
 protected:
 };
 
