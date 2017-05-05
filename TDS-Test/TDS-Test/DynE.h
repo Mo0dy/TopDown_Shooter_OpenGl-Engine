@@ -11,7 +11,7 @@ public:
 	~DynE();
 
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
-	GLboolean updateE(float dt); // call this function every update. returns true if moved
+	virtual GLboolean updateE(float dt); // call this function every update. returns true if moved
 
 protected:
 	GLfloat mass; // mass in kg

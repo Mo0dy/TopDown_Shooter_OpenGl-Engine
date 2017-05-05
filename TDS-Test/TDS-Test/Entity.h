@@ -3,7 +3,7 @@
 #include "Util.h"
 
 #include "Texture2D.h"
-#include "myAnimation.h"
+#include "Animation.h"
 
 class Entity
 {
@@ -16,9 +16,9 @@ public:
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
 	glm::vec2 hitbox;
-	myAnimation ani;
+	Animation ani;
 
-	GLboolean updateE();
+	virtual GLboolean updateE();
 
 	// for test
 	GLboolean collision;

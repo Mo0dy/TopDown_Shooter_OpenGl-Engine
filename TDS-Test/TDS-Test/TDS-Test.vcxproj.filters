@@ -54,7 +54,7 @@
     <ClInclude Include="CustomPlayers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="myAnimation.h">
+    <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,7 +98,7 @@
     <ClCompile Include="CustomPlayers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="myAnimation.cpp">
+    <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

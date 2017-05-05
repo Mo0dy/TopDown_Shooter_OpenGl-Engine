@@ -11,20 +11,20 @@ struct Hitbox {
 };
 
 struct Etex {
-	Etex(std::string texture, GLfloat width): tex(texture) {
-		texSize.x = width;
-		texSize.y = width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width;
-	}
+public:
+	Etex(std::string texture, GLfloat width);
 	std::string tex;
 	glm::vec2 texSize;
 	std::vector<Hitbox> hitboxes;
 };
 
-class myAnimation
+class Animation
 {
 public:
-	myAnimation();
-	~myAnimation();
+	Animation();
+	~Animation();
+
+	void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name);
 
 	void startAnimation();
 	void stopAnimation();
@@ -33,10 +33,10 @@ public:
 	void addETex(Etex*);
 	GLint getSize();
 	GLboolean getState();
+	GLfloat animationTime;
 protected:
 	GLboolean state;
 	GLfloat startTime;
-	GLfloat animationTime;
 	std::vector<Etex*> textures;
 };
 

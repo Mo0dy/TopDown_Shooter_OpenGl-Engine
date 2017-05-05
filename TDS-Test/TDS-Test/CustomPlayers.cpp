@@ -21,6 +21,11 @@ Robot::~Robot()
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
+	// updating animation
+	if (ani.getState()) {
+		tex = ani.getETex()->tex;
+	}
+
 	force += airRes();
 
 	if (glm::length(movDir) > 0) {
@@ -50,10 +55,10 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 	setTrackAngle(dt);
 
-	return glm::length(vel) > 0;
 	addEntities[Robot::TRACKS]->pos = pos;
 	force = glm::vec2(0, 0);
 	movDir = glm::vec2(0, 0);
+	return glm::length(vel) > 0;
 }
 
 void Robot::setTrackAngle(GLfloat dt) {

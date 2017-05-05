@@ -12,7 +12,7 @@ DynE::~DynE()
 
 GLboolean DynE::updateE(float dt) {
 	// updating animation
-	if (ani.getState) {
+	if (ani.getState()) {
 		tex = ani.getETex()->tex;
 	}
 
@@ -24,6 +24,7 @@ GLboolean DynE::updateE(float dt) {
 	} else {
 		vel += dV;
 	}
+
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 	force = glm::vec2(0, 0);
 	return glm::length(vel) > 0;

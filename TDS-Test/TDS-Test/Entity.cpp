@@ -15,7 +15,7 @@ Entity::~Entity()
 }
 
 GLboolean Entity::updateE() {
-	if (ani.getState) {
+	if (ani.getState()) {
 		tex = ani.getETex()->tex;
 	}
 	return GL_FALSE; // static entities never move

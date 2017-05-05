@@ -27,7 +27,7 @@ public:
 	GLfloat getInherentF();
 	
 	std::vector<Entity*> getAddEntities();
-	std::vector<myAnimation*> animations;
+	//std::vector<myAnimation*> animations;
 protected:
 	std::vector<Entity*> addEntities;
 	GLfloat inherentForce;

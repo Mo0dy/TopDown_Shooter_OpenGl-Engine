@@ -124,7 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="myAnimation.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
@@ -140,7 +140,7 @@
     <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="myAnimation.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />

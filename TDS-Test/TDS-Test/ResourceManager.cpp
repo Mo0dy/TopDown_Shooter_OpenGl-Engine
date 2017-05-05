@@ -8,7 +8,7 @@
 // Instantiate static variables
 std::map<std::string, Shader> ResourceManager::Shaders;
 std::map<std::string, Texture2D> ResourceManager::Textures;
-std::map<std::string, myAnimation> ResourceManager::Animations;
+//std::map<std::string, Animation> ResourceManager::Animations;
 
 Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string name) {
 	Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);
@@ -29,20 +29,7 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 	return Textures[name];
 }
 
-myAnimation ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name) {
-	myAnimation ani;
-	std::string texName;
-	for (int i = 0; i < amount; i++) {
-		texName = name + "_T_" + std::to_string(i);
-		LoadTexture((path + "\\T" + std::to_string(i) + filetype).c_str(), alpha, texName);
-		ani.addETex(new Etex(texName, width));
-	}
-	return ani;
-}
 
-myAnimation ResourceManager::getAnimation(std::string name) {
-	return Animations[name];
-}
 
 void ResourceManager::Clear()
 {

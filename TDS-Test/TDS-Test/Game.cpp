@@ -55,6 +55,9 @@ void Game::Init() {
 	Players.back()->size = glm::vec2(1.5);
 	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
 	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
+	Players.back()->ani.LoadAnimation("Textures\\A_test", ".png", 13, 1.5, GL_TRUE, "myAnimation");
+	Players.back()->ani.animationTime = 5;
+	Players.back()->ani.startAnimation();
 }
 
 GLboolean Press_P_Flag = false;
