@@ -15,8 +15,7 @@
 #include "Background.h"
 #include "DynE.h"
 #include "Player.h"
-
-static const float GRAV_ACC = 9.81f;
+#include "CollisionDetector.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -43,5 +42,6 @@ public:
 private:
 	Camera *camera;
 	Renderer *renderer;
+	CollisionDetector *colDec;
 };
 

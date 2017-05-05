@@ -24,7 +24,7 @@ void Renderer::initRenderData() {
 	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindVertexArray(quadVAO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
@@ -45,11 +45,17 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	model = glm::scale(model, glm::vec3(entity.size, 1.0f));
 
 	ResourceManager::GetShader(myShader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
-
+	if (entity.collision) {
+		ResourceManager::GetShader(myShader).SetVector3f("spriteColor", glm::vec3(1.0f, 0.4f, 0.4f));
+	}
+	else {
+		ResourceManager::GetShader(myShader).SetVector3f("spriteColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	}
+	
 	// Rendering
 	ResourceManager::GetShader(myShader).Use();
 	glActiveTexture(GL_TEXTURE0);
-	ResourceManager::GetTexture(entity.myTexture).Bind();
+	ResourceManager::GetTexture(entity.tex).Bind();
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6); // This needs to be modified when we start using vectors to store vertex data in entities
 	glBindVertexArray(0);

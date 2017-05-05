@@ -12,18 +12,21 @@
 #include "Texture2D.h"
 #include "Shader.h"
 #include "Texture2D.h"
-#include "Game.h"
+#include "Util.h"
 
 class Entity
 {
 public:
-	Entity(std::string texture); // The name under which the corresponding texture was loaded into the RecourceManager
+	Entity(std::string texture, GLfloat height); // The name under which the corresponding texture was loaded into the RecourceManager
 	virtual ~Entity();
-	std::string myTexture; 
+	std::string tex; // The hash of the texture stored in the Resource
 	glm::vec2 size; // The size of the entities sprite in WCO coordinates (rectangle with the diagonal of size)
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
-	
+	glm::vec2 hitbox;
+
+	// for test
+	GLboolean collision;
 protected:
 };
 
