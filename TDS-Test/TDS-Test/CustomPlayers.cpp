@@ -1,5 +1,7 @@
 #include "CustomPlayers.h"
 
+#include "Renderer.h"
+
 Robot::Robot(glm::vec2 position): Player(position) 
 {
 	inherentForce = 2500;
@@ -15,16 +17,19 @@ Robot::Robot(glm::vec2 position): Player(position)
 	addEntities.push_back(new Entity(pos));
 }
 
-
 Robot::~Robot()
 {
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
 	// updating animation
-	if (ani.getState()) {
-		tex = ani.getETex()->tex;
-	}
+	//if (ani.getState()) {
+	//	tex = ani.getETex()->tex;
+	//	size = ani.getETex()->texSize;
+	//	if (ani.getETex()->hitboxes.size() > 0) {
+	//		Hitboxes = ani.getETex()->hitboxes;
+	//	}
+	//}
 
 	force += airRes();
 
@@ -56,6 +61,12 @@ GLboolean Robot::updateE(GLfloat dt) {
 	setTrackAngle(dt);
 
 	addEntities[Robot::TRACKS]->pos = pos;
+
+	force = glm::vec2(1500, 1500);
+
+	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex(pos + force * 0.001f, glm::vec3(1.0f, 1.0f, 0.0f)));
+
 	force = glm::vec2(0, 0);
 	movDir = glm::vec2(0, 0);
 	return glm::length(vel) > 0;

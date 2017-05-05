@@ -6,8 +6,8 @@
 #include "ResourceManager.h"
 
 // Settings
-const GLuint SCREEN_WIDTH = 1920;
-const GLuint SCREEN_HEIGHT = 1080;
+const GLuint SCREEN_WIDTH = 900;
+const GLuint SCREEN_HEIGHT = 800;
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);

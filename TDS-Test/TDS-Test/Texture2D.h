@@ -8,6 +8,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct Hitbox {
+	Hitbox();
+	Hitbox(glm::vec2 position, glm::vec2 newSize, GLfloat newAngle);
+	glm::vec2 pos; // lower left corner
+	glm::vec2 size; // Size of the rectangle from lower left corner
+	GLfloat angle; // angle relative to the corresponding texture
+};
+
 class Texture2D
 {
 public:

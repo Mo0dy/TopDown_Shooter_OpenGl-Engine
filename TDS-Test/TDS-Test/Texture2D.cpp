@@ -1,5 +1,11 @@
 #include "Texture2D.h"
 
+Hitbox::Hitbox() {
+}
+
+Hitbox::Hitbox(glm::vec2 position, glm::vec2 newSize, GLfloat newAngle): pos(position), size(newSize), angle(newAngle) {
+}
+
 Texture2D::Texture2D() : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
 {
 	glGenTextures(1, &Tex);

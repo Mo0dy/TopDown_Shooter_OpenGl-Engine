@@ -15,13 +15,13 @@ public:
 	glm::vec2 size; // The size of the entities sprite in WCO coordinates (rectangle with the diagonal of size)
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in degrees
-	glm::vec2 hitbox;
+	std::vector<Hitbox*> Hitboxes;
 	Animation ani;
 
-	virtual GLboolean updateE();
+	glm::vec3 color;
 
-	// for test
-	GLboolean collision;
+	virtual GLboolean updateE(GLfloat dt);
+	virtual void Collision(Entity* cE, GLfloat dt);
 protected:
 };
 

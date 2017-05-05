@@ -44,5 +44,6 @@ private:
 	Camera *camera;
 	Renderer *renderer;
 	CollisionDetector *colDec;
+	Entity* background;
 };
 
