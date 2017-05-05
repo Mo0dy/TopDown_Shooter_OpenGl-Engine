@@ -44,8 +44,17 @@ void Game::Init() {
 	colDec = new CollisionDetector;
 
 	statEntities.push_back(new Background("background", 200));
-	Players.push_back(new Player("DrawnChar", "DrawnChar", 0.85, "Tracks", 1.2));
-	Players.push_back(new Player("U_Bot", "U_Bot_Hand", 1.530925, "D_Bot", 1.530925));
+	Players.push_back(new Robot(glm::vec2(0, 0)));
+	Players.back()->tex = "U_Bot";
+	Players.back()->size = glm::vec2(1.5);
+	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
+	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
+
+	Players.push_back(new Robot(glm::vec2(3, 0)));
+	Players.back()->tex = "U_Bot";
+	Players.back()->size = glm::vec2(1.5);
+	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
+	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
 }
 
 GLboolean Press_P_Flag = false;
@@ -126,19 +135,19 @@ void Game::Update(GLfloat dt) {
 		if (e->updateE(dt)) {
 			
 		}
-		e->collision = GL_FALSE;
-		colDec->addMovedE(e);
+		//e->collision = GL_FALSE;
+		//colDec->addMovedE(e);
 	}
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
-	std::vector<Entity*> colE;
+	//std::vector<Entity*> colE;
 	//colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
 	//colE.insert(colE.end(), statEntities.begin(), statEntities.end());
 	//colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	for (Player* p : Players) {
-		colE.push_back(p);
-	}
-	colDec->doCCheck(colE);
+	//for (Player* p : Players) {
+	//	colE.push_back(p);
+	//}
+	//colDec->doCCheck(colE);
 }
 
 void Game::Render() {
@@ -150,7 +159,9 @@ void Game::Render() {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Player* p : Players) {
-		renderer->RenderSprite(*(p->getLegs()), *camera);
+		for (Entity* e : p->getAddEntities()) {
+			renderer->RenderSprite(*e, *camera);
+		}
 		renderer->RenderSprite(*p, *camera);
 	}
 }

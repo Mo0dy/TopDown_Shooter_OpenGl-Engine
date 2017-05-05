@@ -16,26 +16,22 @@ enum WeaponState {
 class Player : public DynE
 {
 public:
-	Player(std::string texture, GLfloat height);
-	Player(std::string bodyTexture, std::string aimTexture, GLfloat bodyHeight, std::string legTex, GLfloat legHeight);
-	~Player();
-	GLboolean updateE(GLfloat dt);
+	Player(glm::vec2 position);
+	virtual ~Player();
+
 	MovementState movState;
 	WeaponState wepState;
 	glm::vec2 movDir;
 
 	// Getters and setters:
 	GLfloat getInherentF();
-	Entity* getLegs();
-
+	
+	std::vector<Entity*> getAddEntities();
+	std::vector<myAnimation*> animations;
 protected:
-	std::string standardTex;
-	std::string aimTex;
-	Entity* legs;
+	std::vector<Entity*> addEntities;
 	GLfloat inherentForce;
 	GLfloat sprintMod; // inherentForce multiplayer while sprinting
 	GLfloat turnSpeed; // degrees per second
-
-	void setLegAngle(GLfloat dt);
 };
 

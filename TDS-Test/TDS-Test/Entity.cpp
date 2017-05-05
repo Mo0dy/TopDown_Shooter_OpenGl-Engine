@@ -1,14 +1,22 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 
-Entity::Entity(std::string texture, GLfloat height) : tex(texture), pos(glm::vec2(0.0f, 0.0f)), angle(0)
+Entity::Entity(glm::vec2 position) : tex("Util"), pos(position), angle(0), size(1, 1), hitbox(size)
 {
-	size.y = height;
-	size.x = height * ResourceManager::GetTexture(texture).Width / ResourceManager::GetTexture(texture).Height;
-	hitbox = size;
+	collision = GL_FALSE;
+}
+
+Entity::Entity(glm::vec2 position, glm::vec2 s) : tex("Util"), pos(position), angle(0), size(s), hitbox(size) {
 	collision = GL_FALSE;
 }
 
 Entity::~Entity()
 {
+}
+
+GLboolean Entity::updateE() {
+	if (ani.getState) {
+		tex = ani.getETex()->tex;
+	}
+	return GL_FALSE; // static entities never move
 }

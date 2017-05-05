@@ -16,6 +16,7 @@
 #include "DynE.h"
 #include "Player.h"
 #include "CollisionDetector.h"
+#include "CustomPlayers.h"
 
 enum GameState {
 	GAME_ACTIVE,

@@ -51,6 +51,12 @@
     <ClInclude Include="CollisionDetector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CustomPlayers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="myAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -89,11 +95,12 @@
     <ClCompile Include="CollisionDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="TDS-Test.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <ClCompile Include="CustomPlayers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="myAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myShader.vs" />

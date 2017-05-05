@@ -24,7 +24,7 @@ public:
 	GLuint Filter_Min; // Filtering mode if texture pixels < screen pixels
 	GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
 
-	Texture2D(); // ID of the texture
+	Texture2D();
 	// Generates texture from image data
 	void Generate(GLuint width, GLuint height, unsigned char* data);
 	// Binds the texture as the current active GL_TEXTURE_2D texture object

@@ -1,9 +1,8 @@
 #include "DynE.h"
 
 #include <iostream>
-#define LOG(x) std::cout << x << std::endl;
 
-DynE::DynE(std::string texture, GLfloat height) : Entity(texture, height), mass(1), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-0.1f)
+DynE::DynE(glm::vec2 position) : Entity(position), mass(1), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-0.1f)
 {
 }
 
@@ -12,6 +11,11 @@ DynE::~DynE()
 }
 
 GLboolean DynE::updateE(float dt) {
+	// updating animation
+	if (ani.getState) {
+		tex = ani.getETex()->tex;
+	}
+
 	glm::vec2 dV = dt * (force + fricRes() + airRes()) / mass;
 
 	// safeguard for wiggeling close to 0v
