@@ -50,5 +50,8 @@ private:
 
 // Utility
 	XINPUT_STATE getController(GLint index);
+	void reset();
 };
+
+
 

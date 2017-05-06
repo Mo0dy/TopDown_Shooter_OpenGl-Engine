@@ -91,14 +91,7 @@ void Game::ProcessInput(GLfloat dt) {
 		Press_R_Flag = true;
 	}
 	if (!Keys[GLFW_KEY_R] && Press_R_Flag) {
-		Press_R_Flag = false;
-		for (int i = 0; i < Players.size(); i++) {
-			Players[i]->pos = glm::vec2(i * 3, 0);
-		}
-		for (int i = 0; i < dynEntities.size(); i++) {
-			dynEntities[i]->pos = glm::vec2(i * 3, 3);
-			dynEntities[i]->vel = glm::vec2(0);
-		}
+		reset();
 	}
 #endif // DEBUG
 
@@ -235,4 +228,17 @@ XINPUT_STATE Game::getController(GLint index) {
 	{
 		LOG("ERROR::CONTROLLER::NO CONTROLLER CONNECTED");
 	}
+}
+
+void Game::reset() {
+	Press_R_Flag = false;
+	for (int i = 0; i < Players.size(); i++) {
+		Players[i]->pos = glm::vec2(i * 3, 0);
+	}
+	for (int i = 0; i < dynEntities.size(); i++) {
+		dynEntities[i]->pos = glm::vec2(i * 3, 3);
+		dynEntities[i]->vel = glm::vec2(0);
+	}
+	dynEntities[0]->vel = glm::vec2(-1, 0);
+	dynEntities[1]->vel = glm::vec2(-2, 0);
 }
