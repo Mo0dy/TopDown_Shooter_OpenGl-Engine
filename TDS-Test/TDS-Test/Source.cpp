@@ -5,14 +5,16 @@
 #include "game.h"
 #include "ResourceManager.h"
 
+//#define FULLSCREEN
+
 // Settings
-const GLuint SCREEN_WIDTH = 900;
-const GLuint SCREEN_HEIGHT = 800;
+GLuint screenWidth = 900;
+GLuint screenHeight = 800;
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-Game TDS(SCREEN_WIDTH, SCREEN_HEIGHT);
+Game TDS(screenWidth, screenHeight);
 
 int main(int argc, char *argv[]) {
 	glfwInit();
@@ -20,8 +22,16 @@ int main(int argc, char *argv[]) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TDS", nullptr, nullptr);
+	
+	GLFWwindow* window;
+#ifdef FULLSCREEN
+	GLFWmonitor* primary = glfwGetPrimaryMonitor();
+	screenWidth = glfwGetVideoMode(primary)->width;
+	screenHeight = glfwGetVideoMode(primary)->height;
+	window = glfwCreateWindow(screenWidth, screenHeight, "TDS", primary, nullptr);
+#else //FULLSCREEN
+	window = glfwCreateWindow(screenWidth, screenHeight, "TDS", nullptr, nullptr);
+#endif
 	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;
@@ -31,7 +41,7 @@ int main(int argc, char *argv[]) {
 	glfwSetKeyCallback(window, key_callback);
 
 	// OpenGL configuration
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glViewport(0, 0, screenWidth, screenHeight);
 	TDS.Init();
 
 	GLfloat deltaTime = 0.0f;

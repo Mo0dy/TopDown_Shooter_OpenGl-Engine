@@ -12,9 +12,21 @@
 #include <vector>
 #include <string>
 
-#define LOG(x) std::cout << x << std::endl;
+// Debug
+#define DEBUG
+#ifdef DEBUG
+	#define DEBUG_FORCES
+	#define LOG(x) std::cout << x << std::endl;
+#endif
 
-static const float GRAV_ACC = 9.81f;
+// Physics
+static const GLfloat GRAV_ACC = 9.81f;
+
+// Sudo Physics
+static const GLfloat COLLISION_ADD_CHANGE = 0.5f;
+
+// Rendering
+static const GLfloat FORCE_SCALE = 0.001f;
 
 static void printVec2(glm::vec2 v) {
 	std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;

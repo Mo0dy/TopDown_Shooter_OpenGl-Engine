@@ -5,7 +5,7 @@
 Robot::Robot(glm::vec2 position): Player(position) 
 {
 	inherentForce = 2500;
-	movState = STOPPING;
+	state = STOPPING;
 	sprintMod = 4;
 	turnSpeed = 10;
 
@@ -37,12 +37,10 @@ GLboolean Robot::updateE(GLfloat dt) {
 		movDir = glm::normalize(movDir);
 	}
 
-	switch (movState) {
+	switch (state) {
 	case STOPPING: force += fricRes();
 		break;
-	case RUNNING: force += movDir * inherentForce;
-		break;
-	case SPRINTING: force += movDir * inherentForce * sprintMod;
+	case MOVING: force += movDir * inherentForce;
 		break;
 	}
 
@@ -62,10 +60,10 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 	addEntities[Robot::TRACKS]->pos = pos;
 
-	force = glm::vec2(1500, 1500);
-
+#ifdef DEBUG_FORCES
 	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-	Renderer::drawLineBuffer.push_back(myVertex(pos + force * 0.001f, glm::vec3(1.0f, 1.0f, 0.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
 
 	force = glm::vec2(0, 0);
 	movDir = glm::vec2(0, 0);

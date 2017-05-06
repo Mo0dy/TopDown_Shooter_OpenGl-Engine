@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Renderer.h"
 
-DynE::DynE(glm::vec2 position) : Entity(position), mass(1), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-0.1f)
+DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING)
 {
 }
 
@@ -20,8 +20,12 @@ GLboolean DynE::updateE(float dt) {
 			Hitboxes = ani.getETex()->hitboxes;
 		}
 	}
-
-	glm::vec2 dV = dt * (force + fricRes() + airRes()) / mass;
+	switch (state) {
+	case MOVING: addForce(airRes());
+		break;
+	case STOPPING: addForce(fricRes() + airRes());
+	}
+	glm::vec2 dV = dt * force / mass;
 
 	// safeguard for wiggeling close to 0v
 	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
@@ -40,11 +44,10 @@ void DynE::Collision(Entity* cE, GLfloat dt) {
 	if (E2 == NULL) { // Collision with static object
 		
 	}
-	else { // Collision with dynamic object
-		glm::vec2 collisionForce = (glm::dot((E2->pos - pos), E2->vel) * E2->mass / glm::pow(glm::distance(pos, E2->pos), 2) / dt) * (E2->pos - pos);
-		addForce(collisionForce);
-		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(pos + collisionForce * 0.001f, glm::vec3(1.0f, 1.0f, 0.0f)));
+	else { 
+		glm::vec2 c = E2->pos - pos;
+		vel += (glm::dot(E2->vel, c) * E2->mass - glm::dot(vel, c) * (2 * E2->mass + mass)) / glm::pow(glm::length(c), 2) / (mass + E2->mass) * c;
+		vel -= glm::normalize(c) * COLLISION_ADD_CHANGE;
 	}
 }
 

@@ -5,7 +5,6 @@
 enum MovementState {
 	RUNNING,
 	SPRINTING,
-	STOPPING
 };
 
 enum WeaponState {

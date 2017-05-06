@@ -2,10 +2,10 @@
 #include "ResourceManager.h"
 #include "Game.h"
 
-myVertex::myVertex(glm::vec2 position): pos(position), color(glm::vec3(0.0f, 0.0f, 0.0f))
+myVertex::myVertex(glm::vec2 position) : pos(position), color(glm::vec3(0.0f, 0.0f, 0.0f))
 {
 }
-myVertex::myVertex(glm::vec2 position, glm::vec3 inColor): pos(position), color(inColor)
+myVertex::myVertex(glm::vec2 position, glm::vec3 inColor) : pos(position), color(inColor)
 {
 }
 
@@ -77,10 +77,11 @@ void Renderer::RenderBuffer(Camera &cam) {
 			vertices.push_back(v.color.y);
 			vertices.push_back(v.color.z);
 		}
+
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size(), &vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 		glBindVertexArray(VAO);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);

@@ -37,6 +37,7 @@ void Game::Init() {
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
 	ResourceManager::LoadTexture("Textures\\TracksMoving.png", GL_TRUE, "TracksMoving");
 	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
+	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
@@ -60,6 +61,10 @@ void Game::Init() {
 	Players.back()->ani.startAnimation();
 	Players.back()->color = glm::vec3(0.7f, 0.7f, 1.0f);
 	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(0.7f, 0.7f, 1.0f);
+
+	dynEntities.push_back(new DynE(glm::vec2(1.5f, 3.0f)));
+	dynEntities.back()->tex = "awesomeface";
+	dynEntities.back()->state = MOVING;
 }
 
 GLboolean Press_P_Flag = false;
@@ -68,7 +73,7 @@ GLboolean Press_R_Flag = false;
 
 void Game::ProcessInput(GLfloat dt) {
 	for (Player* p : Players) {
-		p->movState = STOPPING;
+		p->state = STOPPING;
 		p->wepState = NORMAL;
 	}
 
@@ -89,19 +94,19 @@ void Game::ProcessInput(GLfloat dt) {
 	// Player0
 	if (Keys[GLFW_KEY_W]) {
 		Players[0]->movDir += glm::vec2(0, 1);
-		Players[0]->movState = RUNNING;
+		Players[0]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_S]) {
 		Players[0]->movDir += glm::vec2(0, -1);
-		Players[0]->movState = RUNNING;
+		Players[0]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_D]) {
 		Players[0]->movDir += glm::vec2(1, 0);
-		Players[0]->movState = RUNNING;
+		Players[0]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_A]) {
 		Players[0]->movDir += glm::vec2(-1, 0);
-		Players[0]->movState = RUNNING;
+		Players[0]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_LEFT_SHIFT]) {
 		Players[0]->movState = SPRINTING;
@@ -110,19 +115,19 @@ void Game::ProcessInput(GLfloat dt) {
 	// Player1
 	if (Keys[GLFW_KEY_UP]) {
 		Players[1]->movDir += glm::vec2(0, 1);
-		Players[1]->movState = RUNNING;
+		Players[1]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_DOWN]) {
 		Players[1]->movDir += glm::vec2(0, -1);
-		Players[1]->movState = RUNNING;
+		Players[1]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_RIGHT]) {
 		Players[1]->movDir += glm::vec2(1, 0);
-		Players[1]->movState = RUNNING;
+		Players[1]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_LEFT]) {
 		Players[1]->movDir += glm::vec2(-1, 0);
-		Players[1]->movState = RUNNING;
+		Players[1]->state = MOVING;
 	}
 	if (Keys[GLFW_KEY_P]) {
 		Press_P_Flag = true;
