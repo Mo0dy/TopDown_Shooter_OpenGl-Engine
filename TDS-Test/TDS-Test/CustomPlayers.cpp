@@ -22,6 +22,13 @@ Robot::~Robot()
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
+	// updating values according to collision
+	if (collision) {
+		pos = colPos;
+		vel = colVel;
+		collision = GL_FALSE;
+	}
+
 	// updating animation
 	//if (ani.getState()) {
 	//	tex = ani.getETex()->tex;

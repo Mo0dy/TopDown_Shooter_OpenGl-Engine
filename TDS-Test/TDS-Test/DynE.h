@@ -19,13 +19,20 @@ public:
 	virtual GLboolean updateE(float dt); // call this function every update. returns true if moved
 	virtual void Collision(Entity* cE, GLfloat dt);
 	State state;
+
+	// Should be private but its debugging
+	glm::vec2 vel; // velocity in m/s
+	GLfloat airFricCoeff;
 protected:
 	GLfloat mass; // mass in kg
 	GLfloat dynFricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 	GLfloat statFricCoeff;
-	GLfloat airFricCoeff;
 	glm::vec2 force; // force in N
-	glm::vec2 vel; // velocity in m/s
+
+	// Position and velocity after all collisions are done
+	GLboolean collision;
+	glm::vec2 colVel; 
+	glm::vec2 colPos;
 
 	// Utility functions
 	glm::vec2 fricRes(); // calculates friction

@@ -17,6 +17,8 @@
 #include "Player.h"
 #include "CollisionDetector.h"
 #include "CustomPlayers.h"
+#include <Windows.h>
+#include <Xinput.h>
 
 enum GameState {
 	GAME_ACTIVE,
@@ -45,5 +47,8 @@ private:
 	Renderer *renderer;
 	CollisionDetector *colDec;
 	Entity* background;
+
+// Utility
+	XINPUT_STATE getController(GLint index);
 };
 

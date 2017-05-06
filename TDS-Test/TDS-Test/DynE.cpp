@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Renderer.h"
 
-DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING)
+DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE)
 {
 }
 
@@ -12,6 +12,13 @@ DynE::~DynE()
 }
 
 GLboolean DynE::updateE(float dt) {
+	// updating values according to collision
+	if (collision) {
+		pos = colPos;
+		vel = colVel;
+		collision = GL_FALSE;
+	}
+
 	// updating animation
 	if (ani.getState()) {
 		tex = ani.getETex()->tex;
@@ -30,7 +37,8 @@ GLboolean DynE::updateE(float dt) {
 	// safeguard for wiggeling close to 0v
 	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
 		vel = glm::vec2(0, 0);
-	} else {
+	}
+	else {
 		vel += dV;
 	}
 
@@ -42,12 +50,15 @@ GLboolean DynE::updateE(float dt) {
 void DynE::Collision(Entity* cE, GLfloat dt) {
 	DynE* E2 = dynamic_cast<DynE*> (cE);
 	if (E2 == NULL) { // Collision with static object
-		
+
 	}
-	else { 
+	else {
+
+		collision = GL_TRUE;
 		glm::vec2 c = E2->pos - pos;
-		vel += (glm::dot(E2->vel, c) * E2->mass - glm::dot(vel, c) * (2 * E2->mass + mass)) / glm::pow(glm::length(c), 2) / (mass + E2->mass) * c;
-		vel -= glm::normalize(c) * COLLISION_ADD_CHANGE;
+		colVel = vel + (glm::dot(E2->vel, c) * E2->mass - glm::dot(vel, c) * (2 * E2->mass + mass)) / glm::pow(glm::length(c), 2) / (mass + E2->mass) * c;
+		colPos = pos - vel * dt * 1.01f;
+
 	}
 }
 
@@ -70,7 +81,7 @@ glm::vec2 DynE::airRes() {
 	if (glm::length(vel) > 0) {
 		return glm::normalize(vel) * glm::pow(glm::length(vel), 2) * airFricCoeff;
 	}
-	return glm::vec2(0,0);
+	return glm::vec2(0, 0);
 }
 
 // Getters and Setters

@@ -12,6 +12,12 @@
 #include <vector>
 #include <string>
 
+// Settings
+#define CONTROLLER_SUPPORT
+#define KEYBOARD_SUPPORT
+
+//#define FULLSCREEN
+
 // Debug
 #define DEBUG
 #ifdef DEBUG
@@ -23,7 +29,6 @@
 static const GLfloat GRAV_ACC = 9.81f;
 
 // Sudo Physics
-static const GLfloat COLLISION_ADD_CHANGE = 0.5f;
 
 // Rendering
 static const GLfloat FORCE_SCALE = 0.001f;
@@ -31,3 +36,6 @@ static const GLfloat FORCE_SCALE = 0.001f;
 static void printVec2(glm::vec2 v) {
 	std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
 }
+
+// Other
+static const GLfloat CONTROLLER_STICK_MAX = 32767;

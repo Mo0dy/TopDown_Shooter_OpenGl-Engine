@@ -4,8 +4,10 @@
 
 #include "game.h"
 #include "ResourceManager.h"
+#include "Windows.h"
 
-//#define FULLSCREEN
+// Controller IDE
+#include <Xinput.h>
 
 // Settings
 GLuint screenWidth = 900;
@@ -22,7 +24,7 @@ int main(int argc, char *argv[]) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	
+
 	GLFWwindow* window;
 #ifdef FULLSCREEN
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
