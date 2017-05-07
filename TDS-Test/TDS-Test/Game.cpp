@@ -5,7 +5,7 @@
 
 #include <Xinput.h>
 
-Game::Game(GLuint width, GLuint height): State(GAME_ACTIVE), Width(width), Height(height)
+Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
 }
 
@@ -30,40 +30,24 @@ Game::~Game()
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
-
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
-	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
-	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
-	ResourceManager::LoadTexture("Textures\\U_Bot_Hand.png", GL_TRUE, "U_Bot_Hand");
-	ResourceManager::LoadTexture("Textures\\DrawnChar.png", GL_TRUE, "DrawnChar");
-	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
-	ResourceManager::LoadTexture("Textures\\TracksMoving.png", GL_TRUE, "TracksMoving");
 	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
+	ResourceManager::LoadTexture("Textures\\Dickbutt.png", GL_TRUE, "Dickbutt");
+
+	Robot::loadRobot();
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
-	background = new Background("background", 200);
+	background = new Background("Dickbutt", 80);
+
 	Players.push_back(new Robot(glm::vec2(0, -3)));
-	Players.back()->tex = "U_Bot";
-	Players.back()->size = glm::vec2(1.5);
-	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
-	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
-	Players.back()->color = glm::vec3(1.0f, 0.7f, 0.7f);
-	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(1.0f, 0.7f, 0.7f);
+	Players.back()->setColor(glm::vec3(1.0f, 0.7f, 0.7f));
 
 #ifdef SECOND_PLAYER
 	Players.push_back(new Robot(glm::vec2(3, -3)));
-	Players.back()->tex = "U_Bot";
-	Players.back()->size = glm::vec2(1.5);
-	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
-	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
-	Players.back()->ani.LoadAnimation("Textures\\A_test", ".png", 13, 1.5, GL_TRUE, "myAnimation");
-	Players.back()->ani.animationTime = 5;
-	Players.back()->ani.startAnimation();
-	Players.back()->color = glm::vec3(0.7f, 0.7f, 1.0f);
-	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(0.7f, 0.7f, 1.0f);
+	Players.back()->setColor(glm::vec3(0.7f, 0.7f, 1.0f));
 #endif // SECOND_PLAYER
 
 	for (int i = 0; i < 5; i++) {
@@ -76,8 +60,8 @@ void Game::Init() {
 }
 
 #ifdef KEYBOARD_SUPPORT
-	GLboolean Press_P_Flag = false;
-	GLboolean Press_O_Flag = false;
+GLboolean Press_P_Flag = false;
+GLboolean Press_O_Flag = false;
 #endif // KEYBOARD_SUPPORT
 
 // UTIL
@@ -95,26 +79,44 @@ void Game::ProcessInput(GLfloat dt) {
 		Press_R_Flag = true;
 	}
 	if (!Keys[GLFW_KEY_R] && Press_R_Flag) {
+		Press_R_Flag = false;
 		reset();
 	}
 #endif // DEBUG
 
 #ifdef CONTROLLER_SUPPORT
-	XINPUT_STATE& cState = getController(0);
+	XINPUT_STATE* cState[4];
+
+	for (int i = 0; i < 4; i++) {
+		cState[i] = new XINPUT_STATE;
+	}
+
 	// We should probably check the dwPacket number that only changes if input changes
-	XINPUT_GAMEPAD gState = cState.Gamepad;
+	XINPUT_GAMEPAD gState;
 
-	if (abs(gState.sThumbLX) > 2000 || abs(gState.sThumbLY) > 2000) {
-		Players[0]->movDir += glm::vec2(gState.sThumbLX, 0);
-		Players[0]->movDir += glm::vec2(0, gState.sThumbLY);
-		Players[0]->state = MOVING;
+	GLuint controlledPlayers = 0;
+
+	while (getController(controlledPlayers, cState[controlledPlayers]) == ERROR_SUCCESS && controlledPlayers < 4) {
+		controlledPlayers++;
 	}
 
-	if (abs(gState.sThumbRX) > 2000 || abs(gState.sThumbRY) > 2000) {
-		Players[0]->bodyDir += glm::vec2(gState.sThumbRX, 0);
-		Players[0]->bodyDir += glm::vec2(0, gState.sThumbRY);
+	if (controlledPlayers > Players.size()) {
+		controlledPlayers = Players.size();
 	}
 
+	for (int i = 0; i < controlledPlayers; i++) {
+		gState = cState[i]->Gamepad;
+		if (abs(gState.sThumbLX) > 2000 || abs(gState.sThumbLY) > 2000) {
+			Players[i]->movDir += glm::vec2(gState.sThumbLX, 0);
+			Players[i]->movDir += glm::vec2(0, gState.sThumbLY);
+			Players[i]->state = MOVING;
+		}
+
+		if (abs(gState.sThumbRX) > 2000 || abs(gState.sThumbRY) > 2000) {
+			Players[i]->bodyDir += glm::vec2(gState.sThumbRX, 0);
+			Players[i]->bodyDir += glm::vec2(0, gState.sThumbRY);
+		}
+	}
 #endif // Controller Support
 
 
@@ -145,7 +147,7 @@ void Game::ProcessInput(GLfloat dt) {
 	if (Keys[GLFW_KEY_UP]) {
 		Players[1]->movDir += glm::vec2(0, 1);
 		Players[1]->state = MOVING;
-}
+	}
 	if (Keys[GLFW_KEY_DOWN]) {
 		Players[1]->movDir += glm::vec2(0, -1);
 		Players[1]->state = MOVING;
@@ -224,32 +226,18 @@ void Game::Render() {
 }
 
 // Utility
-XINPUT_STATE Game::getController(GLint index) {
-	DWORD dwResult;
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState(index, &state);
 
-	if (dwResult == ERROR_SUCCESS)
-	{
-		return state;
-	}
-	else
-	{
-		LOG("ERROR::CONTROLLER::NO CONTROLLER CONNECTED");
-	}
+DWORD Game::getController(GLint index, XINPUT_STATE* state) {
+	ZeroMemory(state, sizeof(XINPUT_STATE));
+	return XInputGetState(index, state);
 }
 
 void Game::reset() {
-	Press_R_Flag = false;
 	for (int i = 0; i < Players.size(); i++) {
 		Players[i]->pos = glm::vec2(i * 3, -3);
 	}
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			dynEntities[i+j]->pos = glm::vec2(i * 3, j * 3);
-			dynEntities[i+j]->vel = glm::vec2(0);
-		}	
+	for (int i = 0; i < dynEntities.size(); i++) {
+		dynEntities[i]->pos = glm::vec2(i % 5 * 3, i / 5 * 3);
+		dynEntities[i]->vel = glm::vec2(0);
 	}
 }

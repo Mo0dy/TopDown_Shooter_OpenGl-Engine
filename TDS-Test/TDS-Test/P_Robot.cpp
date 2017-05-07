@@ -1,21 +1,34 @@
-#include "CustomPlayers.h"
+#include "P_Robot.h"
 
 #include "Renderer.h"
 
+void Robot::loadRobot() {
+	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
+	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
+	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
+}
+
 Robot::Robot(glm::vec2 position): Player(position) 
 {
+	// Settings
 	inherentForce = 2500;
-	state = STOPPING;
 	sprintMod = 4;
 	bodyTurnSpeed = 3;
 	trackTurnSpeed = 5;
-
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
 
+	tex = "U_Bot";
+	size = glm::vec2(1.5);
+
 	addEntities.push_back(new Entity(pos));
+	addEntities[TRACKS]->tex = "D_Bot";
+	addEntities[TRACKS]->size = glm::vec2(1.5);
+	state = STOPPING;
+
+	setColor(glm::vec3(1.0f));
 }
 
 Robot::~Robot()

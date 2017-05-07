@@ -10,8 +10,8 @@
 #include <Xinput.h>
 
 // Settings
-GLuint screenWidth = 900;
-GLuint screenHeight = 800;
+GLuint screenWidth = SCREEN_WIDTH;
+GLuint screenHeight = SCREEN_HEIGHT;
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 		TDS.Update(deltaTime);
 
 		// Render
-		glClearColor(1.0, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		TDS.Render();
 		glfwSwapBuffers(window);

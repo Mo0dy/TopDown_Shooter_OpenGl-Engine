@@ -8,6 +8,8 @@ public:
 
 	static const int TRACKS = 0;
 
+	static void loadRobot();
+
 	Robot(glm::vec2 position);
 	~Robot();
 

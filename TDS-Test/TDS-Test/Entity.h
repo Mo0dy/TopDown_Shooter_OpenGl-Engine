@@ -18,10 +18,10 @@ public:
 	std::vector<Hitbox*> Hitboxes;
 	Animation ani;
 
-	glm::vec3 color;
-
 	virtual GLboolean updateE(GLfloat dt);
 	virtual void Collision(Entity* cE, GLfloat dt);
+	virtual void setColor(glm::vec3 color);
+	glm::vec3 color;
 protected:
 };
 

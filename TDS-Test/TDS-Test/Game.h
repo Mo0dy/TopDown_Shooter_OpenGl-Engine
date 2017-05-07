@@ -16,7 +16,7 @@
 #include "DynE.h"
 #include "Player.h"
 #include "CollisionDetector.h"
-#include "CustomPlayers.h"
+#include "P_Robot.h"
 #include <Windows.h>
 #include <Xinput.h>
 
@@ -49,7 +49,7 @@ private:
 	Entity* background;
 
 // Utility
-	XINPUT_STATE getController(GLint index);
+	DWORD getController(GLint index, XINPUT_STATE* state);
 	void reset();
 };
 

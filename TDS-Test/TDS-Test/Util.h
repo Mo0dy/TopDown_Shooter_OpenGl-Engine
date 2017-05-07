@@ -17,9 +17,8 @@
 #define CONTROLLER_SUPPORT
 #define KEYBOARD_SUPPORT
 
-//#define SECOND_PLAYER
+#define SECOND_PLAYER
 
-//#define FULLSCREEN
 
 // Debug
 #define DEBUG
@@ -28,6 +27,7 @@
 	#define LOG(x) std::cout << x << std::endl
 #endif
 
+// utility funciton
 class Util {
 public:
 	static GLfloat calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
@@ -55,13 +55,11 @@ public:
 				dA += 2 * glm::pi<GLfloat>();
 			}
 		}
-
-		LOG("A = " << currAngle << " | gA = " << goalAngle << " | dA = " << dA);
-
 		return dA;
 	}
 
 };
+
 // Physics
 static const GLfloat GRAV_ACC = 9.81f;
 
@@ -69,6 +67,9 @@ static const GLfloat GRAV_ACC = 9.81f;
 static const GLfloat COLLISION_ADD_CHANGE = 0.001;
 
 // Rendering
+//#define FULLSCREEN
+#define SCREEN_WIDTH 900
+#define SCREEN_HEIGHT 800
 static const GLfloat FORCE_SCALE = 0.001f;
 
 static void printVec2(glm::vec2 v) {

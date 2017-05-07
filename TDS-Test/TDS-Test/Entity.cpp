@@ -30,5 +30,8 @@ GLboolean Entity::updateE(GLfloat dt) {
 }
 
 void Entity::Collision(Entity* cE, GLfloat dt) {
+}
 
+void Entity::setColor(glm::vec3 color) {
+	this->color = color;
 }

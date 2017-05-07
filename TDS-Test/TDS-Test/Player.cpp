@@ -15,3 +15,10 @@ GLfloat Player::getInherentF() {
 }
 
 std::vector<Entity*> Player::getAddEntities() { return addEntities; }
+
+void Player::setColor(glm::vec3 color) {
+	this->color = color;
+	for (Entity *e : addEntities) {
+		e->setColor(color);
+	}
+}

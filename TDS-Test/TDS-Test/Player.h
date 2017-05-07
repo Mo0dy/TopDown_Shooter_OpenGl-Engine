@@ -11,7 +11,7 @@ enum WeaponState {
 	NORMAL,
 	AIMING
 };
-
+																	
 class Player : public DynE
 {
 public:
@@ -28,6 +28,9 @@ public:
 	
 	std::vector<Entity*> getAddEntities();
 	//std::vector<myAnimation*> animations;
+
+	void setColor(glm::vec3 color);
+
 protected:
 	std::vector<Entity*> addEntities;
 	GLfloat inherentForce;
