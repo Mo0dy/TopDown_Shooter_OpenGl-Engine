@@ -53,6 +53,7 @@ void Game::Init() {
 	Players.back()->color = glm::vec3(1.0f, 0.7f, 0.7f);
 	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(1.0f, 0.7f, 0.7f);
 
+#ifdef SECOND_PLAYER
 	Players.push_back(new Robot(glm::vec2(3, -3)));
 	Players.back()->tex = "U_Bot";
 	Players.back()->size = glm::vec2(1.5);
@@ -63,6 +64,7 @@ void Game::Init() {
 	Players.back()->ani.startAnimation();
 	Players.back()->color = glm::vec3(0.7f, 0.7f, 1.0f);
 	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(0.7f, 0.7f, 1.0f);
+#endif // SECOND_PLAYER
 
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
@@ -139,10 +141,11 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 
 	// Player1
+#ifdef SECOND_PLAYER
 	if (Keys[GLFW_KEY_UP]) {
 		Players[1]->movDir += glm::vec2(0, 1);
 		Players[1]->state = MOVING;
-	}
+}
 	if (Keys[GLFW_KEY_DOWN]) {
 		Players[1]->movDir += glm::vec2(0, -1);
 		Players[1]->state = MOVING;
@@ -172,6 +175,7 @@ void Game::ProcessInput(GLfloat dt) {
 	if (Keys[GLFW_KEY_RIGHT_CONTROL]) {
 		Players[1]->wepState = AIMING;
 	}
+#endif // SECOND_PLAYER
 #endif // KEYBOARD_SUPPORT
 }
 

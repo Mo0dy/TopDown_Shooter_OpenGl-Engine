@@ -17,6 +17,8 @@
 #define CONTROLLER_SUPPORT
 #define KEYBOARD_SUPPORT
 
+//#define SECOND_PLAYER
+
 //#define FULLSCREEN
 
 // Debug
@@ -30,7 +32,19 @@ class Util {
 public:
 	static GLfloat calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
 		goalVec = glm::normalize(goalVec);
-		GLfloat goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
+		GLfloat goalAngle;
+		if (goalVec.x != 0) {
+			goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
+		}
+		else {
+			if (goalVec.y > 0) {
+				goalAngle = 0;
+			}
+			else {
+				goalAngle = glm::pi<GLfloat>();
+			}
+		}
+		
 		GLfloat dA = goalAngle - currAngle;
 
 		if (abs(dA) > glm::pi<GLfloat>()) {
@@ -41,6 +55,9 @@ public:
 				dA += 2 * glm::pi<GLfloat>();
 			}
 		}
+
+		LOG("A = " << currAngle << " | gA = " << goalAngle << " | dA = " << dA);
+
 		return dA;
 	}
 

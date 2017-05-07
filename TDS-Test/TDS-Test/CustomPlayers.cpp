@@ -41,6 +41,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 	force += airRes();
 
+	// normalizing movDir
 	if (glm::length(movDir) > 0) {
 		movDir = glm::normalize(movDir);
 	}
@@ -95,7 +96,7 @@ void Robot::setBodyAngle(GLfloat dt) {
 
 void Robot::setTrackAngle(GLfloat dt) {
 	addEntities[TRACKS]->angle = glm::mod<GLfloat>(addEntities[TRACKS]->angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(addEntities[TRACKS]->angle, movDir);
+	GLfloat dA = Util::calcMovAngle(addEntities[TRACKS]->angle, vel);
 
 	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
 		if (dA > 0) {
