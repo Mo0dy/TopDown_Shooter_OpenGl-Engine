@@ -21,6 +21,7 @@ public:
 	MovementState movState;
 	WeaponState wepState;
 	glm::vec2 movDir;
+	glm::vec2 bodyDir;
 
 	// Getters and setters:
 	GLfloat getInherentF();
@@ -31,6 +32,5 @@ protected:
 	std::vector<Entity*> addEntities;
 	GLfloat inherentForce;
 	GLfloat sprintMod; // inherentForce multiplayer while sprinting
-	GLfloat turnSpeed; // degrees per second
 };
 

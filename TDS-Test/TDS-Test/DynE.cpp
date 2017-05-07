@@ -57,8 +57,9 @@ void DynE::Collision(Entity* cE, GLfloat dt) {
 		collision = GL_TRUE;
 		glm::vec2 c = E2->pos - pos;
 		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
-		colPos = pos - vel * dt * 1.01f;
+		colPos = pos - c * COLLISION_ADD_CHANGE;
 
+		// we should write that checks weather a collision is a true collision.
 	}
 }
 

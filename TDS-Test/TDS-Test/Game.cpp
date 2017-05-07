@@ -45,7 +45,7 @@ void Game::Init() {
 	camera = new Camera;
 	colDec = new CollisionDetector;
 	background = new Background("background", 200);
-	Players.push_back(new Robot(glm::vec2(0, 0)));
+	Players.push_back(new Robot(glm::vec2(0, -3)));
 	Players.back()->tex = "U_Bot";
 	Players.back()->size = glm::vec2(1.5);
 	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
@@ -53,21 +53,23 @@ void Game::Init() {
 	Players.back()->color = glm::vec3(1.0f, 0.7f, 0.7f);
 	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(1.0f, 0.7f, 0.7f);
 
-	//Players.push_back(new Robot(glm::vec2(3, 0)));
-	//Players.back()->tex = "U_Bot";
-	//Players.back()->size = glm::vec2(1.5);
-	//Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
-	//Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
-	//Players.back()->ani.LoadAnimation("Textures\\A_test", ".png", 13, 1.5, GL_TRUE, "myAnimation");
-	//Players.back()->ani.animationTime = 5;
-	//Players.back()->ani.startAnimation();
-	//Players.back()->color = glm::vec3(0.7f, 0.7f, 1.0f);
-	//Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(0.7f, 0.7f, 1.0f);
+	Players.push_back(new Robot(glm::vec2(3, -3)));
+	Players.back()->tex = "U_Bot";
+	Players.back()->size = glm::vec2(1.5);
+	Players.back()->getAddEntities()[Robot::TRACKS]->tex = "D_Bot";
+	Players.back()->getAddEntities()[Robot::TRACKS]->size = glm::vec2(1.5);
+	Players.back()->ani.LoadAnimation("Textures\\A_test", ".png", 13, 1.5, GL_TRUE, "myAnimation");
+	Players.back()->ani.animationTime = 5;
+	Players.back()->ani.startAnimation();
+	Players.back()->color = glm::vec3(0.7f, 0.7f, 1.0f);
+	Players.back()->getAddEntities()[Robot::TRACKS]->color = glm::vec3(0.7f, 0.7f, 1.0f);
 
-	for (int i = 0; i < 3; i++) {
-		dynEntities.push_back(new DynE(glm::vec2(i * 3, 3)));
-		dynEntities.back()->tex = "awesomeface";
-		dynEntities.back()->state = MOVING;
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			dynEntities.push_back(new DynE(glm::vec2(i * 3, j * 3)));
+			dynEntities.back()->tex = "awesomeface";
+			dynEntities.back()->state = MOVING;
+		}
 	}
 }
 
@@ -76,8 +78,8 @@ void Game::Init() {
 	GLboolean Press_O_Flag = false;
 #endif // KEYBOARD_SUPPORT
 
-	// UTIL
-	GLboolean Press_R_Flag = false;
+// UTIL
+GLboolean Press_R_Flag = false;
 
 void Game::ProcessInput(GLfloat dt) {
 	for (Player* p : Players) {
@@ -104,6 +106,11 @@ void Game::ProcessInput(GLfloat dt) {
 		Players[0]->movDir += glm::vec2(gState.sThumbLX, 0);
 		Players[0]->movDir += glm::vec2(0, gState.sThumbLY);
 		Players[0]->state = MOVING;
+	}
+
+	if (abs(gState.sThumbRX) > 2000 || abs(gState.sThumbRY) > 2000) {
+		Players[0]->bodyDir += glm::vec2(gState.sThumbRX, 0);
+		Players[0]->bodyDir += glm::vec2(0, gState.sThumbRY);
 	}
 
 #endif // Controller Support
@@ -233,12 +240,12 @@ XINPUT_STATE Game::getController(GLint index) {
 void Game::reset() {
 	Press_R_Flag = false;
 	for (int i = 0; i < Players.size(); i++) {
-		Players[i]->pos = glm::vec2(i * 3, 0);
+		Players[i]->pos = glm::vec2(i * 3, -3);
 	}
-	for (int i = 0; i < dynEntities.size(); i++) {
-		dynEntities[i]->pos = glm::vec2(i * 3, 3);
-		dynEntities[i]->vel = glm::vec2(0);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			dynEntities[i+j]->pos = glm::vec2(i * 3, j * 3);
+			dynEntities[i+j]->vel = glm::vec2(0);
+		}	
 	}
-	dynEntities[0]->vel = glm::vec2(-1, 0);
-	dynEntities[1]->vel = glm::vec2(-2, 0);
 }

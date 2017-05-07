@@ -14,7 +14,7 @@ public:
 	std::string tex; // The hash of the texture stored in the Resource
 	glm::vec2 size; // The size of the entities sprite in WCO coordinates (rectangle with the diagonal of size)
 	glm::vec2 pos; // The position in WCS coordinates
-	GLfloat angle; // The angle of the entitie in degrees
+	GLfloat angle; // The angle of the entitie in radians
 	std::vector<Hitbox*> Hitboxes;
 	Animation ani;
 

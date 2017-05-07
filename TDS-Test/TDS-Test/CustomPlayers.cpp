@@ -7,7 +7,8 @@ Robot::Robot(glm::vec2 position): Player(position)
 	inherentForce = 2500;
 	state = STOPPING;
 	sprintMod = 4;
-	turnSpeed = 10;
+	bodyTurnSpeed = 3;
+	trackTurnSpeed = 5;
 
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
@@ -30,13 +31,13 @@ GLboolean Robot::updateE(GLfloat dt) {
 	}
 
 	// updating animation
-	//if (ani.getState()) {
-	//	tex = ani.getETex()->tex;
-	//	size = ani.getETex()->texSize;
-	//	if (ani.getETex()->hitboxes.size() > 0) {
-	//		Hitboxes = ani.getETex()->hitboxes;
-	//	}
-	//}
+	if (ani.getState()) {
+		tex = ani.getETex()->tex;
+		size = ani.getETex()->texSize;
+		if (ani.getETex()->hitboxes.size() > 0) {
+			Hitboxes = ani.getETex()->hitboxes;
+		}
+	}
 
 	force += airRes();
 
@@ -64,6 +65,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 
 	setTrackAngle(dt);
+	setBodyAngle(dt);
 
 	addEntities[Robot::TRACKS]->pos = pos;
 
@@ -72,36 +74,45 @@ GLboolean Robot::updateE(GLfloat dt) {
 	Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
 #endif // DEBUG_FORCES
 
-	force = glm::vec2(0, 0);
-	movDir = glm::vec2(0, 0);
+	force = glm::vec2(0);
+	movDir = glm::vec2(0);
+	bodyDir = glm::vec2(0);
 	return glm::length(vel) > 0;
 }
 
-void Robot::setTrackAngle(GLfloat dt) {
-	GLfloat gAngle = addEntities[Robot::TRACKS]->angle; // The angle the player wants to have
-
-								  // you have to check the if vel is longer then 0 otherwise you will divide by 0 while normalizing
-	if (glm::length(vel) > 0) {
-		// this returns the absolute angle between the y axix and the player ?negative if counter clockwise rotation positive if clockwise? <-- not sure about this you have to try it out
-		if (vel.x > 0) {
-			gAngle = -acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (negative)
+void Robot::setBodyAngle(GLfloat dt) {
+	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
+	GLfloat dA = Util::calcMovAngle(angle, bodyDir);
+	if (abs(dA) > 0) {
+		if (bodyTurnSpeed * dt > abs(dA)) {
+			angle += dA;
 		}
 		else {
-			gAngle = acos(glm::dot(glm::normalize(vel), glm::vec2(0, 1))); // shortest angle between the y axis and the velocity vector (positive)
+			angle += dA / abs(dA) * bodyTurnSpeed * dt;
+		}
+	}
+}
+
+void Robot::setTrackAngle(GLfloat dt) {
+	addEntities[TRACKS]->angle = glm::mod<GLfloat>(addEntities[TRACKS]->angle, 2 * glm::pi<GLfloat>());
+	GLfloat dA = Util::calcMovAngle(addEntities[TRACKS]->angle, movDir);
+
+	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
+		if (dA > 0) {
+			dA = dA - glm::pi<GLfloat>();
+		}
+		else {
+			dA = dA + glm::pi<GLfloat>();
 		}
 	}
 
-	// I would propose that you only change the stuff below this comment
-	if (gAngle > addEntities[Robot::TRACKS]->angle) {
-		addEntities[Robot::TRACKS]->angle += dt * turnSpeed;
-		if (addEntities[Robot::TRACKS]->angle > gAngle) {
-			addEntities[Robot::TRACKS]->angle = gAngle;
+	if (abs(dA) > 0) {
+		if (trackTurnSpeed * dt > abs(dA)) {
+			addEntities[TRACKS]->angle += dA;
+		}
+		else {
+			addEntities[TRACKS]->angle += dA / abs(dA) * trackTurnSpeed * dt;
 		}
 	}
-	else if (gAngle < addEntities[Robot::TRACKS]->angle) {
-		addEntities[Robot::TRACKS]->angle -= dt * turnSpeed;
-		if (addEntities[Robot::TRACKS]->angle < gAngle) {
-			addEntities[Robot::TRACKS]->angle = gAngle;
-		}
-	}
+
 }

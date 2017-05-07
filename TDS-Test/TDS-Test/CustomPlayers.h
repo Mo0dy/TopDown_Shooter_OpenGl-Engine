@@ -14,6 +14,10 @@ public:
 	GLboolean updateE(GLfloat dt);
 
 private:
+	void setBodyAngle(GLfloat dt);
 	void setTrackAngle(GLfloat dt);
+
+	GLfloat bodyTurnSpeed;
+	GLfloat trackTurnSpeed;
 };
 
