@@ -4,13 +4,14 @@
 
 #include "Background.h"
 #include "Entity.h"
+#include "ResourceManager.h"
 
 class Level
 {
 public:
-	Level(Background* b);
+	Level();
 	~Level();
-
+	glm::vec2 size;
 	Background* background;
 	std::vector<Entity*> entities;
 };

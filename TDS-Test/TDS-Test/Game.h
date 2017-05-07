@@ -19,6 +19,7 @@
 #include "P_Robot.h"
 #include <Windows.h>
 #include <Xinput.h>
+#include "Level.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -46,7 +47,7 @@ private:
 	Camera *camera;
 	Renderer *renderer;
 	CollisionDetector *colDec;
-	Entity* background;
+	Level* level;
 
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);

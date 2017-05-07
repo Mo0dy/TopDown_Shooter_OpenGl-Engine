@@ -17,12 +17,15 @@
 #define CONTROLLER_SUPPORT
 #define KEYBOARD_SUPPORT
 
-#define SECOND_PLAYER
+#define CAM_STANDART_SIZE 10
+
+//#define SECOND_PLAYER
 
 
 // Debug
 #define DEBUG
 #ifdef DEBUG
+	#define CAM_ZOOM_SPEED 0.2
 	//#define DEBUG_FORCES
 	#define LOG(x) std::cout << x << std::endl
 #endif
@@ -58,6 +61,14 @@ public:
 		return dA;
 	}
 
+	static glm::mat2 create2DrotMatrix(GLfloat angle) {
+		glm::mat2 rotMat;
+		rotMat[0][0] = cos(angle / 180 * glm::pi<GLfloat>());
+		rotMat[1][0] = -sin(angle / 180 * glm::pi<GLfloat>());
+		rotMat[0][1] = sin(angle / 180 * glm::pi<GLfloat>());
+		rotMat[1][1] = cos(angle / 180 * glm::pi<GLfloat>());
+		return rotMat;
+	}
 };
 
 // Physics
@@ -67,9 +78,9 @@ static const GLfloat GRAV_ACC = 9.81f;
 static const GLfloat COLLISION_ADD_CHANGE = 0.001;
 
 // Rendering
-//#define FULLSCREEN
-#define SCREEN_WIDTH 900
-#define SCREEN_HEIGHT 800
+#define FULLSCREEN
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 static const GLfloat FORCE_SCALE = 0.001f;
 
 static void printVec2(glm::vec2 v) {

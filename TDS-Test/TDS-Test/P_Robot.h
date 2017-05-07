@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "EnergyBullet.h"
 
 class Robot : public Player
 {
@@ -15,7 +16,13 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 
+	GLfloat lastShoot;
+	void shoot();
+
 private:
+
+	GLfloat shootDelay;
+
 	void setBodyAngle(GLfloat dt);
 	void setTrackAngle(GLfloat dt);
 

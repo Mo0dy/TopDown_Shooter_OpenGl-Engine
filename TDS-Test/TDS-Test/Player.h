@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DynE.h"
+#include "Bullet.h"
 
 enum MovementState {
 	RUNNING,
@@ -30,6 +31,9 @@ public:
 	//std::vector<myAnimation*> animations;
 
 	void setColor(glm::vec3 color);
+	virtual void shoot();
+
+	std::vector<Bullet*> Bullets;
 
 protected:
 	std::vector<Entity*> addEntities;

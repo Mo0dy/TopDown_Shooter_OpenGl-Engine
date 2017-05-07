@@ -1,6 +1,7 @@
 #include "P_Robot.h"
 
 #include "Renderer.h"
+#include "Game.h"
 
 void Robot::loadRobot() {
 	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
@@ -28,6 +29,7 @@ Robot::Robot(glm::vec2 position): Player(position)
 	addEntities[TRACKS]->size = glm::vec2(1.5);
 	state = STOPPING;
 
+	shootDelay = 0.05;
 	setColor(glm::vec3(1.0f));
 }
 
@@ -42,6 +44,19 @@ GLboolean Robot::updateE(GLfloat dt) {
 		vel = colVel;
 		collision = GL_FALSE;
 	}
+
+	// We need to remove all bullets that travel too far!!!
+	for (int i = 0; i < Bullets.size(); i++) {
+		if (Bullets[i]->collision) {
+			delete Bullets[i];
+			Bullets.erase(Bullets.begin() + i);
+		}
+		else {
+			Bullets[i]->updateE(dt);
+		}
+	}
+
+	lastShoot += dt;
 
 	// updating animation
 	if (ani.getState()) {
@@ -92,6 +107,20 @@ GLboolean Robot::updateE(GLfloat dt) {
 	movDir = glm::vec2(0);
 	bodyDir = glm::vec2(0);
 	return glm::length(vel) > 0;
+}
+
+void Robot::shoot() {
+	if (lastShoot > shootDelay) {
+		lastShoot = 0;
+		Bullets.push_back(new EnergyBullet(pos, angle));
+		Bullets.back()->whitelist.push_back(this);
+		for (Entity *e : addEntities) {
+			Bullets.back()->whitelist.push_back(e);
+		}
+		for (Entity *e : Bullets) {
+			Bullets.back()->whitelist.push_back(e);
+		}
+	}
 }
 
 void Robot::setBodyAngle(GLfloat dt) {

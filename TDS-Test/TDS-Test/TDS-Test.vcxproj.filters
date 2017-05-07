@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Entities\Enemies">
       <UniqueIdentifier>{200a026a-fb8d-4c90-a058-454d5643f002}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\Bullets">
+      <UniqueIdentifier>{07c8ec05-a40f-48bd-8794-b299521c0969}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -76,6 +79,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Test_Area.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -127,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="Test_Area.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyBullet.cpp">
+      <Filter>Source Files\Entities\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelTest.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

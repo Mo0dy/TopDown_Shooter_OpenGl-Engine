@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include "DynE.h"
 #include "Camera.h"
+#include "Util.h"
 
 class CollisionDetector
 {
@@ -28,7 +29,5 @@ protected:
 
 	std::vector<Entity*> allE; // Stores entities
 	std::vector<DynE*> movedE; // Store moved entities
-
-	glm::mat2 create2DrotMatrix(GLfloat angle);
 };
 

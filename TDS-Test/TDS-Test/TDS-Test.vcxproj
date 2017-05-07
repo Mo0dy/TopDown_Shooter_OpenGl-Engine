@@ -126,8 +126,11 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="EnergyBullet.h" />
+    <ClInclude Include="LevelTest.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Test_Area.h" />
@@ -144,8 +147,11 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
+    <ClCompile Include="EnergyBullet.cpp" />
+    <ClCompile Include="LevelTest.cpp" />
     <ClCompile Include="P_Robot.cpp" />
     <ClCompile Include="DynE.cpp" />
     <ClCompile Include="Entity.cpp" />

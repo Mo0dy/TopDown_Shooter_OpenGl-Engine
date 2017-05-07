@@ -10,6 +10,9 @@ Player::~Player()
 	}
 }
 
+void Player::shoot() {
+}
+
 GLfloat Player::getInherentF() {
 	return inherentForce;
 }

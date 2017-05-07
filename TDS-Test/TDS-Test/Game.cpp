@@ -4,6 +4,7 @@
 #include "Util.h"
 
 #include <Xinput.h>
+#include "LevelTest.h"
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -31,16 +32,16 @@ void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
-	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "background");
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
-	ResourceManager::LoadTexture("Textures\\Dickbutt.png", GL_TRUE, "Dickbutt");
 
 	Robot::loadRobot();
+	EnergyBullet::loadEnergyBullet();
+	LevelTest::loadLevelTest();
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
-	background = new Background("Dickbutt", 80);
+	level = new LevelTest;
 
 	Players.push_back(new Robot(glm::vec2(0, -3)));
 	Players.back()->setColor(glm::vec3(1.0f, 0.7f, 0.7f));
@@ -66,6 +67,7 @@ GLboolean Press_O_Flag = false;
 
 // UTIL
 GLboolean Press_R_Flag = false;
+GLboolean Press_M_Flag = false;
 
 void Game::ProcessInput(GLfloat dt) {
 	for (Player* p : Players) {
@@ -82,6 +84,20 @@ void Game::ProcessInput(GLfloat dt) {
 		Press_R_Flag = false;
 		reset();
 	}
+	if (Keys[GLFW_KEY_M]) {
+		Press_M_Flag = true;
+	}
+	if (!Keys[GLFW_KEY_M] && Press_M_Flag) {
+		Press_M_Flag = false;
+		camera->minSizeHeight = CAM_STANDART_SIZE;
+	}
+	if (Keys[GLFW_KEY_U]) {
+		camera->minSizeHeight += CAM_ZOOM_SPEED;
+	}
+	if (Keys[GLFW_KEY_J]) {
+		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+	}
+
 #endif // DEBUG
 
 #ifdef CONTROLLER_SUPPORT
@@ -104,7 +120,7 @@ void Game::ProcessInput(GLfloat dt) {
 		controlledPlayers = Players.size();
 	}
 
-	for (int i = 0; i < controlledPlayers; i++) {
+	for (GLuint i = 0; i < controlledPlayers; i++) {
 		gState = cState[i]->Gamepad;
 		if (abs(gState.sThumbLX) > 2000 || abs(gState.sThumbLY) > 2000) {
 			Players[i]->movDir += glm::vec2(gState.sThumbLX, 0);
@@ -115,6 +131,7 @@ void Game::ProcessInput(GLfloat dt) {
 		if (abs(gState.sThumbRX) > 2000 || abs(gState.sThumbRY) > 2000) {
 			Players[i]->bodyDir += glm::vec2(gState.sThumbRX, 0);
 			Players[i]->bodyDir += glm::vec2(0, gState.sThumbRY);
+			Players[i]->shoot();
 		}
 	}
 #endif // Controller Support
@@ -138,8 +155,8 @@ void Game::ProcessInput(GLfloat dt) {
 		Players[0]->movDir += glm::vec2(-1, 0);
 		Players[0]->state = MOVING;
 	}
-	if (Keys[GLFW_KEY_LEFT_SHIFT]) {
-		Players[0]->movState = SPRINTING;
+	if (Keys[GLFW_KEY_SPACE]) {
+		Players[0]->shoot();
 	}
 
 	// Player1
@@ -176,7 +193,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (Keys[GLFW_KEY_RIGHT_CONTROL]) {
 		Players[1]->wepState = AIMING;
-	}
+}
 #endif // SECOND_PLAYER
 #endif // KEYBOARD_SUPPORT
 }
@@ -185,22 +202,25 @@ void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
 
+	for (Player *e : Players) {
+		for (Bullet *b : e->Bullets) {
+			colDec->addMovedE(b);
+		}
+		if (e->updateE(dt)) {
+			colDec->addMovedE(e);
+		}
+	}
 	for (DynE *e : dynEntities) {
 		if (e->updateE(dt)) {
 			colDec->addMovedE(e);
 		}
 	}
-	for (Player *e : Players) {
-		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
-		}
-	}
+
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
 	std::vector<Entity*> colE;
 	colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
 	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
 	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	colE.push_back(background);
 	for (Player* p : Players) {
 		colE.push_back(p);
 	}
@@ -209,7 +229,7 @@ void Game::Update(GLfloat dt) {
 
 void Game::Render() {
 	// combine this in one function (by combining all vectors)
-	renderer->RenderSprite(*background, *camera);
+	renderer->RenderSprite(*level->background, *camera);
 	for (Entity* e : statEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
@@ -217,6 +237,9 @@ void Game::Render() {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Player* p : Players) {
+		for (Entity* b : p->Bullets) {
+			renderer->RenderSprite(*b, *camera);
+		}
 		for (Entity* e : p->getAddEntities()) {
 			renderer->RenderSprite(*e, *camera);
 		}

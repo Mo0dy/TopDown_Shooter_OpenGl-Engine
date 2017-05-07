@@ -20,15 +20,26 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
 		for (Entity *cE : entities) {
 			// This rough check only works if all hitboxes are inside the size of the texture;
 			if (cE != mE && glm::distance(mE->pos, cE->pos) <= (glm::length(cE->size) + glm::length(mE->size)) / 2.0f) {
+				Bullet* b = dynamic_cast<Bullet*>(mE);
+				GLboolean doColCheck = true;
+				if (b != NULL) {
+					for (Entity* e : b->whitelist) {
+						if (cE == e) {
+							doColCheck = false;
+							break;
+						}
+					}
+				}
+				if (doColCheck) {
 					GLboolean colHappened = false;
 					for (Hitbox* mEH : mE->Hitboxes) {
 						for (Hitbox* cEH : cE->Hitboxes) {
 							// Calculation WCS position of the Hitbox
 							mymEH = *mEH;
-							mymEH.pos = create2DrotMatrix(mE->angle) * mymEH.pos + mE->pos;
+							mymEH.pos = Util::create2DrotMatrix(mE->angle) * mymEH.pos + mE->pos;
 							mymEH.angle += mE->angle;
 							mycEH = *cEH;
-							mycEH.pos = create2DrotMatrix(cE->angle) * mycEH.pos + cE->pos;
+							mycEH.pos = Util::create2DrotMatrix(cE->angle) * mycEH.pos + cE->pos;
 							mycEH.angle += cE->angle;
 
 							if (doSingleCheck(mymEH, mycEH)) {
@@ -42,6 +53,7 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
 							break;
 						}
 					}
+				}
 			}
 		}
 		// Deletes the moved entity from the static entitie list because all collisions involving this entity have been checked 
@@ -62,14 +74,14 @@ GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
 	// do fine collision check (Seperating Axix Theorem)
 	// creating Axis to project on
 	glm::vec2 Axis[4];
-	Axis[0] = create2DrotMatrix(h1.angle) * glm::vec2(1, 0);
-	Axis[1] = create2DrotMatrix(h1.angle) * glm::vec2(0, 1);
-	Axis[2] = create2DrotMatrix(h2.angle) * glm::vec2(1, 0);
-	Axis[3] = create2DrotMatrix(h2.angle) * glm::vec2(0, 1);
+	Axis[0] = Util::create2DrotMatrix(h1.angle) * glm::vec2(1, 0);
+	Axis[1] = Util::create2DrotMatrix(h1.angle) * glm::vec2(0, 1);
+	Axis[2] = Util::create2DrotMatrix(h2.angle) * glm::vec2(1, 0);
+	Axis[3] = Util::create2DrotMatrix(h2.angle) * glm::vec2(0, 1);
 
 	// Hitbox rotated to orientation in WCS
-	glm::mat2 rotMat1 = create2DrotMatrix(h1.angle);
-	glm::mat2 rotMat2 = create2DrotMatrix(h2.angle);
+	glm::mat2 rotMat1 = Util::create2DrotMatrix(h1.angle);
+	glm::mat2 rotMat2 = Util::create2DrotMatrix(h2.angle);
 
 	// WCS Positions of hitbox corners
 	glm::vec2 E1corners[4];
@@ -125,16 +137,6 @@ GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
 		}
 	}
 	return GL_TRUE;
-}
-
-glm::mat2 CollisionDetector::create2DrotMatrix(GLfloat angle) {
-	glm::mat2 rotMat;
-	rotMat[0][0] = cos(angle / 180 * glm::pi<GLfloat>());
-	rotMat[1][0] = -sin(angle / 180 * glm::pi<GLfloat>());
-	rotMat[0][1] = sin(angle / 180 * glm::pi<GLfloat>());
-	rotMat[1][1] = cos(angle / 180 * glm::pi<GLfloat>());
-
-	return rotMat;
 }
 
 // getters and setters

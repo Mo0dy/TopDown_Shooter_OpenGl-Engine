@@ -2,7 +2,7 @@
 #include "Util.h"
 #include <iostream>
 
-Camera::Camera():pos(-1.0f, -1.0f)
+Camera::Camera():pos(-1.0f, -1.0f), minSizeHeight(10)
 {
 }
 
@@ -49,8 +49,8 @@ void Camera::updatePos(GLfloat width, GLfloat height, std::vector<Player*> playe
 	}
 
 	// makes sure cam has a maxiumum zoom
-	if (abs(size).y < MIN_SIZE_HEIGHT) {
-		size *= MIN_SIZE_HEIGHT / abs(size).y;
+	if (abs(size).y < minSizeHeight) {
+		size *= minSizeHeight / abs(size).y;
 	}
 
 	pos = camMid - 0.5f * size;

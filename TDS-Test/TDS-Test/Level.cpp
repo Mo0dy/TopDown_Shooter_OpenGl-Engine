@@ -1,8 +1,6 @@
 #include "Level.h"
 
-
-
-Level::Level(Background* b): background(b)
+Level::Level()
 {
 }
 
