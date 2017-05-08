@@ -9,13 +9,14 @@ AwesomeFace::AwesomeFace(glm::vec2 position) : Enemy(position)
 {
 	tex = "awesomeface";
 	health = 100;
-	movForce = 100;
+	movForce = 20;
 	state = MOVING;
 	airFricCoeff = -1;
 
-	damage = 50;
+	damage = 0;
 	attacking = true;
 	attackSpeed = 0.5;
+	mass = 1;
 }
 
 AwesomeFace::~AwesomeFace()
@@ -43,12 +44,12 @@ GLboolean AwesomeFace::updateE(GLfloat dt) {
 	glm::vec2 dV = dt * force / mass;
 
 	// safeguard for wiggeling close to 0v
-	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
-		vel = glm::vec2(0, 0);
-	}
-	else {
+	//if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
+	//	vel = glm::vec2(0, 0);
+	//}
+	//else {
 		vel += dV;
-	}
+	//}
 
 	color = glm::vec3(1.0f, health / 100.0f, 1.0f);
 

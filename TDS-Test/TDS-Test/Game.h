@@ -44,6 +44,7 @@ public:
 	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
 	static std::vector<Player*> Players;
 	static std::vector<Bullet*> Bullets;
+	static std::vector<Entity*> UtilVec;
 
 	static void deleteEntities();
 	static void clearEntities();

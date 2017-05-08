@@ -27,6 +27,7 @@ public:
 	GLfloat mass; // mass in kg
 
 protected:
+	virtual void dynamicCollision(DynE* cE, GLfloat dt);
 	GLfloat dynFricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 	GLfloat statFricCoeff;
 	glm::vec2 force; // force in N

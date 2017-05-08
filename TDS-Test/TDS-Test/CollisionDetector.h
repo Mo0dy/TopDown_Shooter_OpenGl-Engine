@@ -20,14 +20,14 @@ public:
 	CollisionDetector();
 	~CollisionDetector();
 
-	void doCCheck(std::vector<Entity*> entities, GLfloat dt);
+	GLboolean doCCheck(std::vector<Entity*> entities, GLfloat dt);
 
 	// Getters and setters
-	void addMovedE(DynE* dE);
+	void addMovedE(Entity* dE);
+	std::vector<Entity*> movedE; // Store moved entities
 protected:
 	GLboolean doSingleCheck(Hitbox& h1, Hitbox& h2);
 
 	std::vector<Entity*> allE; // Stores entities
-	std::vector<DynE*> movedE; // Store moved entities
 };
 

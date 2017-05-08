@@ -40,18 +40,31 @@ GLboolean DynE::updateE(GLfloat dt) {
 }
 
 void DynE::Collision(Entity* cE, GLfloat dt) {
+	collision = GL_TRUE;
 	DynE* E2 = dynamic_cast<DynE*> (cE);
 	if (E2 == NULL) { // Collision with static object
 
 	}
 	else {
-		collision = GL_TRUE;
-		glm::vec2 c = E2->pos - pos;
-		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
-		colPos = pos - c * COLLISION_ADD_CHANGE;
-
-		// we should write that checks weather a collision is a true collision.
+		dynamicCollision(E2, dt);
 	}
+}
+
+void DynE::dynamicCollision(DynE* cE, GLfloat dt) {
+	glm::vec2 c = cE->pos - pos;
+	GLfloat myVelProj = glm::dot(vel, c);
+	GLfloat otherVelProj = glm::dot(cE->vel, c);
+	
+	if ((myVelProj > 0 && otherVelProj < myVelProj) || (myVelProj < 0 && otherVelProj > myVelProj)) {
+		colVel = vel + 2 * ((cE->mass * glm::dot(cE->vel, c) - cE->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + cE->mass)) * c;
+		colPos = pos - c * COLLISION_ADD_CHANGE;
+	} else {
+		// do something to avoid stupid collisions
+		LOG("STUPID COLLISIONS!!!");
+		colVel = vel;
+		colPos = pos - c * COLLISION_ADD_CHANGE;
+	}
+
 }
 
 // Utitlity functions

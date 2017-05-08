@@ -1,6 +1,8 @@
 #include "CollisionDetector.h"
 #include "Renderer.h"
 
+#include "Game.h"
+
 CollisionDetector::CollisionDetector()
 {
 }
@@ -11,12 +13,13 @@ CollisionDetector::~CollisionDetector()
 
 static GLint interator = 0;
 
-void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
+GLboolean CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
+	GLboolean atLeastOneCol = GL_FALSE;
 	// Utility variables
 	Hitbox mycEH;
 	Hitbox mymEH;
 
-	for (DynE* mE : movedE) {
+	for (Entity* mE : movedE) {
 		for (Entity *cE : entities) {
 			// This rough check only works if all hitboxes are inside the size of the texture;
 			if (cE != mE && glm::distance(mE->pos, cE->pos) <= (glm::length(cE->size) + glm::length(mE->size)) / 2.0f) {
@@ -55,9 +58,12 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
 								mycEH.angle += cE->angle;
 
 								if (doSingleCheck(mymEH, mycEH)) {
+									atLeastOneCol = GL_TRUE;
 									mE->Collision(cE, dt);
 									cE->Collision(mE, dt);
 									colHappened = true;
+									Game::UtilVec.push_back(mE);
+									Game::UtilVec.push_back(cE);
 									break;
 								}
 							}
@@ -77,6 +83,7 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
 		}
 	}
 	movedE.clear();
+	return atLeastOneCol;
 }
 
 GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
@@ -153,4 +160,4 @@ GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
 }
 
 // getters and setters
-void CollisionDetector::addMovedE(DynE* dE) { movedE.push_back(dE); }
+void CollisionDetector::addMovedE(Entity* dE) { movedE.push_back(dE); }

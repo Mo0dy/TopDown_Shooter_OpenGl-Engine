@@ -12,6 +12,8 @@ std::vector<DynE*> Game::dynEntities; // a vector that includes all dynamic enti
 std::vector<Player*> Game::Players;
 std::vector<Bullet*> Game::Bullets;
 
+std::vector<Entity*> Game::UtilVec;
+
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
 }
@@ -172,7 +174,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (Keys[GLFW_KEY_RIGHT_CONTROL]) {
 		Players[1]->wepState = AIMING;
-}
+	}
 #endif // SECOND_PLAYER
 #endif // KEYBOARD_SUPPORT
 }
@@ -180,7 +182,7 @@ void Game::ProcessInput(GLfloat dt) {
 void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
-	
+
 	checkForOutOfBounds();
 
 	for (Player *e : Players) {
@@ -202,12 +204,23 @@ void Game::Update(GLfloat dt) {
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
 	std::vector<Entity*> colE;
-	colE.reserve(statEntities.size() + dynEntities.size() + Players.size() + Bullets.size());
-	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
-	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	colE.insert(colE.end(), Bullets.begin(), Bullets.end());
-	colE.insert(colE.end(), Players.begin(), Players.end());
-	colDec->doCCheck(colE, dt);
+	//colE.reserve(statEntities.size() + dynEntities.size() + Players.size() + Bullets.size());
+	//colE.insert(colE.end(), statEntities.begin(), statEntities.end());
+	//colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
+	//colE.insert(colE.end(), Bullets.begin(), Bullets.end());
+	//colE.insert(colE.end(), Players.begin(), Players.end());
+
+	UtilVec = colDec->movedE;
+
+	do {
+		colDec->movedE = UtilVec;
+		colE.clear();
+		colE.reserve(statEntities.size() + dynEntities.size() + Players.size() + Bullets.size());
+		colE.insert(colE.end(), statEntities.begin(), statEntities.end());
+		colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
+		colE.insert(colE.end(), Bullets.begin(), Bullets.end());
+		colE.insert(colE.end(), Players.begin(), Players.end());
+	} while (colDec->doCCheck(colE, dt));
 }
 
 void Game::Render() {
