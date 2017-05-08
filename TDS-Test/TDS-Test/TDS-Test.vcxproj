@@ -125,10 +125,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AwesomeFace.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBullet.h" />
     <ClInclude Include="LevelTest.h" />
     <ClInclude Include="P_Robot.h" />
@@ -146,10 +148,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AwesomeFace.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnergyBullet.cpp" />
     <ClCompile Include="LevelTest.cpp" />
     <ClCompile Include="P_Robot.cpp" />

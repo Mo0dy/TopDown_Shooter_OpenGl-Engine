@@ -37,6 +37,4 @@ protected:
 	// Utility functions
 	glm::vec2 fricRes(); // calculates friction
 	glm::vec2 airRes(); // calculates air resistance
-
 };
-

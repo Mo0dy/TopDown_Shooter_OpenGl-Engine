@@ -29,6 +29,15 @@ GLboolean Entity::updateE(GLfloat dt) {
 	return GL_FALSE; // static entities never move
 }
 
+GLboolean Entity::checkForErase(glm::vec2 levelSize) {
+	if (pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
+		return GL_TRUE;
+	}
+	else {
+		return GL_FALSE;
+	}
+}
+
 void Entity::Collision(Entity* cE, GLfloat dt) {
 }
 

@@ -12,6 +12,7 @@ EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat newAngle): Bullet(positio
 	mass = 1;
 	size = glm::vec2(0.25, 0.6);
 	tex = "EnergyBall";
+	damage = 10;
 }
 
 EnergyBullet::~EnergyBullet()

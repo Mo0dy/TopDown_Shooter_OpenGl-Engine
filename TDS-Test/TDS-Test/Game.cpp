@@ -5,6 +5,12 @@
 
 #include <Xinput.h>
 #include "LevelTest.h"
+#include "AwesomeFace.h"
+
+std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
+std::vector<DynE*> Game::dynEntities; // a vector that includes all dynamic entities
+std::vector<Player*> Game::Players;
+
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -16,15 +22,7 @@ Game::~Game()
 	delete camera;
 	delete colDec;
 	// combine this in one function (by combining all vectors)
-	for (Entity *e : statEntities) {
-		delete e;
-	}
-	for (Entity *e : dynEntities) {
-		delete e;
-	}
-	for (Entity *e : Players) {
-		delete e;
-	}
+	deleteEntities();
 	ResourceManager::Clear();
 }
 
@@ -32,8 +30,8 @@ void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
-	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
 
+	AwesomeFace::LoadAwesomeface();
 	Robot::loadRobot();
 	EnergyBullet::loadEnergyBullet();
 	LevelTest::loadLevelTest();
@@ -43,21 +41,7 @@ void Game::Init() {
 	colDec = new CollisionDetector;
 	level = new LevelTest;
 
-	Players.push_back(new Robot(glm::vec2(0, -3)));
-	Players.back()->setColor(glm::vec3(1.0f, 0.7f, 0.7f));
-
-#ifdef SECOND_PLAYER
-	Players.push_back(new Robot(glm::vec2(3, -3)));
-	Players.back()->setColor(glm::vec3(0.7f, 0.7f, 1.0f));
-#endif // SECOND_PLAYER
-
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			dynEntities.push_back(new DynE(glm::vec2(i * 3, j * 3)));
-			dynEntities.back()->tex = "awesomeface";
-			dynEntities.back()->state = MOVING;
-		}
-	}
+	reset();
 }
 
 #ifdef KEYBOARD_SUPPORT
@@ -201,6 +185,8 @@ void Game::ProcessInput(GLfloat dt) {
 void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
+	
+	checkForOutOfBounds();
 
 	for (Player *e : Players) {
 		for (Bullet *b : e->Bullets) {
@@ -256,11 +242,55 @@ DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 }
 
 void Game::reset() {
+	deleteEntities();
+
+	Players.clear();
+	statEntities.clear();
+	dynEntities.clear();
+
+	Players.push_back(new Robot(glm::vec2(1, 1)));
+	Players.back()->setColor(glm::vec3(1.0f, 0.7f, 0.7f));
+
+#ifdef SECOND_PLAYER
+	Players.push_back(new Robot(glm::vec2(4, 1)));
+	Players.back()->setColor(glm::vec3(0.7f, 0.7f, 1.0f));
+#endif // SECOND_PLAYER
+
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			dynEntities.push_back(new AwesomeFace(glm::vec2(3 + i * 3, 3 + j * 3)));
+		}
+	}
+}
+
+void Game::checkForOutOfBounds() {
 	for (int i = 0; i < Players.size(); i++) {
-		Players[i]->pos = glm::vec2(i * 3, -3);
+		for (int j = 0; j < Players[i]->Bullets.size(); j++) {
+			if (Players[i]->Bullets[j]->checkForErase(level->size)) {
+				delete Players[i]->Bullets[j];
+				Players[i]->Bullets.erase(Players[i]->Bullets.begin() + j);
+			}
+		}
+		if (Players[i]->checkForErase(level->size)) {
+			Players[i]->pos = glm::vec2(0);
+		}
 	}
 	for (int i = 0; i < dynEntities.size(); i++) {
-		dynEntities[i]->pos = glm::vec2(i % 5 * 3, i / 5 * 3);
-		dynEntities[i]->vel = glm::vec2(0);
+		if (dynEntities[i]->checkForErase(level->size)) {
+			delete dynEntities[i];
+			dynEntities.erase(dynEntities.begin() + i);
+		}
+	}
+}
+
+void Game::deleteEntities() {
+	for (Entity *e : statEntities) {
+		delete e;
+	}
+	for (Entity *e : dynEntities) {
+		delete e;
+	}
+	for (Entity *e : Players) {
+		delete e;
 	}
 }

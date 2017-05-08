@@ -40,9 +40,9 @@ public:
 	void Update(GLfloat dt); // Function to update objects
 	void Render(); // Function to render objects
 
-	std::vector<Entity*> statEntities; // a vector that includes all static entities
-	std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
-	std::vector<Player*> Players;
+	static std::vector<Entity*> statEntities; // a vector that includes all static entities
+	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
+	static std::vector<Player*> Players;
 private:
 	Camera *camera;
 	Renderer *renderer;
@@ -52,6 +52,8 @@ private:
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);
 	void reset();
+	void checkForOutOfBounds();
+	void deleteEntities();
 };
 
 

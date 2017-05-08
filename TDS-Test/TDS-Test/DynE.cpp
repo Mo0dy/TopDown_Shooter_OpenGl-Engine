@@ -27,6 +27,7 @@ GLboolean DynE::updateE(GLfloat dt) {
 			Hitboxes = ani.getETex()->hitboxes;
 		}
 	}
+
 	switch (state) {
 	case MOVING: addForce(airRes());
 		break;

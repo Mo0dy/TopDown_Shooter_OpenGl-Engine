@@ -4,7 +4,6 @@ Level::Level()
 {
 }
 
-
 Level::~Level()
 {
 	delete background;
