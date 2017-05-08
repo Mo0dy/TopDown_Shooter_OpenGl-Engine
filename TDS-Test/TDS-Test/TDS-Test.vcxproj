@@ -133,6 +133,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBullet.h" />
     <ClInclude Include="LevelTest.h" />
+    <ClInclude Include="P_Heavy.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Test_Area.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnergyBullet.cpp" />
     <ClCompile Include="LevelTest.cpp" />
+    <ClCompile Include="P_Heavy.cpp" />
     <ClCompile Include="P_Robot.cpp" />
     <ClCompile Include="DynE.cpp" />
     <ClCompile Include="Entity.cpp" />

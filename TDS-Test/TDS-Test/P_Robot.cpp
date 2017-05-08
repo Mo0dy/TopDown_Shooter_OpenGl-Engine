@@ -14,7 +14,7 @@ Robot::Robot(glm::vec2 position): Player(position)
 	// Settings
 	inherentForce = 2500;
 	sprintMod = 4;
-	bodyTurnSpeed = 3;
+	bodyTurnSpeed = 6;
 	trackTurnSpeed = 5;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances

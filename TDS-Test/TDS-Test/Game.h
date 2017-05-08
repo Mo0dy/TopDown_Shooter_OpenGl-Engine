@@ -43,6 +43,10 @@ public:
 	static std::vector<Entity*> statEntities; // a vector that includes all static entities
 	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
 	static std::vector<Player*> Players;
+
+	static void deleteEntities();
+	static void clearEntities();
+
 private:
 	Camera *camera;
 	Renderer *renderer;
@@ -53,7 +57,6 @@ private:
 	DWORD getController(GLint index, XINPUT_STATE* state);
 	void reset();
 	void checkForOutOfBounds();
-	void deleteEntities();
 };
 
 

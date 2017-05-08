@@ -14,5 +14,8 @@ public:
 	glm::vec2 size;
 	Background* background;
 	std::vector<Entity*> entities;
+
+	virtual void updateL(GLfloat dt);
+	virtual void reset();
 };
 

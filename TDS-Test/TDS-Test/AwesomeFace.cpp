@@ -1,7 +1,7 @@
 #include "AwesomeFace.h"
 #include "Game.h"
 
-void AwesomeFace::LoadAwesomeface() {
+void AwesomeFace::loadAwesomeface() {
 	ResourceManager::LoadTexture("Textures\\awesomeface.png", GL_TRUE, "awesomeface");
 }
 

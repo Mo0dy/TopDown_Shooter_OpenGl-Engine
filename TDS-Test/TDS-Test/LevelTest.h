@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Level.h"
+#include "Game.h"
 
 class LevelTest: public Level
 {
@@ -10,5 +11,7 @@ public:
 
 	LevelTest();
 	~LevelTest();
+
+	void reset();
 };
 

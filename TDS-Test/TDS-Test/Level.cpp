@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "Game.h"
 
 Level::Level()
 {
@@ -11,3 +12,10 @@ Level::~Level()
 		delete e;
 	}
 }
+
+void Level::updateL(GLfloat dt) {
+}
+
+void Level::reset() {
+}
+

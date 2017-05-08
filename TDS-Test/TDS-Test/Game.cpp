@@ -31,7 +31,7 @@ void Game::Init() {
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
 
-	AwesomeFace::LoadAwesomeface();
+	AwesomeFace::loadAwesomeface();
 	Robot::loadRobot();
 	EnergyBullet::loadEnergyBullet();
 	LevelTest::loadLevelTest();
@@ -73,7 +73,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (!Keys[GLFW_KEY_M] && Press_M_Flag) {
 		Press_M_Flag = false;
-		camera->minSizeHeight = CAM_STANDART_SIZE;
+		camera->minSizeHeight = CAM_STANDARD_SIZE;
 	}
 	if (Keys[GLFW_KEY_U]) {
 		camera->minSizeHeight += CAM_ZOOM_SPEED;
@@ -106,13 +106,13 @@ void Game::ProcessInput(GLfloat dt) {
 
 	for (GLuint i = 0; i < controlledPlayers; i++) {
 		gState = cState[i]->Gamepad;
-		if (abs(gState.sThumbLX) > 2000 || abs(gState.sThumbLY) > 2000) {
+		if (abs(gState.sThumbLX) > CONTROLLER_DEADZONE || abs(gState.sThumbLY) > CONTROLLER_DEADZONE) {
 			Players[i]->movDir += glm::vec2(gState.sThumbLX, 0);
 			Players[i]->movDir += glm::vec2(0, gState.sThumbLY);
 			Players[i]->state = MOVING;
 		}
 
-		if (abs(gState.sThumbRX) > 2000 || abs(gState.sThumbRY) > 2000) {
+		if (abs(gState.sThumbRX) > CONTROLLER_DEADZONE || abs(gState.sThumbRY) > CONTROLLER_DEADZONE) {
 			Players[i]->bodyDir += glm::vec2(gState.sThumbRX, 0);
 			Players[i]->bodyDir += glm::vec2(0, gState.sThumbRY);
 			Players[i]->shoot();
@@ -201,6 +201,7 @@ void Game::Update(GLfloat dt) {
 			colDec->addMovedE(e);
 		}
 	}
+	level->updateL(dt);
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
 	std::vector<Entity*> colE;
@@ -242,25 +243,7 @@ DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 }
 
 void Game::reset() {
-	deleteEntities();
-
-	Players.clear();
-	statEntities.clear();
-	dynEntities.clear();
-
-	Players.push_back(new Robot(glm::vec2(1, 1)));
-	Players.back()->setColor(glm::vec3(1.0f, 0.7f, 0.7f));
-
-#ifdef SECOND_PLAYER
-	Players.push_back(new Robot(glm::vec2(4, 1)));
-	Players.back()->setColor(glm::vec3(0.7f, 0.7f, 1.0f));
-#endif // SECOND_PLAYER
-
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			dynEntities.push_back(new AwesomeFace(glm::vec2(3 + i * 3, 3 + j * 3)));
-		}
-	}
+	level->reset();
 }
 
 void Game::checkForOutOfBounds() {
@@ -293,4 +276,10 @@ void Game::deleteEntities() {
 	for (Entity *e : Players) {
 		delete e;
 	}
+}
+
+void Game::clearEntities() {
+	Players.clear();
+	statEntities.clear();
+	dynEntities.clear();
 }

@@ -17,9 +17,9 @@
 #define CONTROLLER_SUPPORT
 #define KEYBOARD_SUPPORT
 
-#define CAM_STANDART_SIZE 10
+#define CAM_STANDARD_SIZE 10
 
-//#define SECOND_PLAYER
+#define SECOND_PLAYER
 
 
 // Debug
@@ -60,7 +60,7 @@ public:
 		}
 		return dA;
 	}
-
+	
 	static glm::mat2 create2DrotMatrix(GLfloat angle) {
 		glm::mat2 rotMat;
 		rotMat[0][0] = cos(angle / 180 * glm::pi<GLfloat>());
@@ -68,6 +68,10 @@ public:
 		rotMat[0][1] = sin(angle / 180 * glm::pi<GLfloat>());
 		rotMat[1][1] = cos(angle / 180 * glm::pi<GLfloat>());
 		return rotMat;
+	}
+
+	static void printVec2(glm::vec2 v) {
+		std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
 	}
 };
 
@@ -78,16 +82,15 @@ static const GLfloat GRAV_ACC = 9.81f;
 static const GLfloat COLLISION_ADD_CHANGE = 0.001;
 
 // Rendering
-#define FULLSCREEN
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+//#define FULLSCREEN
+#define SCREEN_WIDTH 900
+#define SCREEN_HEIGHT 800
 static const GLfloat FORCE_SCALE = 0.001f;
-
-static void printVec2(glm::vec2 v) {
-	std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
-}
 
 // Other
 static const GLfloat CONTROLLER_STICK_MAX = 32767;
 
 // Utility funciton
+
+// Input
+#define CONTROLLER_DEADZONE 6500

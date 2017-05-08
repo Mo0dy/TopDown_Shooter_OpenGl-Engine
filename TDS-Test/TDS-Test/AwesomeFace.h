@@ -6,7 +6,7 @@ class AwesomeFace: public Enemy
 {
 public:
 
-	static void LoadAwesomeface();
+	static void loadAwesomeface();
 
 	AwesomeFace(glm::vec2 position);
 	~AwesomeFace();
