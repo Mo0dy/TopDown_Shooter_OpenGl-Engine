@@ -10,7 +10,7 @@
 std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::dynEntities; // a vector that includes all dynamic entities
 std::vector<Player*> Game::Players;
-
+std::vector<Bullet*> Game::Bullets;
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -54,10 +54,6 @@ GLboolean Press_R_Flag = false;
 GLboolean Press_M_Flag = false;
 
 void Game::ProcessInput(GLfloat dt) {
-	for (Player* p : Players) {
-		p->state = STOPPING;
-		p->wepState = NORMAL;
-	}
 
 #ifdef DEBUG
 	// Util
@@ -92,8 +88,6 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 
 	// We should probably check the dwPacket number that only changes if input changes
-	XINPUT_GAMEPAD gState;
-
 	GLuint controlledPlayers = 0;
 
 	while (getController(controlledPlayers, cState[controlledPlayers]) == ERROR_SUCCESS && controlledPlayers < 4) {
@@ -105,18 +99,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 
 	for (GLuint i = 0; i < controlledPlayers; i++) {
-		gState = cState[i]->Gamepad;
-		if (abs(gState.sThumbLX) > CONTROLLER_DEADZONE || abs(gState.sThumbLY) > CONTROLLER_DEADZONE) {
-			Players[i]->movDir += glm::vec2(gState.sThumbLX, 0);
-			Players[i]->movDir += glm::vec2(0, gState.sThumbLY);
-			Players[i]->state = MOVING;
-		}
-
-		if (abs(gState.sThumbRX) > CONTROLLER_DEADZONE || abs(gState.sThumbRY) > CONTROLLER_DEADZONE) {
-			Players[i]->bodyDir += glm::vec2(gState.sThumbRX, 0);
-			Players[i]->bodyDir += glm::vec2(0, gState.sThumbRY);
-			Players[i]->shoot();
-		}
+		Players[i]->gPad = cState[i]->Gamepad;
 	}
 #endif // Controller Support
 
@@ -189,9 +172,6 @@ void Game::Update(GLfloat dt) {
 	checkForOutOfBounds();
 
 	for (Player *e : Players) {
-		for (Bullet *b : e->Bullets) {
-			colDec->addMovedE(b);
-		}
 		if (e->updateE(dt)) {
 			colDec->addMovedE(e);
 		}
@@ -224,19 +204,14 @@ void Game::Render() {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Player* p : Players) {
-		for (Entity* b : p->Bullets) {
-			renderer->RenderSprite(*b, *camera);
+		for (std::string s : p->renderList) {
+			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
-		for (Entity* e : p->getAddEntities()) {
-			renderer->RenderSprite(*e, *camera);
-		}
-		renderer->RenderSprite(*p, *camera);
 	}
 	renderer->RenderBuffer(*camera);
 }
 
 // Utility
-
 DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 	ZeroMemory(state, sizeof(XINPUT_STATE));
 	return XInputGetState(index, state);
@@ -248,12 +223,12 @@ void Game::reset() {
 
 void Game::checkForOutOfBounds() {
 	for (int i = 0; i < Players.size(); i++) {
-		for (int j = 0; j < Players[i]->Bullets.size(); j++) {
-			if (Players[i]->Bullets[j]->checkForErase(level->size)) {
-				delete Players[i]->Bullets[j];
-				Players[i]->Bullets.erase(Players[i]->Bullets.begin() + j);
-			}
-		}
+		//for (int j = 0; j < Players[i]->Bullets.size(); j++) {
+		//	if (Players[i]->Bullets[j]->checkForErase(level->size)) {
+		//		delete Players[i]->Bullets[j];
+		//		Players[i]->Bullets.erase(Players[i]->Bullets.begin() + j);
+		//	}
+		//}
 		if (Players[i]->checkForErase(level->size)) {
 			Players[i]->pos = glm::vec2(0);
 		}
@@ -276,10 +251,14 @@ void Game::deleteEntities() {
 	for (Entity *e : Players) {
 		delete e;
 	}
+	for (Entity *e : Bullets) {
+		delete e;
+	}
 }
 
 void Game::clearEntities() {
 	Players.clear();
 	statEntities.clear();
 	dynEntities.clear();
+	Bullets.clear();
 }

@@ -15,7 +15,7 @@
 
 // Settings
 #define CONTROLLER_SUPPORT
-#define KEYBOARD_SUPPORT
+// #define KEYBOARD_SUPPORT
 
 #define CAM_STANDARD_SIZE 10
 

@@ -130,12 +130,13 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="CompE.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBullet.h" />
     <ClInclude Include="LevelTest.h" />
-    <ClInclude Include="P_Heavy.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="SubE.h" />
     <ClInclude Include="Test_Area.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="DynE.h" />
@@ -154,10 +155,10 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
+    <ClCompile Include="CompE.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnergyBullet.cpp" />
     <ClCompile Include="LevelTest.cpp" />
-    <ClCompile Include="P_Heavy.cpp" />
     <ClCompile Include="P_Robot.cpp" />
     <ClCompile Include="DynE.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SubE.cpp" />
     <ClCompile Include="Test_Area.cpp" />
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>

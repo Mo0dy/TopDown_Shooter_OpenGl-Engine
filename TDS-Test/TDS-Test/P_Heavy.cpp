@@ -6,7 +6,6 @@ P_Heavy::P_Heavy(glm::vec2 position): Player(position)
 {
 	// Settings
 	inherentForce = 2500;
-	sprintMod = 4;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;

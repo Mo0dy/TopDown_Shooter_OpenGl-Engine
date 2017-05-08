@@ -51,9 +51,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,7 +96,13 @@
     <ClInclude Include="AwesomeFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="P_Heavy.h">
+    <ClInclude Include="Texture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SubE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,8 +170,11 @@
     <ClCompile Include="AwesomeFace.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="P_Heavy.cpp">
-      <Filter>Source Files\Entities\Players</Filter>
+    <ClCompile Include="CompE.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SubE.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

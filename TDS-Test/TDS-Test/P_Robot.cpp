@@ -13,24 +13,30 @@ Robot::Robot(glm::vec2 position): Player(position)
 {
 	// Settings
 	inherentForce = 2500;
-	sprintMod = 4;
 	bodyTurnSpeed = 6;
 	trackTurnSpeed = 5;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
+	Hitboxes.clear();
 
-	tex = "U_Bot";
-	size = glm::vec2(1.5);
+	subEntities["tracks"] = new SubE(pos, glm::vec2(0));
+	subEntities["body"] = new SubE(pos, glm::vec2(0));
 
-	addEntities.push_back(new Entity(pos));
-	addEntities[TRACKS]->tex = "D_Bot";
-	addEntities[TRACKS]->size = glm::vec2(1.5);
+	subEntities["tracks"]->tex = "D_Bot";
+	subEntities["tracks"]->size = glm::vec2(1.5);
+
+	subEntities["body"]->tex = "U_Bot";
+	subEntities["body"]->size = glm::vec2(1.5);
+
 	state = STOPPING;
 
 	shootDelay = 0.05;
 	setColor(glm::vec3(1.0f));
+
+	renderList.push_back("tracks");
+	renderList.push_back("body");
 }
 
 Robot::~Robot()
@@ -38,6 +44,7 @@ Robot::~Robot()
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
+	state = STOPPING;
 	// updating values according to collision
 	if (collision) {
 		pos = colPos;
@@ -45,31 +52,32 @@ GLboolean Robot::updateE(GLfloat dt) {
 		collision = GL_FALSE;
 	}
 
-	// We need to remove all bullets that travel too far!!!
-	for (int i = 0; i < Bullets.size(); i++) {
-		if (Bullets[i]->collision) {
-			delete Bullets[i];
-			Bullets.erase(Bullets.begin() + i);
-		}
-		else {
-			Bullets[i]->updateE(dt);
-		}
-	}
-
-	lastShoot += dt;
+	lastShot += dt;
 
 	// updating animation
-	if (ani.getState()) {
-		tex = ani.getETex()->tex;
-		size = ani.getETex()->texSize;
-		if (ani.getETex()->hitboxes.size() > 0) {
-			Hitboxes = ani.getETex()->hitboxes;
-		}
-	}
+	//if (ani.getState()) {
+	//	tex = ani.getETex()->tex;
+	//	size = ani.getETex()->texSize;
+	//	if (ani.getETex()->hitboxes.size() > 0) {
+	//		Hitboxes = ani.getETex()->hitboxes;
+	//	}
+	//}
 
 	force += airRes();
 
-	// normalizing movDir
+	if (abs(gPad.sThumbLX) > CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > CONTROLLER_DEADZONE) {
+		movDir += glm::vec2(gPad.sThumbLX, 0);
+		movDir += glm::vec2(0, gPad.sThumbLY);
+		state = MOVING;
+	}
+
+	if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
+		bodyDir += glm::vec2(gPad.sThumbRX, 0);
+		bodyDir += glm::vec2(0, gPad.sThumbRY);
+		shoot();
+	}
+
+	// adding movement direction
 	if (glm::length(movDir) > 0) {
 		movDir = glm::normalize(movDir);
 	}
@@ -96,7 +104,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 	setTrackAngle(dt);
 	setBodyAngle(dt);
 
-	addEntities[Robot::TRACKS]->pos = pos;
+	updateSupE();
+	combineHitboxes();
 
 #ifdef DEBUG_FORCES
 	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
@@ -110,35 +119,36 @@ GLboolean Robot::updateE(GLfloat dt) {
 }
 
 void Robot::shoot() {
-	if (lastShoot > shootDelay) {
-		lastShoot = 0;
-		Bullets.push_back(new EnergyBullet(pos, angle));
-		Bullets.back()->whitelist.push_back(this);
-		for (Entity *e : addEntities) {
-			Bullets.back()->whitelist.push_back(e);
-		}
-		for (Entity *e : Bullets) {
-			Bullets.back()->whitelist.push_back(e);
-		}
-	}
+	//if (lastShoot > shootDelay) {
+	//	lastShoot = 0;
+	//	Bullets.push_back(new EnergyBullet(pos, angle));
+	//	Bullets.back()->whitelist.push_back(this);
+	//	for (Entity *e : subEntities) {
+	//		Bullets.back()->whitelist.push_back(e);
+	//	}
+	//	for (Entity *e : Bullets) {
+	//		Bullets.back()->whitelist.push_back(e);
+	//	}
+	//}
 }
 
 void Robot::setBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(angle, bodyDir);
+	subEntities["body"]->rAngle = glm::mod<GLfloat>(subEntities["body"]->rAngle, 2 * glm::pi<GLfloat>());
+	GLfloat dA = Util::calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);
 	if (abs(dA) > 0) {
 		if (bodyTurnSpeed * dt > abs(dA)) {
-			angle += dA;
+			subEntities["body"]->rAngle += dA;
 		}
 		else {
-			angle += dA / abs(dA) * bodyTurnSpeed * dt;
+			subEntities["body"]->rAngle += dA / abs(dA) * bodyTurnSpeed * dt;
 		}
 	}
 }
 
 void Robot::setTrackAngle(GLfloat dt) {
-	addEntities[TRACKS]->angle = glm::mod<GLfloat>(addEntities[TRACKS]->angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(addEntities[TRACKS]->angle, vel);
+	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
+	GLfloat dA = Util::calcMovAngle(angle, vel);
 
 	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
 		if (dA > 0) {
@@ -151,10 +161,10 @@ void Robot::setTrackAngle(GLfloat dt) {
 
 	if (abs(dA) > 0) {
 		if (trackTurnSpeed * dt > abs(dA)) {
-			addEntities[TRACKS]->angle += dA;
+			angle += dA;
 		}
 		else {
-			addEntities[TRACKS]->angle += dA / abs(dA) * trackTurnSpeed * dt;
+			angle += dA / abs(dA) * trackTurnSpeed * dt;
 		}
 	}
 

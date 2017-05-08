@@ -6,9 +6,6 @@
 class Robot : public Player
 {
 public:
-
-	static const int TRACKS = 0;
-
 	static void loadRobot();
 
 	Robot(glm::vec2 position);
@@ -16,10 +13,12 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 
-	GLfloat lastShoot;
+	GLfloat lastShot;
 	void shoot();
 
 private:
+	glm::vec2 movDir;
+	glm::vec2 bodyDir;
 
 	GLfloat shootDelay;
 

@@ -43,6 +43,7 @@ public:
 	static std::vector<Entity*> statEntities; // a vector that includes all static entities
 	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
 	static std::vector<Player*> Players;
+	static std::vector<Bullet*> Bullets;
 
 	static void deleteEntities();
 	static void clearEntities();

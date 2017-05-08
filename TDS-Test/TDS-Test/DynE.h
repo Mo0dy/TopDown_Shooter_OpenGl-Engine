@@ -13,7 +13,7 @@ class DynE : public Entity // Dynamic entity
 {
 public:
 	DynE(glm::vec2 position);
-	~DynE();
+	virtual ~DynE();
 
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
 	virtual GLboolean updateE(GLfloat dt); // call this function every update. returns true if moved
