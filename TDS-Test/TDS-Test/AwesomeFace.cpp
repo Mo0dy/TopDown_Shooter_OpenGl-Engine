@@ -12,6 +12,10 @@ AwesomeFace::AwesomeFace(glm::vec2 position) : Enemy(position)
 	movForce = 100;
 	state = MOVING;
 	airFricCoeff = -1;
+
+	damage = 50;
+	attacking = true;
+	attackSpeed = 0.5;
 }
 
 AwesomeFace::~AwesomeFace()
@@ -19,6 +23,12 @@ AwesomeFace::~AwesomeFace()
 }
 
 GLboolean AwesomeFace::updateE(GLfloat dt) {
+	lastAttack += dt;
+
+	if (!attacking && lastAttack > attackSpeed) {
+		attacking = GL_TRUE;
+	}
+
 	// updating values according to collision
 	if (collision) {
 		pos = colPos;

@@ -16,5 +16,10 @@ public:
 	void Collision(Entity* cE, GLfloat dt);
 
 	std::vector<Bullet*> damageWhitelist;
+
+	GLfloat lastAttack;
+	GLfloat attackSpeed;
+	GLboolean attacking;
+	GLfloat damage;
 };
 

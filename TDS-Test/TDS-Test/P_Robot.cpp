@@ -27,6 +27,9 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	statFricCoeff = -5;
 	Hitboxes.clear();
 	accuracy = 0.1;
+	health = MAX_HEALTH;
+
+	death = GL_FALSE;
 
 	bulletSpawn = glm::vec2(100, 100);
 
@@ -48,8 +51,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	renderList.push_back("tracks");
 	renderList.push_back("body");
 
-	lastShot = +100;
-	lastShotBigB = +100;
+	lastShot = 100;
+	lastShotBigB = 100;
 
 	Animations["Robot_Shoot"] = new Animation("Robot_Shoot", GL_FALSE);
 }
@@ -59,113 +62,120 @@ Robot::~Robot()
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
-	if (Animations["Robot_Shoot"]->getState()) {
-		subEntities["body"]->tex = Animations["Robot_Shoot"]->getETex()->tex;
-		subEntities["body"]->size = Animations["Robot_Shoot"]->getETex()->texSize;
-	}
+	if (!death) {
+		if (Animations["Robot_Shoot"]->getState()) {
+			subEntities["body"]->tex = Animations["Robot_Shoot"]->getETex()->tex;
+			subEntities["body"]->size = Animations["Robot_Shoot"]->getETex()->texSize;
+		}
 
-	state = STOPPING;
-	movState = NORMAL;
-	accuracy = 0.1;
-	lastShot += dt;
-	lastShotBigB += dt;
-	// updating values according to collision
-	if (collision) {
-		pos = colPos;
-		vel = colVel;
-		collision = GL_FALSE;
-	}
+		if (health < 0) {
+			death = true;
+		}
 
-	force += airRes();
+		setColor(glm::vec3(1.0f, 1.0f / 2000 * health, 1.0f / 2000 * health));
 
-	if (abs(gPad.sThumbLX) > CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > CONTROLLER_DEADZONE) {
-		movDir += glm::vec2(gPad.sThumbLX, 0);
-		movDir += glm::vec2(0, gPad.sThumbLY);
-		state = MOVING;
-	}
+		state = STOPPING;
+		movState = NORMAL;
+		accuracy = 0.1;
+		lastShot += dt;
+		lastShotBigB += dt;
+		// updating values according to collision
+		if (collision) {
+			pos = colPos;
+			vel = colVel;
+			collision = GL_FALSE;
+		}
 
-	if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
-		bodyDir += glm::vec2(gPad.sThumbRX, 0);
-		bodyDir += glm::vec2(0, gPad.sThumbRY);
-	}
+		force += airRes();
 
-	if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-		movState = AIMING;
-	}
-	if (gPad.bLeftTrigger > 0) {
-		movState = SPRINTING;
-	}
+		if (abs(gPad.sThumbLX) > CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > CONTROLLER_DEADZONE) {
+			movDir += glm::vec2(gPad.sThumbLX, 0);
+			movDir += glm::vec2(0, gPad.sThumbLY);
+			state = MOVING;
+		}
 
-	// adding movement direction
-	if (glm::length(movDir) > 0) {
-		movDir = glm::normalize(movDir);
-	}
+		if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
+			bodyDir += glm::vec2(gPad.sThumbRX, 0);
+			bodyDir += glm::vec2(0, gPad.sThumbRY);
+		}
 
-	if (movState == AIMING) {
-		accuracy = 0.01;
-		shootDelay = 0.025;
-	}
-	else {
-		shootDelay = 0.1;
-	}
+		if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+			movState = AIMING;
+		}
+		if (gPad.bLeftTrigger > 0) {
+			movState = SPRINTING;
+		}
 
-	switch (state) {
-	case STOPPING: force += fricRes();
-		break;
-	case MOVING:
-		switch (movState) {
-		case AIMING: 
-			force += movDir * inherentForce * 0.1f;
+		// adding movement direction
+		if (glm::length(movDir) > 0) {
+			movDir = glm::normalize(movDir);
+		}
+
+		if (movState == AIMING) {
 			accuracy = 0.01;
+			shootDelay = 0.025;
+		}
+		else {
+			shootDelay = 0.1;
+		}
+
+		switch (state) {
+		case STOPPING: force += fricRes();
 			break;
-		case NORMAL: 
-			force += movDir * inherentForce;
-			break;
-		case SPRINTING: 
-			force += movDir * inherentForce * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat) gPad.bLeftTrigger);
-			accuracy = 0.1 * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat) gPad.bLeftTrigger);
+		case MOVING:
+			switch (movState) {
+			case AIMING:
+				force += movDir * inherentForce * 0.1f;
+				accuracy = 0.01;
+				break;
+			case NORMAL:
+				force += movDir * inherentForce;
+				break;
+			case SPRINTING:
+				force += movDir * inherentForce * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+				accuracy = 0.1 * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+				break;
+			}
 			break;
 		}
-		break;
-	}
 
-	if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-		shoot();
-	}
+		if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+			shoot();
+		}
 
-	if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
-		shootBigB();
-	}
+		if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+			shootBigB();
+		}
 
-	glm::vec2 dV = dt * force / mass;
+		glm::vec2 dV = dt * force / mass;
 
-	// safeguard for wiggeling close to 0v
-	if (glm::length(vel) > 0 && vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
-		vel = glm::vec2(0, 0);
-	}
-	else {
-		vel += dV; // acceleration is in m/s^2 so we need to divide my dt to get a velocity
-	}
+		// safeguard for wiggeling close to 0v
+		if (glm::length(vel) > 0 && vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
+			vel = glm::vec2(0, 0);
+		}
+		else {
+			vel += dV; // acceleration is in m/s^2 so we need to divide my dt to get a velocity
+		}
 
-	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
+		pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
 
-	setTrackAngle(dt);
-	setBodyAngle(dt);
+		setTrackAngle(dt);
+		setBodyAngle(dt);
 
-	updateSupE();
-	combineHitboxes();
+		updateSupE();
+		combineHitboxes();
 
 #ifdef DEBUG_FORCES
-	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-	Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
 #endif // DEBUG_FORCES
 
-	force = glm::vec2(0);
-	movDir = glm::vec2(0);
-	bodyDir = glm::vec2(0);
-	return glm::length(vel) > 0;
+		force = glm::vec2(0);
+		movDir = glm::vec2(0);
+		bodyDir = glm::vec2(0);
+		return glm::length(vel) > 0;
+	}
 }
-
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
 		Animations["Robot_Shoot"]->animationTime = shootDelay;

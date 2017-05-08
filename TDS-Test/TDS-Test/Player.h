@@ -15,7 +15,11 @@ public:
 
 	// Getters and setters:
 	GLfloat getInherentF();
+	void Collision(Entity* cE, GLfloat dt);
+
 protected:
+	GLboolean death;
 	GLfloat inherentForce;
+	GLfloat health;
 };
 

@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "Bullet.h"
-Enemy::Enemy(glm::vec2 position) : DynE(position)
+#include "Player.h"
+
+Enemy::Enemy(glm::vec2 position) : DynE(position), lastAttack(9999)
 {
 }
 
@@ -44,6 +46,11 @@ void Enemy::Collision(Entity* cE, GLfloat dt) {
 
 	}
 	else {
+		Player* p = dynamic_cast<Player*> (E2);
+		if (p != NULL && attacking) {
+			attacking = GL_FALSE;
+			lastAttack = 0;
+		}
 		glm::vec2 c = E2->pos - pos;
 		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
 		colPos = pos - c * COLLISION_ADD_CHANGE;

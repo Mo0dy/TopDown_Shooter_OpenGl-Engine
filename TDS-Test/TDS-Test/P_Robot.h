@@ -23,6 +23,8 @@ public:
 	void shootBigB();
 
 private:
+	const GLfloat MAX_HEALTH = 2000;
+
 	std::map<std::string, Animation*> Animations;
 
 	glm::vec2 movDir;
