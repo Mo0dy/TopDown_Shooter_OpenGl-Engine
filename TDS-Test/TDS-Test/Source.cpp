@@ -8,6 +8,7 @@
 
 // Controller IDE
 #include <Xinput.h>
+#include <ctime>
 
 // Settings
 GLuint screenWidth = SCREEN_WIDTH;
@@ -19,6 +20,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 Game TDS(screenWidth, screenHeight);
 
 int main(int argc, char *argv[]) {
+	srand(time(NULL));
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

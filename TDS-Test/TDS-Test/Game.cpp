@@ -72,10 +72,10 @@ void Game::ProcessInput(GLfloat dt) {
 		camera->minSizeHeight = CAM_STANDARD_SIZE;
 	}
 	if (Keys[GLFW_KEY_U]) {
-		camera->minSizeHeight += CAM_ZOOM_SPEED;
+		camera->minSizeHeight -= CAM_ZOOM_SPEED;
 	}
 	if (Keys[GLFW_KEY_J]) {
-		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+		camera->minSizeHeight += CAM_ZOOM_SPEED;
 	}
 
 #endif // DEBUG
@@ -97,6 +97,18 @@ void Game::ProcessInput(GLfloat dt) {
 	if (controlledPlayers > Players.size()) {
 		controlledPlayers = Players.size();
 	}
+
+#ifdef DEBUG
+	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
+		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+	}
+	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
+		camera->minSizeHeight += CAM_ZOOM_SPEED;
+	}
+	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
+		reset();
+	}
+#endif // DEBUG
 
 	for (GLuint i = 0; i < controlledPlayers; i++) {
 		Players[i]->gPad = cState[i]->Gamepad;
@@ -176,6 +188,11 @@ void Game::Update(GLfloat dt) {
 			colDec->addMovedE(e);
 		}
 	}
+	for (Bullet *e : Bullets) {
+		if (e->updateE(dt)) {
+			colDec->addMovedE(e);
+		}
+	}
 	for (DynE *e : dynEntities) {
 		if (e->updateE(dt)) {
 			colDec->addMovedE(e);
@@ -185,12 +202,11 @@ void Game::Update(GLfloat dt) {
 
 	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
 	std::vector<Entity*> colE;
-	colE.reserve(statEntities.size() + dynEntities.size() + Players.size());
+	colE.reserve(statEntities.size() + dynEntities.size() + Players.size() + Bullets.size());
 	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
 	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	for (Player* p : Players) {
-		colE.push_back(p);
-	}
+	colE.insert(colE.end(), Bullets.begin(), Bullets.end());
+	colE.insert(colE.end(), Players.begin(), Players.end());
 	colDec->doCCheck(colE, dt);
 }
 
@@ -198,6 +214,9 @@ void Game::Render() {
 	// combine this in one function (by combining all vectors)
 	renderer->RenderSprite(*level->background, *camera);
 	for (Entity* e : statEntities) {
+		renderer->RenderSprite(*e, *camera);
+	}
+	for (Entity* e : Bullets) {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Entity* e : dynEntities) {
@@ -222,13 +241,13 @@ void Game::reset() {
 }
 
 void Game::checkForOutOfBounds() {
+	for (int i = 0; i < Bullets.size(); i++) {
+		if (Bullets[i]->checkForErase(level->size)) {
+			delete Bullets[i];
+			Bullets.erase(Bullets.begin() + i);
+		}
+	}
 	for (int i = 0; i < Players.size(); i++) {
-		//for (int j = 0; j < Players[i]->Bullets.size(); j++) {
-		//	if (Players[i]->Bullets[j]->checkForErase(level->size)) {
-		//		delete Players[i]->Bullets[j];
-		//		Players[i]->Bullets.erase(Players[i]->Bullets.begin() + j);
-		//	}
-		//}
 		if (Players[i]->checkForErase(level->size)) {
 			Players[i]->pos = glm::vec2(0);
 		}

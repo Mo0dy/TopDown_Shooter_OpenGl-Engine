@@ -21,8 +21,4 @@ GLboolean Bullet::updateE(GLfloat dt) {
 
 void Bullet::Collision(Entity* cE, GLfloat dt) {
 	collision = GL_TRUE;
-	Enemy* myEnemy = dynamic_cast<Enemy*> (cE);
-	if (myEnemy != NULL) {
-		myEnemy->health -= damage;
-	}
 }

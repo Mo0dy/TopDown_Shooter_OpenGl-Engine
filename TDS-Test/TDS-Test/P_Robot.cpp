@@ -3,13 +3,15 @@
 #include "Renderer.h"
 #include "Game.h"
 
+#include <glm\gtc\random.hpp>
+
 void Robot::loadRobot() {
 	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
 	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
 }
 
-Robot::Robot(glm::vec2 position): Player(position) 
+Robot::Robot(glm::vec2 position) : Player(position)
 {
 	// Settings
 	inherentForce = 2500;
@@ -20,6 +22,8 @@ Robot::Robot(glm::vec2 position): Player(position)
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
 	Hitboxes.clear();
+	accuracy = 0.1;
+
 
 	subEntities["tracks"] = new SubE(pos, glm::vec2(0));
 	subEntities["body"] = new SubE(pos, glm::vec2(0));
@@ -32,7 +36,7 @@ Robot::Robot(glm::vec2 position): Player(position)
 
 	state = STOPPING;
 
-	shootDelay = 0.05;
+	shootDelay = 0.1;
 	setColor(glm::vec3(1.0f));
 
 	renderList.push_back("tracks");
@@ -45,23 +49,15 @@ Robot::~Robot()
 
 GLboolean Robot::updateE(GLfloat dt) {
 	state = STOPPING;
+	movState = NORMAL;
+	accuracy = 0.1;
+	lastShot += dt;
 	// updating values according to collision
 	if (collision) {
 		pos = colPos;
 		vel = colVel;
 		collision = GL_FALSE;
 	}
-
-	lastShot += dt;
-
-	// updating animation
-	//if (ani.getState()) {
-	//	tex = ani.getETex()->tex;
-	//	size = ani.getETex()->texSize;
-	//	if (ani.getETex()->hitboxes.size() > 0) {
-	//		Hitboxes = ani.getETex()->hitboxes;
-	//	}
-	//}
 
 	force += airRes();
 
@@ -74,7 +70,13 @@ GLboolean Robot::updateE(GLfloat dt) {
 	if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
 		bodyDir += glm::vec2(gPad.sThumbRX, 0);
 		bodyDir += glm::vec2(0, gPad.sThumbRY);
-		shoot();
+	}
+
+	if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+		movState = AIMING;
+	}
+	if (gPad.bLeftTrigger > 0) {
+		movState = SPRINTING;
 	}
 
 	// adding movement direction
@@ -82,11 +84,36 @@ GLboolean Robot::updateE(GLfloat dt) {
 		movDir = glm::normalize(movDir);
 	}
 
+	if (movState == AIMING) {
+		accuracy = 0.01;
+		shootDelay = 0.025;
+	}
+	else {
+		shootDelay = 0.1;
+	}
+
 	switch (state) {
 	case STOPPING: force += fricRes();
 		break;
-	case MOVING: force += movDir * inherentForce;
+	case MOVING:
+		switch (movState) {
+		case AIMING: 
+			force += movDir * inherentForce * 0.1f;
+			accuracy = 0.01;
+			break;
+		case NORMAL: 
+			force += movDir * inherentForce;
+			break;
+		case SPRINTING: 
+			force += movDir * inherentForce * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat) gPad.bLeftTrigger);
+			accuracy = 0.1 * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat) gPad.bLeftTrigger);
+			break;
+		}
 		break;
+	}
+
+	if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+		shoot();
 	}
 
 	glm::vec2 dV = dt * force / mass;
@@ -94,7 +121,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 	// safeguard for wiggeling close to 0v
 	if (glm::length(vel) > 0 && vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
 		vel = glm::vec2(0, 0);
-	} 
+	}
 	else {
 		vel += dV; // acceleration is in m/s^2 so we need to divide my dt to get a velocity
 	}
@@ -119,17 +146,11 @@ GLboolean Robot::updateE(GLfloat dt) {
 }
 
 void Robot::shoot() {
-	//if (lastShoot > shootDelay) {
-	//	lastShoot = 0;
-	//	Bullets.push_back(new EnergyBullet(pos, angle));
-	//	Bullets.back()->whitelist.push_back(this);
-	//	for (Entity *e : subEntities) {
-	//		Bullets.back()->whitelist.push_back(e);
-	//	}
-	//	for (Entity *e : Bullets) {
-	//		Bullets.back()->whitelist.push_back(e);
-	//	}
-	//}
+	if (lastShot > shootDelay) {
+		lastShot = 0;
+		Game::Bullets.push_back(new EnergyBullet(pos, subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::Bullets.back()->whitelist.push_back(this);
+	}
 }
 
 void Robot::setBodyAngle(GLfloat dt) {

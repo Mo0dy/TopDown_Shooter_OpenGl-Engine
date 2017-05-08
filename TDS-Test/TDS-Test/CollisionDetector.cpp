@@ -20,46 +20,59 @@ void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
 		for (Entity *cE : entities) {
 			// This rough check only works if all hitboxes are inside the size of the texture;
 			if (cE != mE && glm::distance(mE->pos, cE->pos) <= (glm::length(cE->size) + glm::length(mE->size)) / 2.0f) {
-				Bullet* b = dynamic_cast<Bullet*>(mE);
+				Bullet* b1 = dynamic_cast<Bullet*>(mE);
+				Bullet* b2 = dynamic_cast<Bullet*>(cE);
 				GLboolean doColCheck = true;
-				if (b != NULL) {
-					for (Entity* e : b->whitelist) {
-						if (cE == e) {
-							doColCheck = false;
-							break;
-						}
-					}
+				if (b1 != NULL && b2 != NULL) { // Two bullets
+					doColCheck = false;
 				}
-				if (doColCheck) {
-					GLboolean colHappened = false;
-					for (Hitbox* mEH : mE->Hitboxes) {
-						for (Hitbox* cEH : cE->Hitboxes) {
-							// Calculation WCS position of the Hitbox
-							mymEH = *mEH;
-							mymEH.pos = Util::create2DrotMatrix(mE->angle) * mymEH.pos + mE->pos;
-							mymEH.angle += mE->angle;
-							mycEH = *cEH;
-							mycEH.pos = Util::create2DrotMatrix(cE->angle) * mycEH.pos + cE->pos;
-							mycEH.angle += cE->angle;
-
-							if (doSingleCheck(mymEH, mycEH)) {
-								mE->Collision(cE, dt);
-								cE->Collision(mE, dt);
-								colHappened = true;
+				else if (b1 != NULL) {
+						for (Entity* e : b1->whitelist) {
+							if (cE == e) {
+								doColCheck = false;
 								break;
 							}
 						}
-						if (colHappened) {
-							break;
+					}
+					else if (b2 != NULL) {
+						for (Entity* e : b2->whitelist) {
+							if (mE == e) {
+								doColCheck = false;
+								break;
+							}
 						}
 					}
-				}
+					if (doColCheck) {
+						GLboolean colHappened = false;
+						for (Hitbox* mEH : mE->Hitboxes) {
+							for (Hitbox* cEH : cE->Hitboxes) {
+								// Calculation WCS position of the Hitbox
+								mymEH = *mEH;
+								mymEH.pos = Util::create2DrotMatrix(mE->angle) * mymEH.pos + mE->pos;
+								mymEH.angle += mE->angle;
+								mycEH = *cEH;
+								mycEH.pos = Util::create2DrotMatrix(cE->angle) * mycEH.pos + cE->pos;
+								mycEH.angle += cE->angle;
+
+								if (doSingleCheck(mymEH, mycEH)) {
+									mE->Collision(cE, dt);
+									cE->Collision(mE, dt);
+									colHappened = true;
+									break;
+								}
+							}
+							if (colHappened) {
+								break;
+							}
+						}
+					}
 			}
 		}
 		// Deletes the moved entity from the static entitie list because all collisions involving this entity have been checked 
 		for (int i = 0; i < entities.size(); i++) {
 			if (mE == entities[i]) {
 				entities.erase(entities.begin() + i);
+				break;
 			}
 		}
 	}

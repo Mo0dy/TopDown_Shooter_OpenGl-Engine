@@ -12,10 +12,10 @@ public:
 	GLboolean updateE(GLfloat dt);
 
 	std::vector<Entity*> whitelist;
+	GLfloat damage;
 
 protected:
 	GLfloat velocity;
-	GLfloat damage;
 	void Collision(Entity* cE, GLfloat dt);
 };
 

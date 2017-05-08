@@ -19,7 +19,7 @@
 
 #define CAM_STANDARD_SIZE 10
 
-#define SECOND_PLAYER
+//#define SECOND_PLAYER
 
 
 // Debug
@@ -89,6 +89,7 @@ static const GLfloat FORCE_SCALE = 0.001f;
 
 // Other
 static const GLfloat CONTROLLER_STICK_MAX = 32767;
+static const GLfloat CONTROLLER_TRIGGER_MAX = 255;
 
 // Utility funciton
 

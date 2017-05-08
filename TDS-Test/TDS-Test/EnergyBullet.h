@@ -11,6 +11,8 @@ public:
 	EnergyBullet(glm::vec2 position, GLfloat newAngle);
 	~EnergyBullet();
 
+	GLboolean checkForErase(glm::vec2 levelSize);
+
 protected:
 	
 };

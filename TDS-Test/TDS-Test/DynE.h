@@ -24,8 +24,9 @@ public:
 	glm::vec2 vel; // velocity in m/s
 	GLfloat airFricCoeff;
 	GLboolean collision;
-protected:
 	GLfloat mass; // mass in kg
+
+protected:
 	GLfloat dynFricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 	GLfloat statFricCoeff;
 	glm::vec2 force; // force in N

@@ -11,5 +11,7 @@ public:
 	GLfloat health;
 
 	GLboolean checkForErase(glm::vec2 levelSize);
+
+	void Collision(Entity* cE, GLfloat dt);
 };
 
