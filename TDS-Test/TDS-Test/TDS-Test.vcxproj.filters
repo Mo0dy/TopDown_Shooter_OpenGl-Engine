@@ -105,6 +105,9 @@
     <ClInclude Include="SubE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EnergyBulletBig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="SubE.cpp">
       <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyBulletBig.cpp">
+      <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

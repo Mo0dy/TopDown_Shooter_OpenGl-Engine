@@ -79,17 +79,17 @@ public:
 static const GLfloat GRAV_ACC = 9.81f;
 
 // Sudo Physics
-static const GLfloat COLLISION_ADD_CHANGE = 0.001;
+static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
 
 // Rendering
-//#define FULLSCREEN
-#define SCREEN_WIDTH 900
-#define SCREEN_HEIGHT 800
+#define FULLSCREEN
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 static const GLfloat FORCE_SCALE = 0.001f;
 
 // Other
-static const GLfloat CONTROLLER_STICK_MAX = 32767;
-static const GLfloat CONTROLLER_TRIGGER_MAX = 255;
+static const GLfloat CONTROLLER_STICK_MAX = 32767.0f;
+static const GLfloat CONTROLLER_TRIGGER_MAX = 255.0f;
 
 // Utility funciton
 

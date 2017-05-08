@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include "Game.h"
+#include "EnergyBulletBig.h"
 
 #include <glm\gtc\random.hpp>
 
@@ -9,6 +10,9 @@ void Robot::loadRobot() {
 	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
 	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
 	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
+	ResourceManager::LoadTexture("Textures\\U_Bot_Hand.png", GL_TRUE, "U_Bot_Hand");
+
+	Animation::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot");
 }
 
 Robot::Robot(glm::vec2 position) : Player(position)
@@ -24,6 +28,7 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	Hitboxes.clear();
 	accuracy = 0.1;
 
+	bulletSpawn = glm::vec2(100, 100);
 
 	subEntities["tracks"] = new SubE(pos, glm::vec2(0));
 	subEntities["body"] = new SubE(pos, glm::vec2(0));
@@ -37,10 +42,16 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	state = STOPPING;
 
 	shootDelay = 0.1;
+	shootDelayBigB = 5;
 	setColor(glm::vec3(1.0f));
 
 	renderList.push_back("tracks");
 	renderList.push_back("body");
+
+	lastShot = +100;
+	lastShotBigB = +100;
+
+	Animations["Robot_Shoot"] = new Animation("Robot_Shoot", GL_FALSE);
 }
 
 Robot::~Robot()
@@ -48,10 +59,16 @@ Robot::~Robot()
 }
 
 GLboolean Robot::updateE(GLfloat dt) {
+	if (Animations["Robot_Shoot"]->getState()) {
+		subEntities["body"]->tex = Animations["Robot_Shoot"]->getETex()->tex;
+		subEntities["body"]->size = Animations["Robot_Shoot"]->getETex()->texSize;
+	}
+
 	state = STOPPING;
 	movState = NORMAL;
 	accuracy = 0.1;
 	lastShot += dt;
+	lastShotBigB += dt;
 	// updating values according to collision
 	if (collision) {
 		pos = colPos;
@@ -116,6 +133,10 @@ GLboolean Robot::updateE(GLfloat dt) {
 		shoot();
 	}
 
+	if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+		shootBigB();
+	}
+
 	glm::vec2 dV = dt * force / mass;
 
 	// safeguard for wiggeling close to 0v
@@ -147,8 +168,18 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
+		Animations["Robot_Shoot"]->animationTime = shootDelay;
+		Animations["Robot_Shoot"]->startAnimation();
 		lastShot = 0;
-		Game::Bullets.push_back(new EnergyBullet(pos, subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::Bullets.push_back(new EnergyBullet(pos + Util::create2DrotMatrix(glm::degrees(subEntities["body"]->angle)) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::Bullets.back()->whitelist.push_back(this);
+	}
+}
+
+void Robot::shootBigB() {
+	if (lastShotBigB > shootDelayBigB) {
+		lastShotBigB = 0;
+		Game::Bullets.push_back(new EnergyBulletBig(pos, subEntities["body"]->angle));
 		Game::Bullets.back()->whitelist.push_back(this);
 	}
 }

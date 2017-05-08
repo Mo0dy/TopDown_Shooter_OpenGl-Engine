@@ -16,7 +16,6 @@ public:
 	glm::vec2 pos; // The position in WCS coordinates
 	GLfloat angle; // The angle of the entitie in radians
 	std::vector<Hitbox*> Hitboxes;
-	Animation ani;
 
 	virtual GLboolean checkForErase(glm::vec2 levelSize);
 	virtual GLboolean updateE(GLfloat dt);

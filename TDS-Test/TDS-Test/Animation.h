@@ -15,22 +15,26 @@ public:
 class Animation
 {
 public:
-	Animation();
+
+	static std::map<std::string, std::vector<Etex*> > Animations;
+
+	Animation(std::string name, GLboolean repeat);
 	~Animation();
 
-	void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name);
+	static void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name);
 
 	void startAnimation();
 	void stopAnimation();
 
 	Etex* getETex();
-	void addETex(Etex*);
 	GLint getSize();
 	GLboolean getState();
 	GLfloat animationTime;
 protected:
+	GLboolean repeat;
 	GLboolean state;
 	GLfloat startTime;
-	std::vector<Etex*> textures;
+
+	std::string name;
 };
 

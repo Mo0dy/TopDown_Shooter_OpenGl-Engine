@@ -25,16 +25,6 @@ GLboolean AwesomeFace::updateE(GLfloat dt) {
 		vel = colVel;
 		collision = GL_FALSE;
 	}
-
-	// updating animation
-	if (ani.getState()) {
-		tex = ani.getETex()->tex;
-		size = ani.getETex()->texSize;
-		if (ani.getETex()->hitboxes.size() > 0) {
-			Hitboxes = ani.getETex()->hitboxes;
-		}
-	}
-
 	addForce(airRes());
 
 	// Pathfinding to player

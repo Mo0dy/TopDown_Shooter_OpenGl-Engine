@@ -19,13 +19,6 @@ Entity::~Entity()
 }
 
 GLboolean Entity::updateE(GLfloat dt) {
-	if (ani.getState()) {
-		tex = ani.getETex()->tex;
-		size = ani.getETex()->texSize;
-		if (ani.getETex()->hitboxes.size() > 0) {
-			Hitboxes = ani.getETex()->hitboxes;
-		}
-	}
 	return GL_FALSE; // static entities never move
 }
 
