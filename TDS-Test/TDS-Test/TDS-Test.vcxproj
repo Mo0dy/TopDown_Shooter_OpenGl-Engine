@@ -74,8 +74,8 @@
     <LibraryPath>C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
