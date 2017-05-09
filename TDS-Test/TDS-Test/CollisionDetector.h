@@ -28,6 +28,6 @@ protected:
 	GLboolean doSingleCheck(Hitbox& h1, Hitbox& h2);
 
 	std::vector<Entity*> allE; // Stores entities
-	std::vector<DynE*> movedE; // Store moved entities
+	std::vector<Entity*> movedE; // Store moved entities
 };
 

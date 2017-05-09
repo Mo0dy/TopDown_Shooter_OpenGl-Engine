@@ -60,10 +60,12 @@ void DynE::dynCollision(DynE* E2) {
 	if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
 		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
 		colPos = pos - c * COLLISION_ADD_CHANGE;
+		pos = colPos;
 	}
 	else {
 		colVel = vel;
 		colPos = pos - c * COLLISION_ADD_CHANGE;
+		pos = colPos;
 	}
 }
 
