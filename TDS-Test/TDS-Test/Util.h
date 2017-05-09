@@ -79,7 +79,7 @@ public:
 static const GLfloat GRAV_ACC = 9.81f;
 
 // Sudo Physics
-static const GLfloat COLLISION_ADD_CHANGE = 0.01f;
+static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
 
 // Rendering
 #define FULLSCREEN
