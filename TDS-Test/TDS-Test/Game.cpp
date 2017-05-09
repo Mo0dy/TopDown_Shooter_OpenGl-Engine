@@ -14,6 +14,8 @@ std::vector<Player*> Game::Players;
 std::vector<Bullet*> Game::Bullets;
 std::vector<DynE*> Game::movedE;
 
+GLuint Game::killcount;
+
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
 }
@@ -103,9 +105,15 @@ void Game::ProcessInput(GLfloat dt) {
 #ifdef DEBUG
 	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
 		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+		if (camera->minSizeHeight < 6) {
+			camera->minSizeHeight = 6;
+		}
 	}
 	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
 		camera->minSizeHeight += CAM_ZOOM_SPEED;
+		if (camera->minSizeHeight > 25) {
+			camera->minSizeHeight = 25;
+		}
 	}
 	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
 		reset();
@@ -201,11 +209,13 @@ void Game::Update(GLfloat dt) {
 	}
 	level->updateL(dt);
 
+	// Collision detection
+	GLfloat penDepth;
 	for (Player *p : Players) {
 		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(p, e)) {
-				p->ColWithDyn(e);
-				e->ColWithPlayer(p);
+			if (colDec->doCCheck(p, e, &penDepth)) {
+				p->ColWithDyn(e, penDepth);
+				e->ColWithPlayer(p, penDepth);
 			}
 		}
 	}
@@ -213,18 +223,18 @@ void Game::Update(GLfloat dt) {
 	// We should probably only check for all Enemies that moved but for now this is fine
 	for (int i = 0; i < Enemies.size(); i++) {
 		for (int j = i + 1; j < Enemies.size(); j++) {
-			if (colDec->doCCheck(Enemies[i], Enemies[j])) {
-				Enemies[i]->ColWithDyn(Enemies[j]);
-				Enemies[j]->ColWithDyn(Enemies[i]);
+			if (colDec->doCCheck(Enemies[i], Enemies[j], &penDepth)) {
+				Enemies[i]->ColWithDyn(Enemies[j], penDepth);
+				Enemies[j]->ColWithDyn(Enemies[i], penDepth);
 			}
 		}
 	}
 
 	for (Bullet *b : Bullets) {
 		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(b, e)) {
+			if (colDec->doCCheck(b, e, &penDepth)) {
 				b->ColWithEnemy(e);
-				e->ColWithDyn(b);
+				e->ColWithDyn(b, penDepth);
 			}
 		}
 	}
@@ -275,6 +285,7 @@ void Game::checkForOutOfBounds() {
 	for (int i = 0; i < Players.size(); i++) {
 		if (Players[i]->checkForErase(level->size)) {
 			Players[i]->pos = glm::vec2(0);
+			Players[i]->death = GL_TRUE;
 		}
 	}
 	for (int i = 0; i < dynEntities.size(); i++) {
@@ -286,6 +297,7 @@ void Game::checkForOutOfBounds() {
 	for (int i = 0; i < Enemies.size(); i++) {
 		if (Enemies[i]->checkForErase(level->size)) {
 			delete Enemies[i];
+			killcount++;													// ===========================================================
 			Enemies.erase(Enemies.begin() + i);
 		}
 	}

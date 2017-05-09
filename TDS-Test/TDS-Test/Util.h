@@ -82,9 +82,9 @@ static const GLfloat GRAV_ACC = 9.81f;
 static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
 
 // Rendering
-//#define FULLSCREEN
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 900
+#define FULLSCREEN
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 static const GLfloat FORCE_SCALE = 0.001f;
 
 // Other

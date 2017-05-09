@@ -20,9 +20,8 @@ public:
 	CollisionDetector();
 	~CollisionDetector();
 
-	GLboolean doCCheck(DynE* dE, Entity* sE);
-
+	GLboolean doCCheck(DynE* dE, Entity* sE, GLfloat* const penDepth);
 protected:
-	GLboolean doSingleCheck(Hitbox& h1, Hitbox& h2);
+	GLfloat doSingleCheck(Hitbox& h1, Hitbox& h2);
 };
 

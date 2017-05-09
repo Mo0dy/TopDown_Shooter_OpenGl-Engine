@@ -18,8 +18,9 @@ public:
 
 	GLfloat health;
 
-protected:
 	GLboolean death;
+
+protected:
 	GLfloat inherentForce;
 };
 

@@ -9,7 +9,7 @@ AwesomeFace::AwesomeFace(glm::vec2 position) : Enemy(position)
 {
 	tex = "awesomeface";
 	health = 100;
-	movForce = 100;
+	movForce = 110;
 	state = MOVING;
 	airFricCoeff = -1;
 
@@ -39,11 +39,13 @@ GLboolean AwesomeFace::updateE(GLfloat dt) {
 	// Pathfinding to player
 	addForce(glm::normalize(Game::Players[0]->pos - pos) * movForce);
 
-	//for(DynE *e : Game::dynEntities) {
-	//	if (e != this) {
-	//		addForce(glm::normalize(pos - e->pos) * 350.0f /  glm::pow(glm::distance(pos, e->pos), 4));
-	//	}
-	//}
+	 //Unordered group dynamics <-- low fps
+	glm::vec2 movDir = glm::normalize(Game::Players[0]->pos - pos) * movForce;
+	for(Enemy *e : Game::Enemies) {
+		if (glm::distance(pos, e->pos) > 0.4) {
+			movDir += glm::normalize(pos - e->pos) * 500.0f /  glm::pow(glm::distance(pos, e->pos), 4);
+		}
+	}
 
 	glm::vec2 dV = dt * force / mass;
 

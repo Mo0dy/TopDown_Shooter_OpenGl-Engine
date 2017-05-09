@@ -48,6 +48,8 @@ public:
 	static std::vector<Enemy*> Enemies;
 	static std::vector<DynE*> movedE;
 
+	static GLuint killcount;
+
 	static void deleteEntities();
 	static void clearEntities();
 

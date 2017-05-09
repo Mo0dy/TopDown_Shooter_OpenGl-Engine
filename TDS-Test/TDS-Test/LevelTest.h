@@ -9,6 +9,8 @@ public:
 
 	static void loadLevelTest();
 
+	void updateL(GLfloat dt);
+
 	LevelTest();
 	~LevelTest();
 

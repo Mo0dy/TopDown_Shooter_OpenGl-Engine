@@ -42,7 +42,7 @@ void DynE::ColWithStat(Entity *cE) {
 
 }
 
-void DynE::ColWithDyn(DynE *cE) {
+void DynE::ColWithDyn(DynE *cE, GLfloat colDepth) {
 	collision = GL_TRUE;
 	glm::vec2 c = cE->pos - pos;
 
@@ -55,7 +55,10 @@ void DynE::ColWithDyn(DynE *cE) {
 	else {
 		colVel = vel;
 	}
-	addForce(-c * 500.0f);
+	if (pos == cE->pos) {
+		pos += 0.0001;
+	}
+	addForce(-c * colDepth * 5000.0f);
 }
 
 // Utitlity functions
