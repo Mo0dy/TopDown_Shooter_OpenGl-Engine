@@ -81,7 +81,6 @@ GLboolean Robot::updateE(GLfloat dt) {
 		lastShotBigB += dt;
 		// updating values according to collision
 		if (collision) {
-			pos = colPos;
 			vel = colVel;
 			collision = GL_FALSE;
 		}

@@ -31,9 +31,6 @@ GLboolean Entity::checkForErase(glm::vec2 levelSize) {
 	}
 }
 
-void Entity::Collision(Entity* cE, GLfloat dt) {
-}
-
 void Entity::setColor(glm::vec3 color) {
 	this->color = color;
 }

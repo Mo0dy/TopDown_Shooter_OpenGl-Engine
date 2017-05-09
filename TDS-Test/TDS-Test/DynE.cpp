@@ -14,7 +14,6 @@ DynE::~DynE()
 GLboolean DynE::updateE(GLfloat dt) {
 	// updating values according to collision
 	if (collision) {
-		pos = colPos;
 		vel = colVel;
 		collision = GL_FALSE;
 	}
@@ -39,32 +38,24 @@ GLboolean DynE::updateE(GLfloat dt) {
 	return glm::length(vel) > 0;
 }
 
-void DynE::Collision(Entity* cE, GLfloat dt) {
-	DynE* E2 = dynamic_cast<DynE*> (cE);
-	if (E2 == NULL) { // Collision with static object
+void DynE::ColWithStat(Entity *cE) {
 
-	}
-	else {
-		collision = GL_TRUE;
-		dynCollision(E2);
-		// we should write that checks weather a collision is a true collision.
-	}
 }
 
-void DynE::dynCollision(DynE* E2) {
-	glm::vec2 c = E2->pos - pos;
+void DynE::ColWithDyn(DynE *cE) {
+	collision = GL_TRUE;
+	glm::vec2 c = cE->pos - pos;
 
 	GLfloat v1p = glm::dot(vel, c);
-	GLfloat v2p = glm::dot(E2->vel, c);
+	GLfloat v2p = glm::dot(cE->vel, c);
 
 	if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
-		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
-		colPos = pos - c * COLLISION_ADD_CHANGE;
+		colVel = vel + 2 * ((cE->mass * glm::dot(cE->vel, c) - cE->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + cE->mass)) * c;
 	}
 	else {
 		colVel = vel;
-		colPos = pos - c * COLLISION_ADD_CHANGE;
 	}
+	addForce(-c * 500.0f);
 }
 
 // Utitlity functions

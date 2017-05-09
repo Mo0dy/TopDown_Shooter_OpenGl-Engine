@@ -18,7 +18,3 @@ GLboolean Bullet::updateE(GLfloat dt) {
 	pos += vel * dt;
 	return GL_TRUE;
 }
-
-void Bullet::Collision(Entity* cE, GLfloat dt) {
-	collision = GL_TRUE;
-}

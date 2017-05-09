@@ -9,75 +9,33 @@ CollisionDetector::~CollisionDetector()
 {
 }
 
-static GLint interator = 0;
-
-void CollisionDetector::doCCheck(std::vector<Entity*> entities, GLfloat dt) {
+GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE) {
 	// Utility variables
 	Hitbox mycEH;
 	Hitbox mymEH;
 
-	for (DynE* mE : movedE) {
-		for (Entity *cE : entities) {
-			// This rough check only works if all hitboxes are inside the size of the texture;
-			if (cE != mE && glm::distance(mE->pos, cE->pos) <= (glm::length(cE->size) + glm::length(mE->size)) / 2.0f) {
-				Bullet* b1 = dynamic_cast<Bullet*>(mE);
-				Bullet* b2 = dynamic_cast<Bullet*>(cE);
-				GLboolean doColCheck = true;
-				if (b1 != NULL && b2 != NULL) { // Two bullets
-					doColCheck = false;
-				}
-				else if (b1 != NULL) {
-						for (Entity* e : b1->whitelist) {
-							if (cE == e) {
-								doColCheck = false;
-								break;
-							}
-						}
-					}
-					else if (b2 != NULL) {
-						for (Entity* e : b2->whitelist) {
-							if (mE == e) {
-								doColCheck = false;
-								break;
-							}
-						}
-					}
-					if (doColCheck) {
-						GLboolean colHappened = false;
-						for (Hitbox* mEH : mE->Hitboxes) {
-							for (Hitbox* cEH : cE->Hitboxes) {
-								// Calculation WCS position of the Hitbox
-								mymEH = *mEH;
-								mymEH.pos = Util::create2DrotMatrix(mE->angle) * mymEH.pos + mE->pos;
-								mymEH.angle += mE->angle;
-								mycEH = *cEH;
-								mycEH.pos = Util::create2DrotMatrix(cE->angle) * mycEH.pos + cE->pos;
-								mycEH.angle += cE->angle;
 
-								if (doSingleCheck(mymEH, mycEH)) {
-									mE->Collision(cE, dt);
-									cE->Collision(mE, dt);
-									colHappened = true;
-									break;
-								}
-							}
-							if (colHappened) {
-								break;
-							}
-						}
-					}
-			}
-		}
-		// Deletes the moved entity from the static entitie list because all collisions involving this entity have been checked 
-		for (int i = 0; i < entities.size(); i++) {
-			if (mE == entities[i]) {
-				entities.erase(entities.begin() + i);
-				break;
+	// This rough check only works if all hitboxes are inside the size of the texture;
+	if (glm::distance(dE->pos, sE->pos) <= (glm::length(dE->size) + glm::length(sE->size)) / 2.0f) {
+		for (Hitbox* mEH : dE->Hitboxes) {
+			for (Hitbox* cEH : sE->Hitboxes) {
+				// Calculation WCS position of the Hitbox
+				mymEH = *mEH;
+				mymEH.pos = Util::create2DrotMatrix(dE->angle) * mymEH.pos + dE->pos;
+				mymEH.angle += dE->angle;
+				mycEH = *cEH;
+				mycEH.pos = Util::create2DrotMatrix(sE->angle) * mycEH.pos + sE->pos;
+				mycEH.angle += sE->angle;
+
+				if (doSingleCheck(mymEH, mycEH)) {
+					return GL_TRUE;
+				}
 			}
 		}
 	}
-	movedE.clear();
+	return GL_FALSE;
 }
+
 
 GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
 	if (glm::distance(h1.pos, h2.pos) > (glm::length(h1.size) + glm::length(h2.size)) / 2.0f) { // rough check for possible collision
@@ -151,6 +109,3 @@ GLboolean CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2) {
 	}
 	return GL_TRUE;
 }
-
-// getters and setters
-void CollisionDetector::addMovedE(DynE* dE) { movedE.push_back(dE); }

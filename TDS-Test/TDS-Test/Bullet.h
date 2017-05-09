@@ -16,6 +16,5 @@ public:
 
 protected:
 	GLfloat velocity;
-	void Collision(Entity* cE, GLfloat dt);
 };
 

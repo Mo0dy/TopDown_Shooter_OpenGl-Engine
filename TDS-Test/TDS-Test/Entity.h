@@ -19,7 +19,6 @@ public:
 
 	virtual GLboolean checkForErase(glm::vec2 levelSize);
 	virtual GLboolean updateE(GLfloat dt);
-	virtual void Collision(Entity* cE, GLfloat dt);
 	virtual void setColor(glm::vec3 color);
 	glm::vec3 color;
 protected:

@@ -20,6 +20,7 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include "Level.h"
+#include "Enemy.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -44,6 +45,8 @@ public:
 	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
 	static std::vector<Player*> Players;
 	static std::vector<Bullet*> Bullets;
+	static std::vector<Enemy*> Enemies;
+	static std::vector<DynE*> movedE;
 
 	static void deleteEntities();
 	static void clearEntities();

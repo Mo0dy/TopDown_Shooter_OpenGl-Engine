@@ -17,7 +17,8 @@ public:
 
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
 	virtual GLboolean updateE(GLfloat dt); // call this function every update. returns true if moved
-	virtual void Collision(Entity* cE, GLfloat dt);
+	virtual void ColWithDyn(DynE* cE);
+	virtual void ColWithStat(Entity* cE);
 	State state;
 
 	// Should be private but its debugging
@@ -27,15 +28,12 @@ public:
 	GLfloat mass; // mass in kg
 
 protected:
-	void dynCollision(DynE* E2);
-
 	GLfloat dynFricCoeff; // Coefficent of friction needs to be negative to counteract causing forces
 	GLfloat statFricCoeff;
 	glm::vec2 force; // force in N
 
 	// Position and velocity after all collisions are done
-	glm::vec2 colVel; 
-	glm::vec2 colPos;
+	glm::vec2 colVel;
 
 	// Utility functions
 	glm::vec2 fricRes(); // calculates friction

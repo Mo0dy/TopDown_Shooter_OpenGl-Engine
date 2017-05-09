@@ -28,7 +28,7 @@ void LevelTest::reset() {
 
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			Game::dynEntities.push_back(new AwesomeFace(glm::vec2(3 + i * 3, 3 + j * 3)));
+			Game::Enemies.push_back(new AwesomeFace(glm::vec2(3 + i * 3, 3 + j * 3)));
 		}
 	}
 }

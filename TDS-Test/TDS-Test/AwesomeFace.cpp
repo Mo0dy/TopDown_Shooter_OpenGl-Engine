@@ -13,8 +13,8 @@ AwesomeFace::AwesomeFace(glm::vec2 position) : Enemy(position)
 	state = MOVING;
 	airFricCoeff = -1;
 
-	damage = 800;
-	attacking = true;
+	damage = 10;
+	attacking = GL_TRUE;
 	attackSpeed = 0.5;
 }
 
@@ -31,7 +31,6 @@ GLboolean AwesomeFace::updateE(GLfloat dt) {
 
 	// updating values according to collision
 	if (collision) {
-		pos = colPos;
 		vel = colVel;
 		collision = GL_FALSE;
 	}
@@ -40,11 +39,11 @@ GLboolean AwesomeFace::updateE(GLfloat dt) {
 	// Pathfinding to player
 	addForce(glm::normalize(Game::Players[0]->pos - pos) * movForce);
 
-	for(DynE *e : Game::dynEntities) {
-		if (e != this) {
-			addForce(glm::normalize(pos - e->pos) * 350.0f /  glm::pow(glm::distance(pos, e->pos), 4));
-		}
-	}
+	//for(DynE *e : Game::dynEntities) {
+	//	if (e != this) {
+	//		addForce(glm::normalize(pos - e->pos) * 350.0f /  glm::pow(glm::distance(pos, e->pos), 4));
+	//	}
+	//}
 
 	glm::vec2 dV = dt * force / mass;
 

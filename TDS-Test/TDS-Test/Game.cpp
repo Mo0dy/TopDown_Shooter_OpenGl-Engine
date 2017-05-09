@@ -8,9 +8,11 @@
 #include "AwesomeFace.h"
 
 std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
-std::vector<DynE*> Game::dynEntities; // a vector that includes all dynamic entities
+std::vector<DynE*> Game::dynEntities; // a vector that includes all neutral
+std::vector<Enemy*> Game::Enemies;
 std::vector<Player*> Game::Players;
 std::vector<Bullet*> Game::Bullets;
+std::vector<DynE*> Game::movedE;
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -45,13 +47,13 @@ void Game::Init() {
 }
 
 #ifdef KEYBOARD_SUPPORT
-GLboolean Press_P_Flag = false;
-GLboolean Press_O_Flag = false;
+GLboolean Press_P_Flag = GL_FALSE;
+GLboolean Press_O_Flag = GL_FALSE;
 #endif // KEYBOARD_SUPPORT
 
 // UTIL
-GLboolean Press_R_Flag = false;
-GLboolean Press_M_Flag = false;
+GLboolean Press_R_Flag = GL_FALSE;
+GLboolean Press_M_Flag = GL_FALSE;
 
 void Game::ProcessInput(GLfloat dt) {
 
@@ -172,7 +174,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (Keys[GLFW_KEY_RIGHT_CONTROL]) {
 		Players[1]->wepState = AIMING;
-}
+	}
 #endif // SECOND_PLAYER
 #endif // KEYBOARD_SUPPORT
 }
@@ -180,34 +182,45 @@ void Game::ProcessInput(GLfloat dt) {
 void Game::Update(GLfloat dt) {
 	//LOG("FPS = " << 1 / dt);
 	camera->updatePos(Width, Height, Players);
-	
+
 	checkForOutOfBounds();
 
 	for (Player *e : Players) {
-		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
-		}
+		e->updateE(dt);
 	}
 	for (Bullet *e : Bullets) {
-		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
-		}
+		e->updateE(dt);
+	}
+	for (Enemy *e : Enemies) {
+		e->updateE(dt);
 	}
 	for (DynE *e : dynEntities) {
 		if (e->updateE(dt)) {
-			colDec->addMovedE(e);
+			movedE.push_back(e);
 		}
 	}
 	level->updateL(dt);
 
-	// This should be done at the creaton of the entites. Rewrite as soon as game structure is fixed
-	std::vector<Entity*> colE;
-	colE.reserve(statEntities.size() + dynEntities.size() + Players.size() + Bullets.size());
-	colE.insert(colE.end(), statEntities.begin(), statEntities.end());
-	colE.insert(colE.end(), dynEntities.begin(), dynEntities.end());
-	colE.insert(colE.end(), Bullets.begin(), Bullets.end());
-	colE.insert(colE.end(), Players.begin(), Players.end());
-	colDec->doCCheck(colE, dt);
+	for (Player *p : Players) {
+		for (Enemy *e : Enemies) {
+			if (colDec->doCCheck(p, e)) {
+				p->ColWithDyn(e);
+				e->ColWithDyn(p);
+			}
+		}
+	}
+
+	// We should probably only check for all Enemies that moved but for now this is fine
+	for (int i = 0; i < Enemies.size(); i++) {
+		for (int j = i + 1; j < Enemies.size(); j++) {
+			if (colDec->doCCheck(Enemies[i], Enemies[j])) {
+				Enemies[i]->ColWithDyn(Enemies[j]);
+				Enemies[j]->ColWithDyn(Enemies[i]);
+			}
+		}
+	}
+
+	movedE.clear();
 }
 
 void Game::Render() {
@@ -220,6 +233,9 @@ void Game::Render() {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Entity* e : dynEntities) {
+		renderer->RenderSprite(*e, *camera);
+	}
+	for (Entity* e : Enemies) {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Player* p : Players) {
@@ -258,6 +274,12 @@ void Game::checkForOutOfBounds() {
 			dynEntities.erase(dynEntities.begin() + i);
 		}
 	}
+	for (int i = 0; i < Enemies.size(); i++) {
+		if (Enemies[i]->checkForErase(level->size)) {
+			delete Enemies[i];
+			Enemies.erase(Enemies.begin() + i);
+		}
+	}
 }
 
 void Game::deleteEntities() {
@@ -273,6 +295,9 @@ void Game::deleteEntities() {
 	for (Entity *e : Bullets) {
 		delete e;
 	}
+	for (Entity *e : Enemies) {
+		delete e;
+	}
 }
 
 void Game::clearEntities() {
@@ -280,4 +305,5 @@ void Game::clearEntities() {
 	statEntities.clear();
 	dynEntities.clear();
 	Bullets.clear();
+	Enemies.clear();
 }

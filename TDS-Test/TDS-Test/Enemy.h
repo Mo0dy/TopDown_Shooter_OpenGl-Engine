@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DynE.h"
-#include "Bullet.h"
+//#include "Bullet.h"
 
 class Enemy: public DynE
 {
@@ -13,9 +13,7 @@ public:
 
 	GLboolean checkForErase(glm::vec2 levelSize);
 
-	void Collision(Entity* cE, GLfloat dt);
-
-	std::vector<Bullet*> damageWhitelist;
+	//std::vector<Bullet*> damageWhitelist;
 
 	GLfloat lastAttack;
 	GLfloat attackSpeed;
