@@ -1,0 +1,1 @@
+A just for fun animation that will happen if no user Input is detected for a given time. Feel free to experiment

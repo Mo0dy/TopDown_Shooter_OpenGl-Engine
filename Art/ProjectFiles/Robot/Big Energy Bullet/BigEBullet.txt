@@ -1,0 +1,20 @@
+An Energy ball that the robot creates with ?his hands?
+
+The Energy ball will get bigger with Time and after a given size / time it will start changing color from ?blue? to ?red? <- this can be done in the programm later on.
+
+The size of the ball will also be handled by the application.
+
+Buller Animation:
+
+> An Energyball / maybe some arcs
+> Pulsating I can do this in the program or you can do this in the animation
+
+Casting Animation:
+
+> The Robot moves its arms to the front and then ?lineary? further apart.
+
+Shooting animation:
+
+> The Robot moves it's arms back together -> reverse the casting animation from reached position really fast. 
+> The Robot then "pushes" the energyball away
+> Still some arcs on the arms when returning back to normal (at its sides)

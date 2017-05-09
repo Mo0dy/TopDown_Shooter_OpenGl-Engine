@@ -1,0 +1,9 @@
+See the pictures
+
+We need animations:
+
+> deploying <- played in reverse for storing
+
+> shooting
+
+We also need a bullet sprite. (not animated) <- this has time i might even just write hitscan and add particle effects where the shot hits

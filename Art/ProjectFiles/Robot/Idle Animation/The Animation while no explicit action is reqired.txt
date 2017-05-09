@@ -1,0 +1,12 @@
+Idk. some idle robot movements 
+
+> ?Exhaust? <- do you need me to create particle effects?
+> some parts moving
+
+> this animation is always played for each part while no explicit change is needed that means we need it for:
+
+	> the main body
+	> the tracks
+	> the arms
+	> the shoulder weapon
+
