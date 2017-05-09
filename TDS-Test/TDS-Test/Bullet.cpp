@@ -1,6 +1,4 @@
 #include "Bullet.h"
-#include "Player.h"
-#include "Enemy.h"
 
 Bullet::Bullet(glm::vec2 position, GLfloat newAngle) : DynE(position), velocity(200)
 {
@@ -9,7 +7,6 @@ Bullet::Bullet(glm::vec2 position, GLfloat newAngle) : DynE(position), velocity(
 	state = MOVING;
 }
 
-
 Bullet::~Bullet()
 {
 }
@@ -17,4 +14,9 @@ Bullet::~Bullet()
 GLboolean Bullet::updateE(GLfloat dt) {
 	pos += vel * dt;
 	return GL_TRUE;
+}
+
+void Bullet::ColWithEnemy(Enemy* enemy) {
+	collision = GL_TRUE;
+	enemy->health -= damage;
 }

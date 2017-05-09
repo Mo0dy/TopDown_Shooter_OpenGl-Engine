@@ -205,7 +205,7 @@ void Game::Update(GLfloat dt) {
 		for (Enemy *e : Enemies) {
 			if (colDec->doCCheck(p, e)) {
 				p->ColWithDyn(e);
-				e->ColWithDyn(p);
+				e->ColWithPlayer(p);
 			}
 		}
 	}
@@ -216,6 +216,15 @@ void Game::Update(GLfloat dt) {
 			if (colDec->doCCheck(Enemies[i], Enemies[j])) {
 				Enemies[i]->ColWithDyn(Enemies[j]);
 				Enemies[j]->ColWithDyn(Enemies[i]);
+			}
+		}
+	}
+
+	for (Bullet *b : Bullets) {
+		for (Enemy *e : Enemies) {
+			if (colDec->doCCheck(b, e)) {
+				b->ColWithEnemy(e);
+				e->ColWithDyn(b);
 			}
 		}
 	}

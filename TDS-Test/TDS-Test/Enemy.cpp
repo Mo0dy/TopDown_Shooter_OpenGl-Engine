@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "Player.h"
 
 Enemy::Enemy(glm::vec2 position) : DynE(position), lastAttack(9999)
 {
@@ -18,3 +17,9 @@ GLboolean Enemy::checkForErase(glm::vec2 levelSize) {
 	}
 }
 
+void Enemy::ColWithPlayer(Player* player) {
+	ColWithDyn(player);
+	if (attacking) {
+		player->health -= damage;
+	}
+}

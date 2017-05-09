@@ -16,9 +16,10 @@ public:
 	// Getters and setters:
 	GLfloat getInherentF();
 
+	GLfloat health;
+
 protected:
 	GLboolean death;
 	GLfloat inherentForce;
-	GLfloat health;
 };
 

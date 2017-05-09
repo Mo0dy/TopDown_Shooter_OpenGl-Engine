@@ -2,8 +2,6 @@
 
 #include "Entity.h"
 
-// Inital fricion still missing (High amount of Friction that only affects bodies at very low speeds)
-
 enum State {
 	STOPPING,
 	MOVING

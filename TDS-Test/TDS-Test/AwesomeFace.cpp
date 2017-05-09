@@ -13,7 +13,7 @@ AwesomeFace::AwesomeFace(glm::vec2 position) : Enemy(position)
 	state = MOVING;
 	airFricCoeff = -1;
 
-	damage = 10;
+	damage = 800;
 	attacking = GL_TRUE;
 	attackSpeed = 0.5;
 }

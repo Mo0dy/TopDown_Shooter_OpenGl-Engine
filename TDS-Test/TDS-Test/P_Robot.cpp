@@ -174,6 +174,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 		bodyDir = glm::vec2(0);
 		return glm::length(vel) > 0;
 	}
+	return GL_FALSE;
 }
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
