@@ -46,11 +46,24 @@ void DynE::Collision(Entity* cE, GLfloat dt) {
 	}
 	else {
 		collision = GL_TRUE;
-		glm::vec2 c = E2->pos - pos;
+		dynCollision(E2);
+		// we should write that checks weather a collision is a true collision.
+	}
+}
+
+void DynE::dynCollision(DynE* E2) {
+	glm::vec2 c = E2->pos - pos;
+
+	GLfloat v1p = glm::dot(vel, c);
+	GLfloat v2p = glm::dot(E2->vel, c);
+
+	if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
 		colVel = vel + 2 * ((E2->mass * glm::dot(E2->vel, c) - E2->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + E2->mass)) * c;
 		colPos = pos - c * COLLISION_ADD_CHANGE;
-
-		// we should write that checks weather a collision is a true collision.
+	}
+	else {
+		colVel = vel;
+		colPos = pos - c * COLLISION_ADD_CHANGE;
 	}
 }
 
