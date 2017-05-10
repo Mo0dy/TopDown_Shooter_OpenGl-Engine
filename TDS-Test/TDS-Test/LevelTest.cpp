@@ -23,7 +23,7 @@ void LevelTest::updateL(GLfloat dt) {
 	if (!Game::Players[0]->death) {
 		time += dt;
 
-		std::cout << "Time = " << time << " || killcount = " << Game::killcount << std::endl;
+		std::cout << "Time = " << time << std::endl;
 	}
 
 	//if (Game::Enemies.size() < Game::Players.size() * 10) {
@@ -48,7 +48,6 @@ void LevelTest::updateL(GLfloat dt) {
 }
 
 void LevelTest::reset() {
-	Game::killcount = 0;
 	time = 0;
 	Game::deleteEntities();
 	Game::clearEntities();

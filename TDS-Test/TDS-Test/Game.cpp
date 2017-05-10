@@ -14,10 +14,6 @@ std::vector<Player*> Game::Players;
 std::vector<Bullet*> Game::Bullets;
 std::vector<DynE*> Game::movedE;
 
-GLuint Game::killcount;
-
-// Jonathan was here! Felix was here first
-
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
 }
@@ -313,7 +309,6 @@ void Game::checkForErase() {
 	for (int i = 0; i < Enemies.size(); i++) {
 		if (Enemies[i]->checkForErase(level->size)) {
 			delete Enemies[i];
-			killcount++;													// ===========================================================
 			Enemies.erase(Enemies.begin() + i);
 		}
 	}
