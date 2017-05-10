@@ -23,12 +23,6 @@ static const GLboolean CONTROLLER_SUPPORT = GL_TRUE;
 static const GLfloat CAM_STANDARD_SIZE = 10;
 static const GLfloat CAM_ZOOM_SPEED = 0.2;
 
-#ifndef DEBUG
-	static const GLfloat CAM_MAX_ZOOM = 25;
-#else // !DEBUG
-	static const GLfloat CAM_MAX_ZOOM = 60;
-#endif // !DEBUG
-
 // Game
 static const GLuint PLAYER_AMOUNT = 2;
 static const glm::vec3 PLAYER_COLOR[] = {
@@ -100,7 +94,7 @@ public:
 
 
 // Debug
-// #define DEBUG
+#define DEBUG
 #ifdef DEBUG
 #define LOG_FPS
 //#define DEBUG_FORCES
@@ -110,3 +104,9 @@ public:
 #ifdef DEBUG_FORCES
 #define FORCE_SCALE  0.001f
 #endif // DEBUG_FORCES
+
+#ifndef DEBUG
+static const GLfloat CAM_MAX_ZOOM = 25;
+#else // !DEBUG
+static const GLfloat CAM_MAX_ZOOM = 60;
+#endif // !DEBUG

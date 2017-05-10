@@ -9,8 +9,6 @@
 void Robot::loadRobot() {
 	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
 	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
-	ResourceManager::LoadTexture("Textures\\Tracks.png", GL_TRUE, "Tracks");
-	ResourceManager::LoadTexture("Textures\\U_Bot_Hand.png", GL_TRUE, "U_Bot_Hand");
 
 	Animation::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot");
 }

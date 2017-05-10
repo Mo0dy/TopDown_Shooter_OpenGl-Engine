@@ -14,7 +14,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	state = MOVING;
 	airFricCoeff = -1;
 
-	damage = 800;
+	damage = 0;
 	attacking = GL_TRUE;
 	attackSpeed = 0.5;
 
