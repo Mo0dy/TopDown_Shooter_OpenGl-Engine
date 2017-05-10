@@ -72,9 +72,9 @@ GLboolean Robot::updateE(GLfloat dt) {
 			death = true;
 		}
 
-		setColor(glm::vec3(1.0f, 1.0f / 2000 * health, 1.0f / 2000 * health));
+		setColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
 
-		state = STOPPING;
+
 		movState = NORMAL;
 		accuracy = 0.1;
 		lastShot += dt;
@@ -83,6 +83,10 @@ GLboolean Robot::updateE(GLfloat dt) {
 		if (collision) {
 			vel = colVel;
 			collision = GL_FALSE;
+			state = MOVING;
+		}
+		else {
+			state = STOPPING;
 		}
 
 		force += airRes();

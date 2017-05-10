@@ -34,8 +34,8 @@ void Camera::updatePos(GLfloat width, GLfloat height, std::vector<Player*> playe
 	}
 	
 	// adds offset so that the players have some distance from the wall
-	minPPos = minPPos - glm::vec2(OFFSET, OFFSET);
-	maxPPos = maxPPos + glm::vec2(OFFSET, OFFSET);
+	minPPos = minPPos - glm::vec2(OFFSET);
+	maxPPos = maxPPos + glm::vec2(OFFSET);
 
 	size = maxPPos - minPPos;
 	glm::vec2 camMid = minPPos + 0.5f * size;

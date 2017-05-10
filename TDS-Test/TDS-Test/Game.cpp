@@ -84,47 +84,46 @@ void Game::ProcessInput(GLfloat dt) {
 
 #endif // DEBUG
 
-#ifdef CONTROLLER_SUPPORT
-	XINPUT_STATE* cState[4];
+	if (CONTROLLER_SUPPORT) {
+		XINPUT_STATE* cState[4];
 
-	for (int i = 0; i < 4; i++) {
-		cState[i] = new XINPUT_STATE;
-	}
+		for (int i = 0; i < 4; i++) {
+			cState[i] = new XINPUT_STATE;
+		}
 
-	// We should probably check the dwPacket number that only changes if input changes
-	GLuint controlledPlayers = 0;
+		// We should probably check the dwPacket number that only changes if input changes
+		GLuint controlledPlayers = 0;
 
-	while (getController(controlledPlayers, cState[controlledPlayers]) == ERROR_SUCCESS && controlledPlayers < 4) {
-		controlledPlayers++;
-	}
+		while (getController(controlledPlayers, cState[controlledPlayers]) == ERROR_SUCCESS && controlledPlayers < 4) {
+			controlledPlayers++;
+		}
 
-	if (controlledPlayers > Players.size()) {
-		controlledPlayers = Players.size();
-	}
+		if (controlledPlayers > Players.size()) {
+			controlledPlayers = Players.size();
+		}
 
-#ifdef DEBUG
-	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-		camera->minSizeHeight -= CAM_ZOOM_SPEED;
-		if (camera->minSizeHeight < 6) {
-			camera->minSizeHeight = 6;
+		for (int i = 0; i < controlledPlayers; i++) {
+			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
+				camera->minSizeHeight -= CAM_ZOOM_SPEED;
+				if (camera->minSizeHeight < 6) {
+					camera->minSizeHeight = 6;
+				}
+			}
+			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
+				camera->minSizeHeight += CAM_ZOOM_SPEED;
+				if (camera->minSizeHeight > CAM_MAX_ZOOM) {
+					camera->minSizeHeight = CAM_MAX_ZOOM;
+				}
+			}
+			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
+				reset();
+			}
+		}
+
+		for (GLuint i = 0; i < controlledPlayers; i++) {
+			Players[i]->gPad = cState[i]->Gamepad;
 		}
 	}
-	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-		camera->minSizeHeight += CAM_ZOOM_SPEED;
-		if (camera->minSizeHeight > 25) {
-			camera->minSizeHeight = 25;
-		}
-	}
-	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
-		reset();
-	}
-
-#endif // DEBUG
-
-	for (GLuint i = 0; i < controlledPlayers; i++) {
-		Players[i]->gPad = cState[i]->Gamepad;
-	}
-#endif // Controller Support
 
 
 #ifdef KEYBOARD_SUPPORT // KEYBORD
@@ -189,10 +188,12 @@ void Game::ProcessInput(GLfloat dt) {
 }
 
 void Game::Update(GLfloat dt) {
-	//LOG("FPS = " << 1 / dt);
-	camera->updatePos(Width, Height, Players);
 
-	checkForOutOfBounds();
+#ifdef LOG_FPS
+	LOG("FPS = " << 1 / dt);
+#endif //LOG_FPS
+
+	camera->updatePos(Width, Height, Players);
 
 	for (Player *e : Players) {
 		e->updateE(dt);
@@ -212,11 +213,17 @@ void Game::Update(GLfloat dt) {
 
 	// Collision detection
 	GLfloat penDepth;
-	for (Player *p : Players) {
+	for (int i = 0; i < Players.size(); i++) {
 		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(p, e, &penDepth)) {
-				p->ColWithDyn(e, penDepth);
-				e->ColWithPlayer(p, penDepth);
+			if (colDec->doCCheck(Players[i], e, &penDepth)) {
+				Players[i]->ColWithDyn(e, penDepth);
+				e->ColWithPlayer(Players[i], penDepth);
+			}
+		}
+		for (int j = i + 1; j < Players.size(); j++) {
+			if (colDec->doCCheck(Players[i], Players[j], &penDepth)) {
+				Players[i]->ColWithDyn(Players[j], penDepth);
+				Players[j]->ColWithDyn(Players[i], penDepth);
 			}
 		}
 	}
@@ -241,6 +248,8 @@ void Game::Update(GLfloat dt) {
 	}
 
 	movedE.clear();
+
+	checkForErase();
 }
 
 void Game::Render() {
@@ -276,7 +285,7 @@ void Game::reset() {
 	level->reset();
 }
 
-void Game::checkForOutOfBounds() {
+void Game::checkForErase() {
 	for (int i = 0; i < Bullets.size(); i++) {
 		if (Bullets[i]->checkForErase(level->size)) {
 			delete Bullets[i];

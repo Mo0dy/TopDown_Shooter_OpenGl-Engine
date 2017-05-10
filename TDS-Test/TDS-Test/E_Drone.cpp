@@ -1,5 +1,4 @@
 #include "E_Drone.h"
-#include "Game.h"
 
 void E_Drone::load_E_Drone() {
 	Animation::LoadAnimation("Textures\\A_Drone", ".png", 5, 1.5, GL_TRUE, "E_Drone_A");
@@ -11,7 +10,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	size = glm::vec2(1.5);
 	maxHealth = 70;
 	health = maxHealth;
-	movForce = 100;
+	movForce = 120;
 	state = MOVING;
 	airFricCoeff = -1;
 

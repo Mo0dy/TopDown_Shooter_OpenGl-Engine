@@ -14,21 +14,44 @@
 #include <string>
 
 // Settings
-#define CONTROLLER_SUPPORT
+
+// Controles
+static const GLboolean CONTROLLER_SUPPORT = GL_TRUE;
 // #define KEYBOARD_SUPPORT
 
-#define CAM_STANDARD_SIZE 10
+// Camera
+static const GLfloat CAM_STANDARD_SIZE = 10;
+static const GLfloat CAM_ZOOM_SPEED = 0.2;
 
-//#define SECOND_PLAYER
+#ifndef DEBUG
+	static const GLfloat CAM_MAX_ZOOM = 25;
+#else // !DEBUG
+	static const GLfloat CAM_MAX_ZOOM = 60;
+#endif // !DEBUG
 
+// Game
+static const GLuint PLAYER_AMOUNT = 2;
+static const glm::vec3 PLAYER_COLOR[] = {
+	glm::vec3(0.0f, 1.0f, 0.0f),
+	glm::vec3(0.0f, 0.0f, 1.0f),
+	glm::vec3(1.0f),
+	glm::vec3(1.0f)
+};
 
-// Debug
-#define DEBUG
-#ifdef DEBUG
-	#define CAM_ZOOM_SPEED 0.2
-	//#define DEBUG_FORCES
-	#define LOG(x) std::cout << x << std::endl
-#endif
+// Physics constants
+static const GLfloat GRAV_ACC = 9.81f;
+// Sudo Physics
+static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
+
+// Rendering
+static const GLboolean FULLSCREEN = GL_TRUE;
+static const GLuint SCREEN_WIDTH = 1920;
+static const GLuint SCREEN_HEIGHT = 1080;
+
+// Other
+static const GLfloat CONTROLLER_STICK_MAX = 32767.0f;
+static const GLfloat CONTROLLER_TRIGGER_MAX = 255.0f;
+static const GLfloat CONTROLLER_DEADZONE = 6500.0f;
 
 // utility funciton
 class Util {
@@ -75,23 +98,15 @@ public:
 	}
 };
 
-// Physics
-static const GLfloat GRAV_ACC = 9.81f;
 
-// Sudo Physics
-static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
+// Debug
+#define DEBUG
+#ifdef DEBUG
+#define LOG_FPS
+//#define DEBUG_FORCES
+#define LOG(x) std::cout << x << std::endl
+#endif
 
-// Rendering
-#define FULLSCREEN
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
-static const GLfloat FORCE_SCALE = 0.001f;
-
-// Other
-static const GLfloat CONTROLLER_STICK_MAX = 32767.0f;
-static const GLfloat CONTROLLER_TRIGGER_MAX = 255.0f;
-
-// Utility funciton
-
-// Input
-#define CONTROLLER_DEADZONE 6500
+#ifdef DEBUG_FORCES
+#define FORCE_SCALE  0.001f
+#endif // DEBUG_FORCES

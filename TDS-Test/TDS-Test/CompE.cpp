@@ -32,9 +32,8 @@ void CompE::combineHitboxes() {
 }
 
 void CompE::setColor(glm::vec3 color) {
-	this->color = color;
 	for (auto const& x : subEntities) {
-		x.second->setColor(color);
+		x.second->color = color;
 	}
 }
 std::map <std::string, SubE*> CompE::getSubE() { return subEntities; }

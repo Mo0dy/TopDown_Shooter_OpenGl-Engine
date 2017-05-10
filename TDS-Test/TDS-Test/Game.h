@@ -62,7 +62,7 @@ private:
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);
 	void reset();
-	void checkForOutOfBounds();
+	void checkForErase();
 };
 
 

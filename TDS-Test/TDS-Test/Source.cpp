@@ -29,14 +29,17 @@ int main(int argc, char *argv[]) {
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	GLFWwindow* window;
-#ifdef FULLSCREEN
-	GLFWmonitor* primary = glfwGetPrimaryMonitor();
-	screenWidth = glfwGetVideoMode(primary)->width;
-	screenHeight = glfwGetVideoMode(primary)->height;
-	window = glfwCreateWindow(screenWidth, screenHeight, "TDS", primary, nullptr);
-#else //FULLSCREEN
-	window = glfwCreateWindow(screenWidth, screenHeight, "TDS", nullptr, nullptr);
-#endif
+
+	if (FULLSCREEN) {
+		GLFWmonitor* primary = glfwGetPrimaryMonitor();
+		screenWidth = glfwGetVideoMode(primary)->width;
+		screenHeight = glfwGetVideoMode(primary)->height;
+		window = glfwCreateWindow(screenWidth, screenHeight, "TDS", primary, nullptr);
+	}
+	else {
+		window = glfwCreateWindow(screenWidth, screenHeight, "TDS", nullptr, nullptr);
+	}
+
 	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;

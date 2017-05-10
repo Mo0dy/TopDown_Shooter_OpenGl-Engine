@@ -22,4 +22,6 @@ void Enemy::ColWithPlayer(Player* player, GLfloat colDepth) {
 	if (attacking) {
 		player->health -= damage;
 	}
+	attacking = GL_FALSE;
+	lastAttack = 0;
 }

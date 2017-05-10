@@ -32,11 +32,10 @@ public:
 	GLint getSize();
 	GLboolean getState();
 	GLfloat animationTime;
+	std::string name;
 protected:
 	GLboolean repeat;
 	GLboolean state;
 	GLfloat startTime;
-
-	std::string name;
 };
 

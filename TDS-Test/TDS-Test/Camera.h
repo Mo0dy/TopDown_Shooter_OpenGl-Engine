@@ -9,7 +9,7 @@
 #include <vector>
 #include "Player.h"
 
-static const GLfloat OFFSET = 2;
+static const GLfloat OFFSET = 5;
 
 class Camera
 {
