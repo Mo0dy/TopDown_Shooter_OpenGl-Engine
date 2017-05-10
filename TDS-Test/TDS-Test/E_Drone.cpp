@@ -56,10 +56,19 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 	//addForce(glm::normalize(Game::Players[0]->pos - pos) * movForce);
 
 	 //Unordered group dynamics <-- low fps
-	glm::vec2 movDir = glm::normalize(Game::Players[0]->pos - pos) * movForce;
-	for(Enemy *e : Game::Enemies) {
+	Player* gPlayer = Game::Players[0];
+
+	for (int i = 0; i < Game::Players.size(); i++) {
+		if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::Players[i]->pos)) {
+			gPlayer = Game::Players[i];
+		}
+	}
+
+
+	glm::vec2 movDir = glm::normalize(gPlayer->pos - pos) * movForce;
+	for (Enemy *e : Game::Enemies) {
 		if (glm::distance(pos, e->pos) > 0.4) {
-			movDir += glm::normalize(pos - e->pos) * swarmFactor /  glm::pow(glm::distance(pos, e->pos), 2);
+			movDir += glm::normalize(pos - e->pos) * swarmFactor / glm::pow(glm::distance(pos, e->pos), 2);
 		}
 	}
 
@@ -72,7 +81,7 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 	//	vel = glm::vec2(0, 0);
 	//}
 	//else {
-		vel += dV;
+	vel += dV;
 	//}
 
 	color = glm::vec3(1.0f, health / maxHealth, 1.0f);

@@ -297,6 +297,10 @@ void Game::checkForErase() {
 			Players[i]->pos = glm::vec2(0);
 			Players[i]->death = GL_TRUE;
 		}
+		if (Players[i]->death && Players.size() > 1) {
+			delete Players[i];
+			Players.erase(Players.begin() + i);
+		}
 	}
 	for (int i = 0; i < dynEntities.size(); i++) {
 		if (dynEntities[i]->checkForErase(level->size)) {
