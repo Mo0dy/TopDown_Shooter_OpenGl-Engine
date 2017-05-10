@@ -5,7 +5,7 @@
 
 #include <Xinput.h>
 #include "LevelTest.h"
-#include "AwesomeFace.h"
+#include "E_Drone.h"
 
 std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::dynEntities; // a vector that includes all neutral
@@ -35,7 +35,7 @@ void Game::Init() {
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
 
-	AwesomeFace::loadAwesomeface();
+	E_Drone::load_E_Drone();
 	Robot::loadRobot();
 	EnergyBullet::loadEnergyBullet();
 	LevelTest::loadLevelTest();
@@ -118,6 +118,7 @@ void Game::ProcessInput(GLfloat dt) {
 	if (cState[0]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
 		reset();
 	}
+
 #endif // DEBUG
 
 	for (GLuint i = 0; i < controlledPlayers; i++) {

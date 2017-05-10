@@ -1,6 +1,15 @@
 #include "EnergyBulletBig.h"
+#include "Game.h"
 
-
+GLboolean EnergyBulletBig::updateE(GLfloat dt) {
+	//for (Enemy *e : Game::Enemies) {
+	//	if (glm::distance(e->pos, pos) < 3) {
+	//		e->addForce(glm::normalize(e->pos - pos) * 1000.0f);
+	//	}
+	//}
+	pos += vel * dt;
+	return GL_TRUE;
+}
 
 EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBullet(position, newAngle)
 {
@@ -12,7 +21,6 @@ EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBu
 
 	color = glm::vec3(1.0f, 0.0f, 0.0f);
 }
-
 
 EnergyBulletBig::~EnergyBulletBig()
 {

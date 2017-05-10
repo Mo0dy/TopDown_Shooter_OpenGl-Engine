@@ -26,6 +26,8 @@ public:
 	void startAnimation();
 	void stopAnimation();
 
+	void setFPS(GLfloat fps);
+
 	Etex* getETex();
 	GLint getSize();
 	GLboolean getState();

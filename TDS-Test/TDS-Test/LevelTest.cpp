@@ -1,13 +1,13 @@
 #include "LevelTest.h"
-#include "AwesomeFace.h"
+#include "E_Drone.h"
 
 void LevelTest::loadLevelTest() {
-	ResourceManager::LoadTexture("Textures\\Terrain.png", GL_TRUE, "TestTerrain");
+	ResourceManager::LoadTexture("Textures\\Island.jpg", GL_TRUE, "TestTerrain");
 }
 
 LevelTest::LevelTest()
 {
-	size = glm::vec2(100);
+	size = glm::vec2(150);
 	background = new Background ("TestTerrain", size);
 }
 
@@ -24,15 +24,15 @@ void LevelTest::updateL(GLfloat dt) {
 		std::cout << "Time = " << time << " || killcount = " << Game::killcount << std::endl;
 	}
 
-	while (Game::Enemies.size() < 75) {
+	while (Game::Enemies.size() < 30) {
 		switch (rand() % 4) {
-		case 0: Game::Enemies.push_back(new AwesomeFace(glm::vec2(0, -50)));
+		case 0: Game::Enemies.push_back(new E_Drone(glm::vec2(0, -50)));
 			break;
-		case 1: Game::Enemies.push_back(new AwesomeFace(glm::vec2(0, 50)));
+		case 1: Game::Enemies.push_back(new E_Drone(glm::vec2(0, 50)));
 			break;
-		case 2: Game::Enemies.push_back(new AwesomeFace(glm::vec2(-50, 0)));
+		case 2: Game::Enemies.push_back(new E_Drone(glm::vec2(-50, 0)));
 			break;
-		case 3: Game::Enemies.push_back(new AwesomeFace(glm::vec2(50, 0)));
+		case 3: Game::Enemies.push_back(new E_Drone(glm::vec2(50, 0)));
 			break;
 		}
 	}
@@ -54,7 +54,7 @@ void LevelTest::reset() {
 
 	//for (int i = 0; i < 10; i++) {
 	//	for (int j = 0; j < 10; j++) {
-	//		Game::Enemies.push_back(new AwesomeFace(glm::vec2(3 + i * 3, 3 + j * 3)));
+	//		Game::Enemies.push_back(new E_Drone(glm::vec2(3 + i * 3, 3 + j * 3)));
 	//	}
 	//}
 }

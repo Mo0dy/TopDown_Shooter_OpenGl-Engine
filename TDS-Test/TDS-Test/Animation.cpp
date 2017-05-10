@@ -44,6 +44,10 @@ Etex* Animation::getETex() {
 	}
 }
 
+void Animation::setFPS(GLfloat fps) {
+	animationTime = getSize() / fps;
+}
+
 GLint Animation::getSize() {
 	return Animations[name].size();
 }

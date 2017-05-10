@@ -29,8 +29,6 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 	return Textures[name];
 }
 
-
-
 void ResourceManager::Clear()
 {
 	// (Properly) delete all shaders	

@@ -176,6 +176,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 	}
 	return GL_FALSE;
 }
+
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
 		Animations["Robot_Shoot"]->animationTime = shootDelay;
