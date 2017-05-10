@@ -16,6 +16,8 @@ std::vector<DynE*> Game::movedE;
 
 GLuint Game::killcount;
 
+// Jonathan was here!
+
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
 }
