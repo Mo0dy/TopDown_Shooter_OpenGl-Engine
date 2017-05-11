@@ -5,11 +5,10 @@
 #include <fstream>
 #include <SOIL\SOIL.h>
 
-
-
 // Instantiate static variables
 std::map<std::string, Shader> ResourceManager::Shaders;
 std::map<std::string, Texture2D> ResourceManager::Textures;
+//std::map<std::string, Animation> ResourceManager::Animations;
 
 Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string name) {
 	Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);

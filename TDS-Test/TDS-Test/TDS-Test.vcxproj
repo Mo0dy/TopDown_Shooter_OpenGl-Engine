@@ -74,8 +74,8 @@
     <LibraryPath>C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\jonat_000\Documents\GItRepos\TDS-Test\OpenGlRecources64Bit\include;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\jonat_000\Documents\GItRepos\OpenGlRecources64Bit\lib;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,9 +92,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;SOIL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;SOIL.lib;Xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,9 +125,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="E_Drone.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="CompE.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnergyBullet.h" />
+    <ClInclude Include="EnergyBulletBig.h" />
+    <ClInclude Include="E_MotherDrone.h" />
+    <ClInclude Include="LevelTest.h" />
+    <ClInclude Include="P_Robot.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="SubE.h" />
+    <ClInclude Include="Test_Area.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="DynE.h" />
     <ClInclude Include="Entity.h" />
@@ -138,21 +152,31 @@
     <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="E_Drone.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
+    <ClCompile Include="CompE.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnergyBullet.cpp" />
+    <ClCompile Include="EnergyBulletBig.cpp" />
+    <ClCompile Include="E_MotherDrone.cpp" />
+    <ClCompile Include="LevelTest.cpp" />
+    <ClCompile Include="P_Robot.cpp" />
     <ClCompile Include="DynE.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SubE.cpp" />
+    <ClCompile Include="Test_Area.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="TDS-Test.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="myShader.frag" />

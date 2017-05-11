@@ -8,6 +8,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct Hitbox {
+	Hitbox();
+	Hitbox(glm::vec2 position, glm::vec2 size, GLfloat angle);
+	glm::vec2 pos; // center of the hitbox
+	glm::vec2 size; // Size of the rectangle from lower left corner
+	GLfloat angle; // angle relative to the corresponding texture
+};
+
 class Texture2D
 {
 public:
@@ -24,7 +32,7 @@ public:
 	GLuint Filter_Min; // Filtering mode if texture pixels < screen pixels
 	GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
 
-	Texture2D(); // ID of the texture
+	Texture2D();
 	// Generates texture from image data
 	void Generate(GLuint width, GLuint height, unsigned char* data);
 	// Binds the texture as the current active GL_TEXTURE_2D texture object

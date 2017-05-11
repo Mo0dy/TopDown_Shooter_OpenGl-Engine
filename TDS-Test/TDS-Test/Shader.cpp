@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <iostream>
+#include "ResourceManager.h"
 
 void Shader::Use() {
 	glUseProgram(Program);
@@ -29,10 +30,12 @@ void Shader::Compile(const GLchar *vertexSource, const GLchar *fragmentSource) {
 
 void Shader::SetVector3f(const GLchar *name, const glm::vec3 &value)
 {
+	Use();
 	glUniform3f(glGetUniformLocation(Program, name), value.x, value.y, value.z);
 }
 
 void Shader::SetMatrix4(const GLchar *name, const glm::mat4 &matrix) {
+	Use();
 	glUniformMatrix4fv(glGetUniformLocation(Program, name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

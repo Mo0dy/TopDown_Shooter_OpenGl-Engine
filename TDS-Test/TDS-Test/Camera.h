@@ -9,9 +9,7 @@
 #include <vector>
 #include "Player.h"
 
-static const GLfloat OFFSET = 2;
-
-static const GLfloat MIN_SIZE_HEIGHT = 10;
+static const GLfloat OFFSET = 5;
 
 class Camera
 {
@@ -21,6 +19,9 @@ public:
 	void updatePos(GLfloat width, GLfloat height, std::vector<Player*>);
 	glm::vec2 pos; // Bottom left coordinate of the Camera viewspace in WCS coordinates
 	glm::vec2 size; // The bigger the camera the smaller everything else (linear) in WCS coordinates
+
+	GLfloat minSizeHeight;
+
 private:
 };
 

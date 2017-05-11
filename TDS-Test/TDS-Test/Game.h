@@ -16,6 +16,11 @@
 #include "DynE.h"
 #include "Player.h"
 #include "CollisionDetector.h"
+#include "P_Robot.h"
+#include <Windows.h>
+#include <Xinput.h>
+#include "Level.h"
+#include "Enemy.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -36,12 +41,29 @@ public:
 	void Update(GLfloat dt); // Function to update objects
 	void Render(); // Function to render objects
 
-	std::vector<Entity*> statEntities; // a vector that includes all static entities
-	std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
-	std::vector<Player*> Players;
+	static std::vector<Entity*> statEntities; // a vector that includes all static entities
+	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
+	static std::vector<Player*> Players;
+	static std::vector<Bullet*> Bullets;
+	static std::vector<Enemy*> Enemies;
+	static std::vector<DynE*> movedE;
+
+	static GLuint killcount;
+
+	static void deleteEntities();
+	static void clearEntities();
+
 private:
 	Camera *camera;
 	Renderer *renderer;
 	CollisionDetector *colDec;
+	Level* level;
+
+// Utility
+	DWORD getController(GLint index, XINPUT_STATE* state);
+	void reset();
+	void checkForErase();
 };
+
+
 

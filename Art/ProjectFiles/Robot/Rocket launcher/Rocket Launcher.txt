@@ -1,0 +1,5 @@
+An on arm rocket launcher?? deus ex style
+
+> we need the exposion animation. 
+
+> the last frame of the explosion animation will fade away over time leaving only the crater (debree)

@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include "DynE.h"
 #include "Camera.h"
+#include "Util.h"
 
 class CollisionDetector
 {
@@ -19,16 +20,8 @@ public:
 	CollisionDetector();
 	~CollisionDetector();
 
-	void doCCheck(std::vector<Entity*> entities);
-
-	// Getters and setters
-	void addMovedE(DynE* dE);
+	GLboolean doCCheck(DynE* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis);
 protected:
-	GLboolean doSingleCheck(Entity* E1, Entity* E2);
-
-	std::vector<Entity*> allE; // Stores entities
-	std::vector<DynE*> movedE; // Store moved entities
-
-	glm::mat2 create2DrotMatrix(GLfloat angle);
+	GLfloat doSingleCheck(Hitbox& h1, Hitbox& h2, glm::vec2* const minColAxis);
 };
 

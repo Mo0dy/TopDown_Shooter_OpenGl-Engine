@@ -9,67 +9,111 @@ CollisionDetector::~CollisionDetector()
 {
 }
 
-static GLint interator = 0;
+glm::vec2 E1corners[4];
+glm::vec2 E2corners[4];
+glm::vec2 Axis[4];
 
-void CollisionDetector::doCCheck(std::vector<Entity*> entities) {
-	for (DynE* mE : movedE) {
-		for (Entity *cE : entities) {
-			if (cE != mE) {
-				if (doSingleCheck(mE, cE)) {
-					mE->collision = GL_TRUE;
-					cE->collision = GL_TRUE;
+glm::mat2 rotMat1;
+glm::mat2 rotMat2;
 
-					// We should probably remove cE from mE now????? 
+GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
+	// Utility variables
+	Hitbox mycEH;
+	Hitbox mymEH;
+
+
+	// This rough check only works if all hitboxes are inside the size of the texture;
+	if (glm::distance(dE->pos, sE->pos) <= (glm::length(dE->size) + glm::length(sE->size)) / 2.0f) {
+		for (Hitbox* mEH : dE->Hitboxes) {
+
+			mymEH = *mEH;
+			mymEH.pos = Util::create2DrotMatrix(dE->angle) * mymEH.pos + dE->pos;
+			mymEH.angle += dE->angle;
+
+			// This should probably only be done if the hitboxes have the potential to collide?
+			glm::mat2 rotMat = Util::create2DrotMatrix(mymEH.angle);
+			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.size.x, 0) * 0.5f;
+			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.size.y) * 0.5f;
+			E1corners[0] = mymEH.pos + rotVec1 + rotVec2;
+			E1corners[1] = mymEH.pos + rotVec1 - rotVec2;
+			E1corners[2] = mymEH.pos - rotVec1 - rotVec2;
+			E1corners[3] = mymEH.pos - rotVec1 + rotVec2;
+
+#ifdef DEBUG_HITBOXES
+			for (int i = 0; i < 3; i++) {
+				Renderer::drawLineBuffer.push_back(myVertex(E1corners[i], glm::vec3(1.0f, 0.0f, 0.0f)));
+				Renderer::drawLineBuffer.push_back(myVertex(E1corners[i + 1], glm::vec3(1.0f, 0.0f, 0.0f)));
+			}
+			Renderer::drawLineBuffer.push_back(myVertex(E1corners[3], glm::vec3(1.0f, 0.0f, 0.0f)));
+			Renderer::drawLineBuffer.push_back(myVertex(E1corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
+#endif // DEBUG_HITBOXES
+
+			Axis[0] = Util::create2DrotMatrix(mymEH.angle) * glm::vec2(1, 0);
+			Axis[1] = Util::create2DrotMatrix(mymEH.angle) * glm::vec2(0, 1);
+
+			for (Hitbox* cEH : sE->Hitboxes) {
+				// Calculation WCS position of the Hitbox
+				mycEH = *cEH;
+				mycEH.pos = Util::create2DrotMatrix(sE->angle) * mycEH.pos + sE->pos;
+				mycEH.angle += sE->angle;
+
+				rotMat = Util::create2DrotMatrix(mycEH.angle);
+				rotVec1 = rotMat * glm::vec2(mycEH.size.x, 0) * 0.5f;
+				rotVec2 = rotMat * glm::vec2(0, mycEH.size.y) * 0.5f;
+				E2corners[0] = mycEH.pos + rotVec1 + rotVec2;
+				E2corners[1] = mycEH.pos + rotVec1 - rotVec2;
+				E2corners[2] = mycEH.pos - rotVec1 - rotVec2;
+				E2corners[3] = mycEH.pos - rotVec1 + rotVec2;
+
+#ifdef DEBUG_HITBOXES
+				for (int i = 0; i < 3; i++) {
+					Renderer::drawLineBuffer.push_back(myVertex(E2corners[i], glm::vec3(1.0f, 0.0f, 0.0f)));
+					Renderer::drawLineBuffer.push_back(myVertex(E2corners[i + 1], glm::vec3(1.0f, 0.0f, 0.0f)));
+				}
+				Renderer::drawLineBuffer.push_back(myVertex(E2corners[3], glm::vec3(1.0f, 0.0f, 0.0f)));
+				Renderer::drawLineBuffer.push_back(myVertex(E2corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
+#endif // DEBUG_HITBOXES
+
+
+				Axis[2] = Util::create2DrotMatrix(mycEH.angle) * glm::vec2(1, 0);
+				Axis[3] = Util::create2DrotMatrix(mycEH.angle) * glm::vec2(0, 1);
+
+				*penDepth = doSingleCheck(mymEH, mycEH, minColAxis);
+				if (*penDepth > 0) {
+					return GL_TRUE;
 				}
 			}
 		}
 	}
-	movedE.clear();
+	return GL_FALSE;
 }
 
-GLboolean CollisionDetector::doSingleCheck(Entity* E1, Entity* E2) {
-	if (glm::distance(E1->pos, E2->pos) > (glm::length(E1->hitbox) + glm::length(E2->hitbox)) / 2.0f) { // rough check for possible collision
-		return GLU_FALSE;
+GLfloat CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2, glm::vec2* const minColAxis) {
+	// This should probably be checked in the upper function?
+	if (glm::distance(h1.pos, h2.pos) > (glm::length(h1.size) + glm::length(h2.size)) / 2.0f) { // rough check for possible collision
+		return -1;
 	}
 
-	// do fine collision check (Seperating Axix Theorem)
-	// creating Axis to project on
-	glm::vec2 Axis[4];
-	Axis[0] = create2DrotMatrix(E1->angle) * glm::vec2(1, 0);
-	Axis[1] = create2DrotMatrix(E1->angle) * glm::vec2(0, 1);
-	Axis[2] = create2DrotMatrix(E2->angle) * glm::vec2(1, 0);
-	Axis[3] = create2DrotMatrix(E2->angle) * glm::vec2(0, 1);
-
-	// Hitbox rotated to orientation in WCS
-	glm::vec2 WCS_hitBoxE1 = create2DrotMatrix(E1->angle) * E1->hitbox;
-	glm::vec2 WCS_hitBoxE2 = create2DrotMatrix(E2->angle) * E2->hitbox;
-
-	// WCS Positions of hitbox corners
-	glm::vec2 E1corners[4];
-	E1corners[0] = E1->pos + 0.5f * WCS_hitBoxE1;
-	E1corners[1] = E1->pos - 0.5f * WCS_hitBoxE1;
-	E1corners[2] = E1->pos + 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE1;
-	E1corners[3] = E1->pos - 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE1;
-
-	glm::vec2 E2corners[4];
-	E2corners[0] = E2->pos + 0.5f * WCS_hitBoxE2;
-	E2corners[1] = E2->pos - 0.5f * WCS_hitBoxE2;
-	E2corners[2] = E2->pos + 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE2;
-	E2corners[3] = E2->pos - 0.5f * glm::vec2(-1, 1) * WCS_hitBoxE2;
-
 	// Check for every axis
-	for (glm::vec2 axis : Axis) {
-		// Stores min and max dist for both entities
-		GLfloat E1dist[2];
-		GLfloat E2dist[2];
+	// Stores min and max dist for both entities
+	GLfloat E1dist[2];
+	GLfloat E2dist[2];
 
+	// This holds the signed length of the projection of the vertex vectors to the edges
+	GLfloat dotProduct;
+	GLfloat iDepth;
+	GLfloat minIDepth = 100;
+
+	GLfloat axisDir; // This is either -1 or 1 making the returned axis always point from the first hitbox to the second
+
+	for (glm::vec2 axis : Axis) {
 		// Check all 4 corners of both entities;
 		E1dist[0] = glm::dot(axis, E1corners[0]);
 		E1dist[1] = E1dist[0];
 		E2dist[0] = glm::dot(axis, E2corners[0]);
 		E2dist[1] = E2dist[0];
 		for (int i = 1; i < 4; i++) {
-			GLfloat dotProduct = glm::dot(axis, E1corners[i]);
+			dotProduct = glm::dot(axis, E1corners[i]);
 			if (dotProduct > E1dist[1]) {
 				E1dist[1] = dotProduct;
 			}
@@ -88,27 +132,28 @@ GLboolean CollisionDetector::doSingleCheck(Entity* E1, Entity* E2) {
 		// Checks for Interval overlapping
 		if (E1dist[1] > E2dist[1]) {
 			if (E1dist[0] > E2dist[1]) {
-				return GL_FALSE;
+				return -1;
 			}
 		}
 		else {
 			if (E1dist[1] < E2dist[0]) {
-				return GL_FALSE;
+				return -1;
 			}
 		}
+
+		// Gets the depth of the intrusion
+		if (E1dist[0] > E2dist[0]) {
+			iDepth = E2dist[1] - E1dist[0];
+			axisDir = -1;
+		}
+		else {
+			iDepth = E1dist[1] - E2dist[0];
+			axisDir = 1;
+		}
+		if (iDepth < minIDepth) {
+			*minColAxis = axis *  axisDir;
+			minIDepth = iDepth;
+		}
 	}
-	return GL_TRUE;
+	return minIDepth;
 }
-
-glm::mat2 CollisionDetector::create2DrotMatrix(GLfloat angle) {
-	glm::mat2 rotMat;
-	rotMat[0][0] = cos(angle);
-	rotMat[1][0] = -sin(angle);
-	rotMat[0][1] = sin(angle);
-	rotMat[1][1] = cos(angle);
-
-	return rotMat;
-}
-
-// getters and setters
-void CollisionDetector::addMovedE(DynE* dE) { movedE.push_back(dE); }

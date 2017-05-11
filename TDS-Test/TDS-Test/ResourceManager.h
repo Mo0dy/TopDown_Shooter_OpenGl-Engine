@@ -19,7 +19,7 @@ public:
 	static Shader GetShader(std::string name);
 
 	static Texture2D LoadTexture(const GLchar *file, GLboolean alpha, std::string name); // Loads Texture from file into hasmap under "name"
-	static Texture2D GetTexture(std::string name); 
+	static Texture2D GetTexture(std::string name);
 
 	static void Clear(); // deletes all Shaders and Textures
 

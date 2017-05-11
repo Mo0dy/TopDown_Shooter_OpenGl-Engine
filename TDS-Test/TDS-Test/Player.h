@@ -1,41 +1,26 @@
 #pragma once
 
-#include "DynE.h"
+#include "CompE.h"
+#include "Bullet.h"
+#include <Windows.h>
+#include <Xinput.h>
 
-enum MovementState {
-	RUNNING,
-	SPRINTING,
-	STOPPING
-};
-
-enum WeaponState {
-	NORMAL,
-	AIMING
-};
-
-class Player : public DynE
+class Player : public CompE
 {
 public:
-	Player(std::string texture, GLfloat height);
-	Player(std::string bodyTexture, std::string aimTexture, GLfloat bodyHeight, std::string legTex, GLfloat legHeight);
-	~Player();
-	GLboolean updateE(GLfloat dt);
-	MovementState movState;
-	WeaponState wepState;
-	glm::vec2 movDir;
+	XINPUT_GAMEPAD gPad;
+
+	Player(glm::vec2 position);
+	virtual ~Player();
 
 	// Getters and setters:
 	GLfloat getInherentF();
-	Entity* getLegs();
+
+	GLfloat health;
+
+	GLboolean death;
 
 protected:
-	std::string standardTex;
-	std::string aimTex;
-	Entity* legs;
 	GLfloat inherentForce;
-	GLfloat sprintMod; // inherentForce multiplayer while sprinting
-	GLfloat turnSpeed; // degrees per second
-
-	void setLegAngle(GLfloat dt);
 };
 

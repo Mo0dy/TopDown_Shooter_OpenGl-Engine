@@ -4,24 +4,42 @@
 
 #include "game.h"
 #include "ResourceManager.h"
+#include "Windows.h"
+
+// Controller IDE
+#include <Xinput.h>
+#include <ctime>
 
 // Settings
-const GLuint SCREEN_WIDTH = 1920;
-const GLuint SCREEN_HEIGHT = 1080;
+GLuint screenWidth = SCREEN_WIDTH;
+GLuint screenHeight = SCREEN_HEIGHT;
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-Game TDS(SCREEN_WIDTH, SCREEN_HEIGHT);
+Game TDS(screenWidth, screenHeight);
 
 int main(int argc, char *argv[]) {
+	srand(time(NULL));
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TDS", nullptr, nullptr);
+	GLFWwindow* window;
+
+	if (FULLSCREEN) {
+		GLFWmonitor* primary = glfwGetPrimaryMonitor();
+		screenWidth = glfwGetVideoMode(primary)->width;
+		screenHeight = glfwGetVideoMode(primary)->height;
+		window = glfwCreateWindow(screenWidth, screenHeight, "TDS", primary, nullptr);
+	}
+	else {
+		window = glfwCreateWindow(screenWidth, screenHeight, "TDS", nullptr, nullptr);
+	}
+
 	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;
@@ -31,7 +49,7 @@ int main(int argc, char *argv[]) {
 	glfwSetKeyCallback(window, key_callback);
 
 	// OpenGL configuration
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glViewport(0, 0, screenWidth, screenHeight);
 	TDS.Init();
 
 	GLfloat deltaTime = 0.0f;
@@ -54,7 +72,7 @@ int main(int argc, char *argv[]) {
 		TDS.Update(deltaTime);
 
 		// Render
-		glClearColor(1.0, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		TDS.Render();
 		glfwSwapBuffers(window);
