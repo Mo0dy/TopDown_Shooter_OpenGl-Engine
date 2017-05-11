@@ -20,3 +20,7 @@ void Bullet::ColWithEnemy(Enemy* enemy) {
 	collision = GL_TRUE;
 	enemy->health -= damage;
 }
+
+void Bullet::ColWithStat(Entity* cE, GLfloat colDepth) {
+	collision = GL_TRUE;
+}

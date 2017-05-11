@@ -6,6 +6,16 @@
 DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE)
 {
 }
+DynE::DynE(glm::vec2 position, glm::vec2 size) : Entity(position, size), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
+}
+DynE::DynE(glm::vec2 position, glm::vec2 size, GLfloat angle) : Entity(position, size, angle), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
+}
+DynE::DynE(glm::vec2 position, glm::vec2 size, std::string texture) : Entity(position, size, texture), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
+
+}
+DynE::DynE(glm::vec2 position, glm::vec2 size, GLfloat angle, std::string texture) : Entity(position, size, angle, texture), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), state(STOPPING), collision(GL_FALSE) {
+
+}
 
 DynE::~DynE()
 {
@@ -38,27 +48,35 @@ GLboolean DynE::updateE(GLfloat dt) {
 	return glm::length(vel) > 0;
 }
 
-void DynE::ColWithStat(Entity *cE) {
-
+void DynE::ColWithStat(Entity *cE, GLfloat colDepth, glm::vec2 minColAxis) {
+	collision = GL_TRUE;
+	glm::vec2 n = glm::normalize(minColAxis);
+	//if (colDepth < LINEAR_COL_FORCE_INTERVAL) {
+		pos += -n * colDepth;
+	//}
+	//else {
+	//	addForce(-n * colDepth * MAC_COL_FORCE);
+	//}
+	colVel = vel;
 }
 
-void DynE::ColWithDyn(DynE *cE, GLfloat colDepth) {
+void DynE::ColWithDyn(DynE *cE, GLfloat colDepth, glm::vec2 minColAxis) {
 	collision = GL_TRUE;
-	glm::vec2 c = cE->pos - pos;
+	glm::vec2 n = glm::normalize(minColAxis);
 
-	GLfloat v1p = glm::dot(vel, c);
-	GLfloat v2p = glm::dot(cE->vel, c);
+	GLfloat v1p = glm::dot(vel, n);
+	GLfloat v2p = glm::dot(cE->vel, n);
 
-	if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
-		colVel = vel + 2 * ((cE->mass * glm::dot(cE->vel, c) - cE->mass * glm::dot(vel, c)) / glm::pow(glm::length(c), 2) / (mass + cE->mass)) * c;
-	}
-	else {
-		colVel = vel;
-	}
-	if (pos == cE->pos) {
-		pos += 0.0001;
-	}
-	addForce(-c * colDepth * 5000.0f);
+	colVel = vel;
+
+	//if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
+		// colVel = vel + 2 * ((cE->mass * v2p - cE->mass * v1p) / (mass + cE->mass)) * n; // <-- elastic collision
+		colVel = vel - cE->mass * COEFFFICIENT_OF_RESTITUTION * (v1p - v2p) / (mass + cE->mass) * n; // <-- partly inelastiv collision
+	//}
+	pos += -n * 0.5f * colDepth; // Push out of the collision depth
+	//if (pos == cE->pos) {
+	//	pos += 0.0001;
+	//}
 }
 
 // Utitlity functions
@@ -84,7 +102,7 @@ glm::vec2 DynE::airRes() {
 }
 
 // Getters and Setters
-
-void DynE::addForce(glm::vec2 f) {
-	force += f;
-}
+void DynE::addForce(glm::vec2 f) { force += f; }
+glm::vec2 DynE::getVel() { return vel;  }
+GLfloat DynE::getAbsVel() { return glm::length(vel);  }
+GLfloat DynE::getMass() { return mass; }

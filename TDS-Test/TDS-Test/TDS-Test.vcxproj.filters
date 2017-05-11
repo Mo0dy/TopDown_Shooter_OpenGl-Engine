@@ -186,7 +186,7 @@
       <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="E_MotherDrone.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

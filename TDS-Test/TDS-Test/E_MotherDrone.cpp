@@ -3,8 +3,8 @@
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 {
 	size = glm::vec2(5);
-	Hitboxes.back()->size = size;
-	Hitboxes.back()->pos = -0.5f * size;
+	Hitboxes.clear();
+	autofitHitbox();
 	maxHealth = 10000;
 	health = maxHealth;
 	movForce = 1500;
@@ -12,7 +12,6 @@ E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 	turnSpeed = 5;
 	airFricCoeff = -10;
 }
-
 
 E_MotherDrone::~E_MotherDrone()
 {

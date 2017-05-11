@@ -17,13 +17,12 @@ Robot::Robot(glm::vec2 position) : Player(position)
 {
 	// Settings
 	inherentForce = 2500;
-	bodyTurnSpeed = 6;
+	bodyTurnSpeed = 10;
 	trackTurnSpeed = 5;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
-	Hitboxes.clear();
 	accuracy = 0.1;
 	health = MAX_HEALTH;
 
@@ -31,14 +30,17 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	bulletSpawn = glm::vec2(100, 100);
 
-	subEntities["tracks"] = new SubE(pos, glm::vec2(0));
-	subEntities["body"] = new SubE(pos, glm::vec2(0));
+	subEntities["tracks"] = new SubE(glm::vec2(0));
+	subEntities["body"] = new SubE(glm::vec2(0));
 
 	subEntities["tracks"]->tex = "D_Bot";
-	subEntities["tracks"]->size = glm::vec2(1.5);
+	subEntities["tracks"]->size = glm::vec2(1.05);
 
 	subEntities["body"]->tex = "U_Bot";
-	subEntities["body"]->size = glm::vec2(1.5);
+	subEntities["body"]->size = glm::vec2(1.5, 0.85);
+
+	subEntities["tracks"]->autofitHitbox();
+	subEntities["body"]->autofitHitbox();
 
 	state = STOPPING;
 
@@ -72,13 +74,16 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 		setColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
 
-
 		movState = NORMAL;
 		accuracy = 0.1;
 		lastShot += dt;
 		lastShotBigB += dt;
 		// updating values according to collision
 		if (collision) {
+#ifdef DEBUG_FORCES
+			Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+			Renderer::drawLineBuffer.push_back(myVertex((pos + (colVel - vel) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
 			vel = colVel;
 			collision = GL_FALSE;
 			state = MOVING;
@@ -163,6 +168,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 		setTrackAngle(dt);
 		setBodyAngle(dt);
 
+		std::cout << "TRACKS = " << angle << " || BODY = " << subEntities["body"]->rAngle << std::endl;
+
 		updateSupE();
 		combineHitboxes();
 
@@ -184,7 +191,7 @@ void Robot::shoot() {
 		Animations["Robot_Shoot"]->animationTime = shootDelay;
 		Animations["Robot_Shoot"]->startAnimation();
 		lastShot = 0;
-		Game::Bullets.push_back(new EnergyBullet(pos + Util::create2DrotMatrix(glm::degrees(subEntities["body"]->angle)) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::Bullets.push_back(new EnergyBullet(pos + Util::create2DrotMatrix(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
 		Game::Bullets.back()->whitelist.push_back(this);
 	}
 }

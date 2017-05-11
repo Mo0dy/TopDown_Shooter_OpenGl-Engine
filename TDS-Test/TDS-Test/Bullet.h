@@ -13,6 +13,7 @@ public:
 	GLboolean updateE(GLfloat dt);
 
 	virtual void ColWithEnemy(class Enemy* enemy);
+	void ColWithStat(Entity* cE, GLfloat colDepth);
 
 	std::vector<Entity*> whitelist;
 	GLfloat damage;

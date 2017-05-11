@@ -1,13 +1,14 @@
 #include "E_Drone.h"
 
 void E_Drone::load_E_Drone() {
-	Animation::LoadAnimation("Textures\\A_Drone", ".png", 5, 1.5, GL_TRUE, "E_Drone_A");
+	Animation::LoadAnimation("Textures\\A_Drone", ".png", 31, 1.5, GL_TRUE, "E_Drone_A");
 }
 
 E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 {
 	tex = "E_Drone";
 	size = glm::vec2(1.5);
+	autofitHitbox();
 	maxHealth = 70;
 	health = maxHealth;
 	movForce = 120;
@@ -21,7 +22,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	turnSpeed = 10;
 
 	ani = new Animation("E_Drone_A", GL_TRUE);
-	ani->setFPS(60);
+	ani->animationTime = 1;
 	ani->startAnimation();
 
 	swarmFactor = 715;
@@ -47,6 +48,10 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 
 	// updating values according to collision
 	if (collision) {
+#ifdef DEBUG_FORCES
+		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex((pos + (colVel - vel) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
 		vel = colVel;
 		collision = GL_FALSE;
 	}
@@ -87,6 +92,11 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 	color = glm::vec3(1.0f, health / maxHealth, 1.0f);
 	setBodyAngle(dt);
 	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
+
+#ifdef DEBUG_FORCES
+	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
 	force = glm::vec2(0, 0);
 	return glm::length(vel) > 0;
 }

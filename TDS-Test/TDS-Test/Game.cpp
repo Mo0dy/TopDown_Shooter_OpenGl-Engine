@@ -211,17 +211,23 @@ void Game::Update(GLfloat dt) {
 
 	// Collision detection
 	GLfloat penDepth;
+	glm::vec2 colAxis;
 	for (int i = 0; i < Players.size(); i++) {
 		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(Players[i], e, &penDepth)) {
-				Players[i]->ColWithDyn(e, penDepth);
-				e->ColWithPlayer(Players[i], penDepth);
+			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
+				Players[i]->ColWithDyn(e, penDepth, colAxis);
+				e->ColWithPlayer(Players[i], penDepth, -colAxis);
 			}
 		}
 		for (int j = i + 1; j < Players.size(); j++) {
-			if (colDec->doCCheck(Players[i], Players[j], &penDepth)) {
-				Players[i]->ColWithDyn(Players[j], penDepth);
-				Players[j]->ColWithDyn(Players[i], penDepth);
+			if (colDec->doCCheck(Players[i], Players[j], &penDepth, &colAxis)) {
+				Players[i]->ColWithDyn(Players[j], penDepth, colAxis);
+				Players[j]->ColWithDyn(Players[i], penDepth, -colAxis);
+			}
+		}
+		for (Entity *e : level->entities) {
+			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
+				Players[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
@@ -229,18 +235,28 @@ void Game::Update(GLfloat dt) {
 	// We should probably only check for all Enemies that moved but for now this is fine
 	for (int i = 0; i < Enemies.size(); i++) {
 		for (int j = i + 1; j < Enemies.size(); j++) {
-			if (colDec->doCCheck(Enemies[i], Enemies[j], &penDepth)) {
-				Enemies[i]->ColWithDyn(Enemies[j], penDepth);
-				Enemies[j]->ColWithDyn(Enemies[i], penDepth);
+			if (colDec->doCCheck(Enemies[i], Enemies[j], &penDepth, &colAxis)) {
+				Enemies[i]->ColWithDyn(Enemies[j], penDepth, colAxis);
+				Enemies[j]->ColWithDyn(Enemies[i], penDepth, -colAxis);
+			}
+		}
+		for (Entity *e : level->entities) {
+			if (colDec->doCCheck(Enemies[i], e, &penDepth, &colAxis)) {
+				Enemies[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
 
 	for (Bullet *b : Bullets) {
 		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(b, e, &penDepth)) {
+			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithEnemy(e);
-				e->ColWithDyn(b, penDepth);
+				e->ColWithDyn(b, penDepth, -colAxis);
+			}
+		}
+		for (Entity *e : level->entities) {
+			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
+				b->ColWithStat(e, penDepth);
 			}
 		}
 	}
@@ -269,6 +285,9 @@ void Game::Render() {
 		for (std::string s : p->renderList) {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
+	}
+	for (Entity* e : level->entities) {
+		renderer->RenderSprite(*e, *camera);
 	}
 	renderer->RenderBuffer(*camera);
 }

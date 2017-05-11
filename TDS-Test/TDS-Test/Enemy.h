@@ -9,7 +9,7 @@ public:
 	
 	GLfloat health;
 
-	void ColWithPlayer(class Player* player, GLfloat colDepth);
+	void ColWithPlayer(class Player* player, GLfloat colDepth, glm::vec2 colAxis);
 
 	GLboolean checkForErase(glm::vec2 levelSize);
 

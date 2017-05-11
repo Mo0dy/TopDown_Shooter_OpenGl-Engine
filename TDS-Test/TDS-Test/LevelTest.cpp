@@ -4,13 +4,15 @@
 
 void LevelTest::loadLevelTest() {
 	ResourceManager::LoadTexture("Textures\\Island.jpg", GL_TRUE, "LevelTest_T_Island");
-	//ResourceManager::LoadTexture("Textures\\HighResBackground.jpg", GL_TRUE, "LevelTest_T_HighResBackground");
+	ResourceManager::LoadTexture("Textures\\Houses\\H1.png", GL_TRUE, "House_1");
 }
 
 LevelTest::LevelTest()
 {
-	size = glm::vec2(150);
-	background = new Background("LevelTest_T_Island", size);
+	background = new Background("LevelTest_T_Island", 150);
+	size = glm::vec2(background->size);
+	entities.push_back(new Entity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), "House_1"));
+	entities.back()->autofitHitbox();
 }
 
 LevelTest::~LevelTest()
@@ -23,27 +25,27 @@ void LevelTest::updateL(GLfloat dt) {
 	if (!Game::Players[0]->death) {
 		time += dt;
 
-		std::cout << "Time = " << time << std::endl;
+		//std::cout << "Time = " << time << std::endl;
 	}
 
-	//if (Game::Enemies.size() < Game::Players.size() * 10) {
-	//	if (glm::length(Game::Enemies[0]->vel) > 0) {
-	//		Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos - glm::normalize(Game::Enemies[0]->vel) * 0.2f));
-	//	}
-	//}
-
-	while (Game::Enemies.size() < 30) {
-		switch (rand() % 4) {
-		case 0: Game::Enemies.push_back(new E_Drone(glm::vec2(0, -50)));
-			break;
-		case 1: Game::Enemies.push_back(new E_Drone(glm::vec2(0, 50)));
-			break;
-		case 2: Game::Enemies.push_back(new E_Drone(glm::vec2(-50, 0)));
-			break;
-		case 3: Game::Enemies.push_back(new E_Drone(glm::vec2(50, 0)));
-			break;
+	if (Game::Enemies.size() < Game::Players.size() * 10) {
+		if (glm::length(Game::Enemies[0]->getVel()) > 0) {
+			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos - glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->size.y));
 		}
 	}
+
+	//while (Game::Enemies.size() < 30) {
+	//	switch (rand() % 4) {
+	//	case 0: Game::Enemies.push_back(new E_Drone(glm::vec2(0, -50)));
+	//		break;
+	//	case 1: Game::Enemies.push_back(new E_Drone(glm::vec2(0, 50)));
+	//		break;
+	//	case 2: Game::Enemies.push_back(new E_Drone(glm::vec2(-50, 0)));
+	//		break;
+	//	case 3: Game::Enemies.push_back(new E_Drone(glm::vec2(50, 0)));
+	//		break;
+	//	}
+	//}
 
 }
 
@@ -60,18 +62,18 @@ void LevelTest::reset() {
 		
 	glm::vec2 motherDrone_SpawnPos;
 
-	//	switch (rand() % 4) {
-	//	case 0: motherDrone_SpawnPos = glm::vec2(0, -50);
-	//		break;
-	//	case 1: motherDrone_SpawnPos = glm::vec2(0, 50);
-	//		break;
-	//	case 2: motherDrone_SpawnPos = glm::vec2(-50, 0);
-	//		break;
-	//	case 3: motherDrone_SpawnPos = glm::vec2(50, 0);
-	//		break;
-	//	}
+		switch (rand() % 4) {
+		case 0: motherDrone_SpawnPos = glm::vec2(0, -50);
+			break;
+		case 1: motherDrone_SpawnPos = glm::vec2(0, 50);
+			break;
+		case 2: motherDrone_SpawnPos = glm::vec2(-50, 0);
+			break;
+		case 3: motherDrone_SpawnPos = glm::vec2(50, 0);
+			break;
+		}
 
-	//Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
+	Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
 
 	//for (int i = 0; i < 1; i++) {
 	//	for (int j = 0; j < 1; j++) {

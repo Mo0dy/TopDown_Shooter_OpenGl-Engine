@@ -17,8 +17,8 @@ GLboolean Enemy::checkForErase(glm::vec2 levelSize) {
 	}
 }
 
-void Enemy::ColWithPlayer(Player* player, GLfloat colDepth) {
-	ColWithDyn(player, colDepth);
+void Enemy::ColWithPlayer(Player* player, GLfloat colDepth, glm::vec2 colAxis) {
+	ColWithDyn(player, colDepth, colAxis);
 	if (attacking) {
 		player->health -= damage;
 	}

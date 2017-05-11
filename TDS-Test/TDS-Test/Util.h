@@ -34,8 +34,11 @@ static const glm::vec3 PLAYER_COLOR[] = {
 
 // Physics constants
 static const GLfloat GRAV_ACC = 9.81f;
+static const GLfloat COEFFFICIENT_OF_RESTITUTION = 1;
+
 // Sudo Physics
-static const GLfloat COLLISION_ADD_CHANGE = 0.001f;
+static const GLfloat MAC_COL_FORCE = 20000;
+static const GLfloat LINEAR_COL_FORCE_INTERVAL = 0.005;
 
 // Rendering
 static const GLboolean FULLSCREEN = GL_TRUE;
@@ -80,10 +83,10 @@ public:
 	
 	static glm::mat2 create2DrotMatrix(GLfloat angle) {
 		glm::mat2 rotMat;
-		rotMat[0][0] = cos(angle / 180 * glm::pi<GLfloat>());
-		rotMat[1][0] = -sin(angle / 180 * glm::pi<GLfloat>());
-		rotMat[0][1] = sin(angle / 180 * glm::pi<GLfloat>());
-		rotMat[1][1] = cos(angle / 180 * glm::pi<GLfloat>());
+		rotMat[0][0] = cos(angle);
+		rotMat[1][0] = -sin(angle);
+		rotMat[0][1] = sin(angle);
+		rotMat[1][1] = cos(angle);
 		return rotMat;
 	}
 
@@ -97,7 +100,8 @@ public:
 #define DEBUG
 #ifdef DEBUG
 #define LOG_FPS
-//#define DEBUG_FORCES
+#define DEBUG_HITBOXES
+#define DEBUG_FORCES
 #define LOG(x) std::cout << x << std::endl
 #endif
 

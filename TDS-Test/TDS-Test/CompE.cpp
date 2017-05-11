@@ -14,8 +14,8 @@ CompE::~CompE()
 
 void CompE::updateSupE() {
 	for (const auto& x : subEntities) {
-		x.second->pos = pos + x.second->rPos;
-		x.second->angle = angle + x.second->rAngle;
+		x.second->pos = this->pos + x.second->rPos;
+		x.second->angle = this->angle + x.second->rAngle;
 	}
 }
 
@@ -25,8 +25,8 @@ void CompE::combineHitboxes() {
 	for (auto const& x : subEntities) {
 		for (Hitbox *h : x.second->Hitboxes) {
 			this->Hitboxes.push_back(h);
-			this->Hitboxes.back()->pos += x.second->rPos;
-			this->Hitboxes.back()->angle += x.second->rAngle;
+			this->Hitboxes.back()->pos = x.second->rPos;
+			this->Hitboxes.back()->angle = x.second->rAngle; // <- problem is here !!!!
 		}
 	}
 }

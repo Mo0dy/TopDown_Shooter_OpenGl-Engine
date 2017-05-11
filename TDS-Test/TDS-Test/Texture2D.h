@@ -10,8 +10,8 @@
 
 struct Hitbox {
 	Hitbox();
-	Hitbox(glm::vec2 position, glm::vec2 newSize, GLfloat newAngle);
-	glm::vec2 pos; // lower left corner
+	Hitbox(glm::vec2 position, glm::vec2 size, GLfloat angle);
+	glm::vec2 pos; // center of the hitbox
 	glm::vec2 size; // Size of the rectangle from lower left corner
 	GLfloat angle; // angle relative to the corresponding texture
 };

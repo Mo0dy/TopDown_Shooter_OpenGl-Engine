@@ -5,7 +5,7 @@
 class SubE : public Entity
 {
 public:
-	SubE(glm::vec2 masterPos, glm::vec2 relativePos);
+	SubE(glm::vec2 relativePos);
 	virtual ~SubE();
 
 	// Relative to master object
