@@ -1,26 +1,32 @@
 #include "Animation.h"
 
-std::map<std::string, std::vector<Etex*> > Animation::Animations;
-
-Etex::Etex(std::string texture, GLfloat width) : tex(texture) {
-	texSize.x = width;
-	texSize.y = width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width;
+Animation::Animation() {
 }
 
-Animation::Animation(std::string name, GLboolean repeat): name(name), repeat(repeat)
+Animation::Animation(std::string name, GLboolean repeat) : repeat(repeat), Etextures(ResourceManager::Animations[name])
 {
+}
+
+Animation::Animation(std::string name, GLfloat width, GLboolean repeat) : Animation(name, repeat) {
+	enforceWidth(width);
 }
 
 Animation::~Animation()
 {
 }
 
-void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name) {
-	std::string texName;
-	for (int i = 0; i < amount; i++) {
-		texName = name + "_T_" + std::to_string(i);
-		ResourceManager::LoadTexture((path + "\\T" + std::to_string(i) + filetype).c_str(), alpha, texName);
-		Animations[name].push_back(new Etex(texName, width));
+void Animation::load(std::string name) {
+	Etextures = ResourceManager::Animations[name];
+}
+
+void Animation::load(std::string name, GLfloat width) {
+	load(name);
+	enforceWidth(width);
+}
+
+void Animation::enforceWidth(GLfloat width) {
+	for (Etex e : Etextures) {
+		e.setTexSize(width);
 	}
 }
 
@@ -33,15 +39,19 @@ void Animation::stopAnimation() {
 	state = GL_FALSE;
 }
 
-Etex* Animation::getETex() {
-	if (startTime + animationTime < glfwGetTime() && !repeat) {	
+Etex& Animation::getETex() {
+	if (startTime + animationTime < glfwGetTime() && !repeat) {
 		state = GL_FALSE;
-		return Animations[name].back();
+		Etextures.back();
 	}
 	else {
 		GLfloat dt = glm::mod<GLfloat>((startTime - glfwGetTime()), animationTime);
-		return Animations[name][(GLint)(dt / animationTime * Animations[name].size())];
+		return Etextures[(GLint)(dt / animationTime * Etextures.size())];
 	}
+}
+
+Etex& Animation::getETex(GLuint pos) {
+	return Etextures[pos];
 }
 
 void Animation::setFPS(GLfloat fps) {
@@ -49,9 +59,9 @@ void Animation::setFPS(GLfloat fps) {
 }
 
 GLint Animation::getSize() {
-	return Animations[name].size();
+	return Etextures.size();
 }
 
 GLboolean Animation::getState() {
-	return state && Animations[name].size() > 0;
+	return state && Etextures.size() > 0;
 }

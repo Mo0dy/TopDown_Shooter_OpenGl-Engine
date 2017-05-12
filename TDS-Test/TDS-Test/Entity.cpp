@@ -1,43 +1,29 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 
-Entity::Entity() : tex("Util"), pos(glm::vec2(0)), angle(0), size(1, 1), color(1.0f, 1.0f, 1.0f) {
+Entity::Entity() : pos(glm::vec2(0)), angle(0), color(1), etex(Etex()) {
 }
-
-Entity::Entity(glm::vec2 position) : tex("Util"), pos(position), angle(0), size(1, 1), color(1.0f, 1.0f, 1.0f)
-{
+Entity::Entity(glm::vec2 position) : pos(position), angle(0), color(1), etex(Etex()) {
 }
-
-Entity::Entity(glm::vec2 position, glm::vec2 size) : tex("Util"), pos(position), angle(0), size(size), color(1.0f, 1.0f, 1.0f)
-{
+Entity::Entity(glm::vec2 position, Etex etex) : pos(position), angle(0), color(1), etex(etex) {
 }
-
-Entity::Entity(glm::vec2 position, glm::vec2 size, GLfloat angle) : tex("Util"), pos(position), angle(angle), size(size), color(1.0f, 1.0f, 1.0f) {
+Entity::Entity(glm::vec2 position, GLfloat angle, Etex etex) : pos(position), angle(angle), color(1), etex(etex) {
 }
-
-Entity::Entity(glm::vec2 position, glm::vec2 size, std::string texture) : tex(texture), pos(position), angle(0), size(size), color(1.0f, 1.0f, 1.0f) {
+Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position), angle(0), color(1), ani(aniName), etex(ani.getETex(0)) {
+	Animations[aniName] = ani;
 }
-
-Entity::Entity(glm::vec2 position, GLfloat width, std::string texture) : tex(texture), pos(position), angle(0), size(glm::vec2(width, width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width)), color(1.0f, 1.0f, 1.0f) {
-}
-
-Entity::Entity(glm::vec2 position, GLfloat width, GLfloat angle, std::string texture) : tex(texture), pos(position), angle(angle), size(glm::vec2(width, width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width)), color(1.0f, 1.0f, 1.0f) {
-}
-
-Entity::Entity(glm::vec2 position, glm::vec2 size, GLfloat angle, std::string texture) : tex(texture), pos(position), angle(angle), size(size), color(1.0f, 1.0f, 1.0f) {
+Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle), color(1), ani(aniName), etex(ani.getETex(0)) {
+	Animations[aniName] = ani;
 }
 
 Entity::~Entity()
 {
-	for (Hitbox* h : Hitboxes) {
-		delete h;
-	}
-	for (const auto& a : Animations) {
-		delete a.second;
-	}
 }
 
 GLboolean Entity::updateE(GLfloat dt) {
+	if (Animations[ani].getSize() > 0) {
+		updateAni();
+	}
 	return GL_FALSE; // static entities never move
 }
 
@@ -54,6 +40,10 @@ void Entity::setColor(glm::vec3 color) {
 	this->color = color;
 }
 
-void Entity::autofitHitbox() {
-	Hitboxes.push_back(new Hitbox(glm::vec2(0), size, 0));
+void Entity::updateAni() {
+	etex = Animations[ani].getETex();
+}
+
+void Entity::updateHitboxes() {
+	Hitboxes = etex.getAbsHitboxes();
 }

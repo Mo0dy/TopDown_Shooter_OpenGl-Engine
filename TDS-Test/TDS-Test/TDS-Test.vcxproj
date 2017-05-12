@@ -126,8 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Etex.h" />
     <ClInclude Include="E_Drone.h" />
-    <ClInclude Include="Background.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionDetector.h" />
@@ -139,6 +139,7 @@
     <ClInclude Include="LevelTest.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="StaticEntity.h" />
     <ClInclude Include="SubE.h" />
     <ClInclude Include="Test_Area.h" />
     <ClInclude Include="Util.h" />
@@ -153,8 +154,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Etex.cpp" />
     <ClCompile Include="E_Drone.cpp" />
-    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StaticEntity.cpp" />
     <ClCompile Include="SubE.cpp" />
     <ClCompile Include="Test_Area.cpp" />
     <ClCompile Include="Texture2D.cpp" />

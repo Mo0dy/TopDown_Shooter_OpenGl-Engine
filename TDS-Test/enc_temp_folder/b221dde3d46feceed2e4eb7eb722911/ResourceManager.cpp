@@ -31,15 +31,16 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 }
 
 Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox) {
-	Etextures[name] = LoadTempEtex(path, filename, filetype, alpha, loadHbox); // Problemstelle ==================================================================
+	Etextures[name] = Etex();
+	Etextures[name] = *LoadTempEtex(path, filename, filetype, alpha, loadHbox);
 	return Etextures[name];
 }
 
-Etex ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox) {
-	Etex tempEtex;
-	tempEtex.tex = &loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha);
+Etex* ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox) {
+	Etex* tempEtex = new Etex;
+	tempEtex->tex = &loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha);
 	if (loadHbox) {
-		tempEtex.setRelHitboxes(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
+		tempEtex->setRelHitboxes(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
 	}
 	return tempEtex;
 }
@@ -158,7 +159,7 @@ void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLin
 
 	for (int i = 0; i < amount; i++) {
 
-		Animations[name].push_back(ResourceManager::LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL));
+		Animations[name].push_back(*ResourceManager::LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL));
 		Animations[name].back().setTexSize(width);
 
 		if (loadHitboxes == HBOX_LOAD_ONE) {

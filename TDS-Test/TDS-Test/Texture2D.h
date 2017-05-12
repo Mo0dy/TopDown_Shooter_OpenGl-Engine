@@ -10,10 +10,18 @@
 
 struct Hitbox {
 	Hitbox();
-	Hitbox(glm::vec2 position, glm::vec2 size, GLfloat angle);
-	glm::vec2 pos; // center of the hitbox
-	glm::vec2 size; // Size of the rectangle from lower left corner
+	Hitbox(glm::vec2 pos, glm::vec2 size, GLfloat angle);
+	glm::vec2 pos; // center of the hitbox proportionate to the size of the texture
+	glm::vec2 size; // Size of the rectangle from lower left corner as proportion to the width and height;
 	GLfloat angle; // angle relative to the corresponding texture
+};
+
+struct rHitbox {
+	rHitbox();
+	rHitbox(glm::vec2 rPosProp, glm::vec2 rSizeProp, GLfloat rAngle);
+	glm::vec2 rPosProp; // center of the hitbox proportionate to the size of the texture
+	glm::vec2 rSizeProp; // Size of the rectangle from lower left corner as proportion to the width and height;
+	GLfloat rAngle; // angle relative to the corresponding texture
 };
 
 class Texture2D

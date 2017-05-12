@@ -3,36 +3,37 @@
 #include "Util.h"
 #include "Texture2D.h"
 #include "ResourceManager.h"
-
-struct Etex {
-public:
-	Etex(std::string texture, GLfloat width);
-	std::string tex;
-	glm::vec2 texSize;
-	std::vector<Hitbox*> hitboxes;
-};
+#include "Etex.h"
 
 class Animation
 {
 public:
-
-	static std::map<std::string, std::vector<Etex*> > Animations;
-
+	Animation();
 	Animation(std::string name, GLboolean repeat);
+	Animation(std::string name, GLfloat width, GLboolean repeat);
 	~Animation();
-
-	static void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name);
 
 	void startAnimation();
 	void stopAnimation();
 
 	void setFPS(GLfloat fps);
 
-	Etex* getETex();
+	void load(std::string name);
+	void load(std::string name, GLfloat width);
+
+	void enforceWidth(GLfloat width);
+
+	GLfloat width;
+
+	// Getters and setters
+	Etex& getETex();
+	Etex& getETex(GLuint pos);
 	GLint getSize();
 	GLboolean getState();
 	GLfloat animationTime;
-	std::string name;
+	
+	std::vector<Etex> Etextures;
+
 protected:
 	GLboolean repeat;
 	GLboolean state;

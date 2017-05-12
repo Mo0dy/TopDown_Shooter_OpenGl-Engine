@@ -3,7 +3,13 @@
 Hitbox::Hitbox() {
 }
 
-Hitbox::Hitbox(glm::vec2 position, glm::vec2 size, GLfloat angle): pos(position), size(size), angle(angle) {
+Hitbox::Hitbox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : pos(pos), size(size), angle(angle) {
+}
+
+rHitbox::rHitbox() {
+}
+
+rHitbox::rHitbox(glm::vec2 rPosProp, glm::vec2 rSizeProp, GLfloat rAngle) : rPosProp(rPosProp), rSizeProp(rSizeProp), rAngle(rAngle) {
 }
 
 Texture2D::Texture2D() : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)

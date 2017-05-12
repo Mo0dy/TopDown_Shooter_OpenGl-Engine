@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 
 void EnergyBullet::loadEnergyBullet() {
-	ResourceManager::LoadTexture("Textures\\EnergyBullet.png", GL_TRUE, "EnergyBall");
+	ResourceManager::LoadEtex("Textures","EnergyBullet", ".png", GL_TRUE, "EnergyBall", GL_FALSE);
 }
 
 EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat newAngle): Bullet(position, newAngle)
@@ -10,9 +10,8 @@ EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat newAngle): Bullet(positio
 	velocity = 20;
 	vel = Util::create2DrotMatrix(newAngle) * glm::vec2(0, 1) * velocity;
 	mass = 1;
-	size = glm::vec2(0.25, 0.6);
-	tex = "EnergyBall";
-	autofitHitbox();
+	etex = ResourceManager::GetEtex("EnergyBall");
+	etex.setTexSize(glm::vec2(0.25, 0.6));
 	damage = 10;
 }
 

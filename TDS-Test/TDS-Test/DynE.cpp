@@ -6,15 +6,9 @@
 DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE)
 {
 }
-DynE::DynE(glm::vec2 position, glm::vec2 size) : Entity(position, size), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
-}
-DynE::DynE(glm::vec2 position, glm::vec2 size, GLfloat angle) : Entity(position, size, angle), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
-}
-DynE::DynE(glm::vec2 position, glm::vec2 size, std::string texture) : Entity(position, size, texture), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE) {
 
-}
-DynE::DynE(glm::vec2 position, glm::vec2 size, GLfloat angle, std::string texture) : Entity(position, size, angle, texture), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), state(STOPPING), collision(GL_FALSE) {
-
+DynE::DynE(glm::vec2 position, GLfloat angle) : DynE(position) {
+	this->angle = angle;
 }
 
 DynE::~DynE()
@@ -22,8 +16,16 @@ DynE::~DynE()
 }
 
 GLboolean DynE::updateE(GLfloat dt) {
-	// updating values according to collision
+	updatePos(dt);
+	return glm::length(vel) > 0;
+}
+
+void DynE::updatePos(GLfloat dt) {
 	if (collision) {
+#ifdef DEBUG_FORCES
+		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex((pos + (colVel - vel) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
 		vel = colVel;
 		collision = GL_FALSE;
 	}
@@ -33,9 +35,9 @@ GLboolean DynE::updateE(GLfloat dt) {
 		break;
 	case STOPPING: addForce(fricRes() + airRes());
 	}
+
 	glm::vec2 dV = dt * force / mass;
 
-	// safeguard for wiggeling close to 0v
 	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
 		vel = glm::vec2(0, 0);
 	}
@@ -43,9 +45,14 @@ GLboolean DynE::updateE(GLfloat dt) {
 		vel += dV;
 	}
 
-	pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
+	pos += dt * vel;
+
+#ifdef DEBUG_FORCES
+	Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+#endif // DEBUG_FORCES
+
 	force = glm::vec2(0, 0);
-	return glm::length(vel) > 0;
 }
 
 void DynE::ColWithStat(Entity *cE, GLfloat colDepth, glm::vec2 minColAxis) {

@@ -1,8 +1,7 @@
 #include "Bullet.h"
 
-Bullet::Bullet(glm::vec2 position, GLfloat newAngle) : DynE(position), velocity(200)
+Bullet::Bullet(glm::vec2 position, GLfloat newAngle) : DynE(position, angle), velocity(200)
 {
-	angle = newAngle;
 	airFricCoeff = 0.0;
 	state = MOVING;
 }

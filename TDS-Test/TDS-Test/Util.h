@@ -41,9 +41,9 @@ static const GLfloat MAC_COL_FORCE = 20000;
 static const GLfloat LINEAR_COL_FORCE_INTERVAL = 0.005;
 
 // Rendering
-static const GLboolean FULLSCREEN = GL_TRUE;
-static const GLuint SCREEN_WIDTH = 1920;
-static const GLuint SCREEN_HEIGHT = 1080;
+static const GLboolean FULLSCREEN = GL_FALSE;
+static const GLuint SCREEN_WIDTH = 1200;
+static const GLuint SCREEN_HEIGHT = 900;
 
 // Other
 static const GLfloat CONTROLLER_STICK_MAX = 32767.0f;

@@ -11,10 +11,8 @@ class DynE : public Entity // Dynamic entity
 {
 public:
 	DynE(glm::vec2 position);
-	DynE(glm::vec2 position, glm::vec2 size);
-	DynE(glm::vec2 position, glm::vec2 size, GLfloat angle);
-	DynE(glm::vec2 position, glm::vec2 size, std::string texture);
-	DynE(glm::vec2 position, glm::vec2 size, GLfloat angle, std::string texture);
+	DynE(glm::vec2 position, GLfloat angle);
+
 	virtual ~DynE();
 
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
@@ -31,6 +29,8 @@ public:
 	GLfloat getMass();
 
 protected:
+	virtual void updatePos(GLfloat dt);
+
 	State state;
 	glm::vec2 vel; // velocity in m/s
 	GLfloat airFricCoeff;

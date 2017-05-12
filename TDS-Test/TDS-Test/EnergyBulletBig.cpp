@@ -16,7 +16,7 @@ EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBu
 	velocity = 15;
 	vel = Util::create2DrotMatrix(glm::degrees(newAngle)) * glm::vec2(0, 1) * velocity;
 	mass = 200000;
-	size = glm::vec2(1.7, 3.5);
+	etex.setTexSize(glm::vec2(1.7, 3.5));
 	damage = 90;
 
 	color = glm::vec3(1.0f, 0.0f, 0.0f);

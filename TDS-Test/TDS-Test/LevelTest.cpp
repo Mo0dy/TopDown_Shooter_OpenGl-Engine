@@ -1,18 +1,18 @@
 #include "LevelTest.h"
 #include "E_Drone.h"
 #include "E_MotherDrone.h"
+#include "StaticEntity.h"
 
 void LevelTest::loadLevelTest() {
-	ResourceManager::LoadTexture("Textures\\Island.jpg", GL_TRUE, "LevelTest_T_Island");
-	ResourceManager::LoadTexture("Textures\\Houses\\H1.png", GL_TRUE, "House_1");
+	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", GL_FALSE);
 }
 
 LevelTest::LevelTest()
 {
-	background = new Background("LevelTest_T_Island", 150);
-	size = glm::vec2(background->size);
-	entities.push_back(new Entity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), "House_1"));
-	entities.back()->autofitHitbox();
+	background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelTest_T_Island"));
+	background.etex.setTexSize(150);
+	//entities.push_back(new StaticEntity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), testEtex, GL_TRUE));
+	//entities.back()->Hitboxes = testEtex.getAbsHitboxes();
 }
 
 LevelTest::~LevelTest()
@@ -30,7 +30,7 @@ void LevelTest::updateL(GLfloat dt) {
 
 	if (Game::Enemies.size() < Game::Players.size() * 10) {
 		if (glm::length(Game::Enemies[0]->getVel()) > 0) {
-			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos - glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->size.y));
+			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos - glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->etex.getTexSize().y));
 		}
 	}
 

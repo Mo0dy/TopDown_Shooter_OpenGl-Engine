@@ -12,7 +12,6 @@
 #include "Renderer.h"
 #include "Entity.h"
 #include "Camera.h"
-#include "Background.h"
 #include "DynE.h"
 #include "Player.h"
 #include "CollisionDetector.h"

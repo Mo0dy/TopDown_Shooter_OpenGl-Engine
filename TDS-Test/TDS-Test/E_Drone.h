@@ -18,8 +18,6 @@ public:
 	GLfloat movForce;
 	GLfloat turnSpeed;
 
-	Animation* ani;
-
 	GLfloat swarmFactor;
 	GLfloat swarmPot;
 

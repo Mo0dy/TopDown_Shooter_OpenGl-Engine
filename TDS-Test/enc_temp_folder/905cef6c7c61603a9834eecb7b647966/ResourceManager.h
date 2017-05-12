@@ -34,7 +34,7 @@ public:
 	static Texture2D GetTexture(std::string name);
 
 	static Etex LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox);
-	static Etex LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox);
+	static Etex* LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox);
 
 	static Etex GetEtex(std::string name);
 

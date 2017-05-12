@@ -268,7 +268,7 @@ void Game::Update(GLfloat dt) {
 
 void Game::Render() {
 	// combine this in one function (by combining all vectors)
-	renderer->RenderSprite(*level->background, *camera);
+	renderer->RenderSprite(level->background, *camera);
 	for (Entity* e : statEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
