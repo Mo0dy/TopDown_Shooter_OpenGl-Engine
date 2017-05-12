@@ -34,7 +34,7 @@ public:
 	static Texture2D GetTexture(std::string name);
 
 	static Etex LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox);
-	static Etex LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox);
+	static void LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox, Etex* etexToFill);
 
 	static Etex GetEtex(std::string name);
 
@@ -51,7 +51,7 @@ private:
 
 	// Loads and generates a shader from file
 	static Shader    loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile);
-	static Texture2D loadTextureFromFile(const GLchar *file, GLboolean alpha);
+	static Texture2D* loadTextureFromFile(const GLchar *file, GLboolean alpha);
 
 };
 

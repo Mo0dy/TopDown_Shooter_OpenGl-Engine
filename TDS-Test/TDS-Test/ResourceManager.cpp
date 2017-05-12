@@ -22,7 +22,7 @@ Shader ResourceManager::GetShader(std::string name) {
 
 Texture2D ResourceManager::LoadTexture(const GLchar *file, GLboolean alpha, std::string name)
 {
-	Textures[name] = loadTextureFromFile(file, alpha);
+	Textures[name] = *loadTextureFromFile(file, alpha);
 	return Textures[name];
 }
 
@@ -31,17 +31,17 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 }
 
 Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox) {
-	Etextures[name] = LoadTempEtex(path, filename, filetype, alpha, loadHbox); // Problemstelle ==================================================================
+	Etex* etex = new Etex();
+	LoadTempEtex(path, filename, filetype, alpha, loadHbox, etex); // Problemstelle ==================================================================
+	Etextures[name] = *etex;
 	return Etextures[name];
 }
 
-Etex ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox) {
-	Etex tempEtex;
-	tempEtex.tex = &loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha);
+void ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox, Etex* etexToFill) {
+	etexToFill->tex = loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha);
 	if (loadHbox) {
-		tempEtex.setRelHitboxes(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
+		etexToFill->setRelHitboxes(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
 	}
-	return tempEtex;
 }
 
 Etex ResourceManager::GetEtex(std::string name) { return Etextures[name]; }
@@ -88,20 +88,20 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
 	return shader;
 }
 
-Texture2D ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean alpha)
+Texture2D* ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean alpha)
 {
 	// Create Texture object
-	Texture2D texture;
+	Texture2D *texture = new Texture2D();
 	if (alpha)
 	{
-		texture.Internal_Format = GL_RGBA;
-		texture.Image_Format = GL_RGBA;
+		texture->Internal_Format = GL_RGBA;
+		texture->Image_Format = GL_RGBA;
 	}
 	// Load image
 	int width, height;
-	unsigned char* image = SOIL_load_image(file, &width, &height, 0, texture.Image_Format == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
+	unsigned char* image = SOIL_load_image(file, &width, &height, 0, texture->Image_Format == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
 	// Now generate texture
-	texture.Generate(width, height, image);
+	texture->Generate(width, height, image);
 	// And finally free image data
 	SOIL_free_image_data(image);
 	return texture;
@@ -153,12 +153,13 @@ std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path) {
 void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, loadHboxSwitch loadHitboxes) {
 	std::vector<rHitbox*> temHbox;
 	if (loadHitboxes == HBOX_LOAD_ONE) {
-		temHbox = ResourceManager::loadrHitboxFromFile((path + "\\H.txt").c_str());
+		temHbox = loadrHitboxFromFile((path + "\\H.txt").c_str());
 	}
 
 	for (int i = 0; i < amount; i++) {
-
-		Animations[name].push_back(ResourceManager::LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL));
+		Etex* etex = new Etex();
+		LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL, etex);
+		Animations[name].push_back(*etex);
 		Animations[name].back().setTexSize(width);
 
 		if (loadHitboxes == HBOX_LOAD_ONE) {
