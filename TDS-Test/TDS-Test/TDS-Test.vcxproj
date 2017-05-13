@@ -141,7 +141,6 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="StaticEntity.h" />
     <ClInclude Include="SubE.h" />
-    <ClInclude Include="Test_Area.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="DynE.h" />
     <ClInclude Include="Entity.h" />
@@ -175,9 +174,9 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="StaticEntity.cpp" />
     <ClCompile Include="SubE.cpp" />
-    <ClCompile Include="Test_Area.cpp" />
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>

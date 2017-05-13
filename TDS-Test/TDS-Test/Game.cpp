@@ -71,18 +71,18 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (!Keys[GLFW_KEY_M] && Press_M_Flag) {
 		Press_M_Flag = false;
-		camera->minSizeHeight = CAM_STANDARD_SIZE;
+		camera->minSizeHeight = Util::CAM_STANDARD_MIN_ZOOM;
 	}
 	if (Keys[GLFW_KEY_U]) {
-		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+		camera->minSizeHeight -= Util::CAM_ZOOM_SPEED;
 	}
 	if (Keys[GLFW_KEY_J]) {
-		camera->minSizeHeight += CAM_ZOOM_SPEED;
+		camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
 	}
 
 #endif // DEBUG
 
-	if (CONTROLLER_SUPPORT) {
+	if (Util::CONTROLLER_SUPPORT) {
 		XINPUT_STATE* cState[4];
 
 		for (int i = 0; i < 4; i++) {
@@ -102,15 +102,15 @@ void Game::ProcessInput(GLfloat dt) {
 
 		for (int i = 0; i < controlledPlayers; i++) {
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-				camera->minSizeHeight -= CAM_ZOOM_SPEED;
+				camera->minSizeHeight -= Util::CAM_ZOOM_SPEED;
 				if (camera->minSizeHeight < 6) {
 					camera->minSizeHeight = 6;
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-				camera->minSizeHeight += CAM_ZOOM_SPEED;
-				if (camera->minSizeHeight > CAM_MAX_ZOOM) {
-					camera->minSizeHeight = CAM_MAX_ZOOM;
+				camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
+				if (camera->minSizeHeight > Util::CAM_MAX_ZOOM) {
+					camera->minSizeHeight = Util::CAM_MAX_ZOOM;
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {

@@ -39,8 +39,11 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	subEntities["body"]->etex = ResourceManager::GetEtex("U_Bot");
 	subEntities["body"]->etex.setTexSize(glm::vec2(1.5, 0.85));
 
-	subEntities["tracks"]->etex.updateAbsHitboxes();
-	subEntities["body"]->etex.updateAbsHitboxes();
+	subEntities["tracks"]->etex.fitHitboxToTex();
+	subEntities["body"]->etex.fitHitboxToTex();
+
+	subEntities["tracks"]->updateHitboxes();
+	subEntities["body"]->updateHitboxes();
 
 	state = STOPPING;
 
@@ -76,13 +79,13 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 		force += airRes();
 
-		if (abs(gPad.sThumbLX) > CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > CONTROLLER_DEADZONE) {
+		if (abs(gPad.sThumbLX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > Util::CONTROLLER_DEADZONE) {
 			movDir += glm::vec2(gPad.sThumbLX, 0);
 			movDir += glm::vec2(0, gPad.sThumbLY);
 			state = MOVING;
 		}
 
-		if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
+		if (abs(gPad.sThumbRX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > Util::CONTROLLER_DEADZONE) {
 			bodyDir += glm::vec2(gPad.sThumbRX, 0);
 			bodyDir += glm::vec2(0, gPad.sThumbRY);
 		}
@@ -117,8 +120,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 			force += movDir * inherentForce;
 			break;
 		case SPRINTING:
-			force += movDir * inherentForce * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
-			accuracy = 0.1 * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+			force += movDir * inherentForce * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+			accuracy = 0.1 * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
 			break;
 		}
 
@@ -130,9 +133,12 @@ GLboolean Robot::updateE(GLfloat dt) {
 			shootBigB();
 		}
 
-		updatePos(dt);
 		setTrackAngle(dt);
 		setBodyAngle(dt);
+
+		updatePos(dt);
+
+		LOG(pos.x << "|" << pos.y);
 
 		updateSupE();
 		combineHitboxes();
@@ -141,13 +147,14 @@ GLboolean Robot::updateE(GLfloat dt) {
 		bodyDir = glm::vec2(0);
 		return glm::length(vel) > 0;
 	}
+	LOG("d|" << pos.x << "|" << pos.y);
 	return GL_FALSE;
 }
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
 		lastShot = 0;
-		Game::Bullets.push_back(new EnergyBullet(pos + Util::create2DrotMatrix(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::Bullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
 		Game::Bullets.back()->whitelist.push_back(this);
 	}
 }
@@ -163,7 +170,7 @@ void Robot::shootBigB() {
 void Robot::setBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
 	subEntities["body"]->rAngle = glm::mod<GLfloat>(subEntities["body"]->rAngle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);
+	GLfloat dA = calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);
 	if (abs(dA) > 0) {
 		if (bodyTurnSpeed * dt > abs(dA)) {
 			subEntities["body"]->rAngle += dA;
@@ -176,7 +183,7 @@ void Robot::setBodyAngle(GLfloat dt) {
 
 void Robot::setTrackAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(angle, vel);
+	GLfloat dA = calcMovAngle(angle, vel);
 
 	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
 		if (dA > 0) {

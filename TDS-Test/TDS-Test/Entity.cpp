@@ -24,6 +24,7 @@ GLboolean Entity::updateE(GLfloat dt) {
 	if (Animations[ani].getSize() > 0) {
 		updateAni();
 	}
+	updateHitboxes();
 	return GL_FALSE; // static entities never move
 }
 
@@ -42,8 +43,10 @@ void Entity::setColor(glm::vec3 color) {
 
 void Entity::updateAni() {
 	etex = Animations[ani].getETex();
+	updateHitboxes();
 }
 
 void Entity::updateHitboxes() {
+	etex.updateAbsHitboxes();
 	Hitboxes = etex.getAbsHitboxes();
 }

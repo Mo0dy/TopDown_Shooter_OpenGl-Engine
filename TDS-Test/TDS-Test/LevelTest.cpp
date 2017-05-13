@@ -11,6 +11,7 @@ LevelTest::LevelTest()
 {
 	background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelTest_T_Island"));
 	background.etex.setTexSize(150);
+	size = background.etex.getTexSize();
 	//entities.push_back(new StaticEntity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), testEtex, GL_TRUE));
 	//entities.back()->Hitboxes = testEtex.getAbsHitboxes();
 }
@@ -55,9 +56,9 @@ void LevelTest::reset() {
 	Game::clearEntities();
 
 
-	for (int i = 0; i < PLAYER_AMOUNT; i++) {
+	for (int i = 0; i < Util::PLAYER_AMOUNT; i++) {
 		Game::Players.push_back(new Robot(glm::vec2(0, 3 * i)));
-		Game::Players.back()->color = PLAYER_COLOR[i];
+		Game::Players.back()->color = Util::PLAYER_COLORS[i];
 	}
 		
 	glm::vec2 motherDrone_SpawnPos;

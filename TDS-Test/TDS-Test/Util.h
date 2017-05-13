@@ -13,86 +13,44 @@
 #include <vector>
 #include <string>
 
-// Settings
 
-// Controles
-static const GLboolean CONTROLLER_SUPPORT = GL_TRUE;
-// #define KEYBOARD_SUPPORT
-
-// Camera
-static const GLfloat CAM_STANDARD_SIZE = 10;
-static const GLfloat CAM_ZOOM_SPEED = 0.2;
-
-// Game
-static const GLuint PLAYER_AMOUNT = 2;
-static const glm::vec3 PLAYER_COLOR[] = {
-	glm::vec3(0.0f, 1.0f, 0.0f),
-	glm::vec3(0.0f, 0.0f, 1.0f),
-	glm::vec3(1.0f),
-	glm::vec3(1.0f)
-};
-
-// Physics constants
-static const GLfloat GRAV_ACC = 9.81f;
-static const GLfloat COEFFFICIENT_OF_RESTITUTION = 1;
-
-// Sudo Physics
-static const GLfloat MAC_COL_FORCE = 20000;
-static const GLfloat LINEAR_COL_FORCE_INTERVAL = 0.005;
-
-// Rendering
-static const GLboolean FULLSCREEN = GL_FALSE;
-static const GLuint SCREEN_WIDTH = 1200;
-static const GLuint SCREEN_HEIGHT = 900;
-
-// Other
-static const GLfloat CONTROLLER_STICK_MAX = 32767.0f;
-static const GLfloat CONTROLLER_TRIGGER_MAX = 255.0f;
-static const GLfloat CONTROLLER_DEADZONE = 6500.0f;
 
 // utility funciton
 class Util {
 public:
-	static GLfloat calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
-		goalVec = glm::normalize(goalVec);
-		GLfloat goalAngle;
-		if (goalVec.x != 0) {
-			goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
-		}
-		else {
-			if (goalVec.y > 0) {
-				goalAngle = 0;
-			}
-			else {
-				goalAngle = glm::pi<GLfloat>();
-			}
-		}
-		
-		GLfloat dA = goalAngle - currAngle;
+	// Settings
 
-		if (abs(dA) > glm::pi<GLfloat>()) {
-			if (dA > 0) {
-				dA -= 2 * glm::pi<GLfloat>();
-			}
-			else {
-				dA += 2 * glm::pi<GLfloat>();
-			}
-		}
-		return dA;
-	}
-	
-	static glm::mat2 create2DrotMatrix(GLfloat angle) {
-		glm::mat2 rotMat;
-		rotMat[0][0] = cos(angle);
-		rotMat[1][0] = -sin(angle);
-		rotMat[0][1] = sin(angle);
-		rotMat[1][1] = cos(angle);
-		return rotMat;
-	}
+	// Controles
+	static GLboolean CONTROLLER_SUPPORT;
+	static GLboolean KEYBOARD_SUPPORT;
 
-	static void printVec2(glm::vec2 v) {
-		std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
-	}
+	// Camera
+	static GLfloat CAM_STANDARD_MIN_ZOOM;
+	static GLfloat CAM_ZOOM_SPEED;
+	static GLfloat CAM_MAX_ZOOM;
+
+	// Game
+	static GLuint PLAYER_AMOUNT;
+	static glm::vec3 PLAYER_COLORS[4];
+
+	// Physics constants
+	static GLfloat GRAV_ACC;
+	static GLfloat COEFFFICIENT_OF_RESTITUTION; // The amount of elastic restitution. 1 = elastic collision | 0 = inelastic constitution
+
+	// Rendering
+	static GLboolean FULLSCREEN;
+	static GLuint SCREEN_WIDTH; // Initial screen diementions
+	static GLuint SCREEN_HEIGHT;
+
+	// Other
+	static GLfloat CONTROLLER_STICK_MAX; // The maximum value the stick can return used to normalize values
+	static GLfloat CONTROLLER_TRIGGER_MAX; // The maximum value the trigger can return -==-
+	static GLfloat CONTROLLER_DEADZONE; // The deadzone is an interval of values that the controller could return even if the analog sticks are not used
+
+	// Functions
+	static glm::mat2 rotationMat2(GLfloat angle); // Creates a matrix that rotates a 2D vector counter clockwise by a given angle in radians
+
+	static void printVec2(glm::vec2 v);
 };
 
 
@@ -108,9 +66,3 @@ public:
 #ifdef DEBUG_FORCES
 #define FORCE_SCALE  0.001f
 #endif // DEBUG_FORCES
-
-#ifndef DEBUG
-static const GLfloat CAM_MAX_ZOOM = 25;
-#else // !DEBUG
-static const GLfloat CAM_MAX_ZOOM = 60;
-#endif // !DEBUG

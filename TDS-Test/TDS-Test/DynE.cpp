@@ -17,6 +17,7 @@ DynE::~DynE()
 
 GLboolean DynE::updateE(GLfloat dt) {
 	updatePos(dt);
+	updateHitboxes();
 	return glm::length(vel) > 0;
 }
 
@@ -38,12 +39,12 @@ void DynE::updatePos(GLfloat dt) {
 
 	glm::vec2 dV = dt * force / mass;
 
-	if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
-		vel = glm::vec2(0, 0);
-	}
-	else {
+	//if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
+	//	vel = glm::vec2(0, 0);
+	//}
+	//else {
 		vel += dV;
-	}
+	//}
 
 	pos += dt * vel;
 
@@ -78,7 +79,7 @@ void DynE::ColWithDyn(DynE *cE, GLfloat colDepth, glm::vec2 minColAxis) {
 
 	//if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
 		// colVel = vel + 2 * ((cE->mass * v2p - cE->mass * v1p) / (mass + cE->mass)) * n; // <-- elastic collision
-		colVel = vel - cE->mass * COEFFFICIENT_OF_RESTITUTION * (v1p - v2p) / (mass + cE->mass) * n; // <-- partly inelastiv collision
+		colVel = vel - cE->mass * Util::COEFFFICIENT_OF_RESTITUTION * (v1p - v2p) / (mass + cE->mass) * n; // <-- partly inelastiv collision
 	//}
 	pos += -n * 0.5f * colDepth; // Push out of the collision depth
 	//if (pos == cE->pos) {
@@ -89,11 +90,11 @@ void DynE::ColWithDyn(DynE *cE, GLfloat colDepth, glm::vec2 minColAxis) {
 // Utitlity functions
 glm::vec2 DynE::fricRes() {
 	if (glm::length(vel) > 0) {
-		return glm::normalize(vel) * dynFricCoeff * mass * GRAV_ACC; // Dynamic Friction
+		return glm::normalize(vel) * dynFricCoeff * mass * Util::GRAV_ACC; // Dynamic Friction
 	}
 	else {
 		if (glm::length(force) > 0) {
-			return glm::normalize(force) * statFricCoeff * mass * GRAV_ACC; // Static Friction
+			return glm::normalize(force) * statFricCoeff * mass * Util::GRAV_ACC; // Static Friction
 		}
 		else {
 			return glm::vec2(0, 0);
@@ -106,6 +107,34 @@ glm::vec2 DynE::airRes() {
 		return glm::normalize(vel) * glm::pow(glm::length(vel), 2) * airFricCoeff;
 	}
 	return glm::vec2(0, 0);
+}
+
+GLfloat DynE::calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
+	goalVec = glm::normalize(goalVec);
+	GLfloat goalAngle;
+	if (goalVec.x != 0) {
+		goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
+	}
+	else {
+		if (goalVec.y > 0) {
+			goalAngle = 0;
+		}
+		else {
+			goalAngle = glm::pi<GLfloat>();
+		}
+	}
+
+	GLfloat dA = goalAngle - currAngle;
+
+	if (abs(dA) > glm::pi<GLfloat>()) {
+		if (dA > 0) {
+			dA -= 2 * glm::pi<GLfloat>();
+		}
+		else {
+			dA += 2 * glm::pi<GLfloat>();
+		}
+	}
+	return dA;
 }
 
 // Getters and Setters

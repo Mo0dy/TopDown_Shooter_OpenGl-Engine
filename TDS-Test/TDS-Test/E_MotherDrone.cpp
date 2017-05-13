@@ -2,7 +2,9 @@
 
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 {
-	etex.setTexSize(glm::vec2(5));
+	for (Etex e : Animations[ani].Etextures) {
+		e.setTexSize(5);
+	}
 	maxHealth = 10000;
 	health = maxHealth;
 	movForce = 1500;
@@ -24,7 +26,7 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 
 	glm::vec2 movDir = glm::vec2(0);
 
-	glm::mat2 rot90DegreesM = Util::create2DrotMatrix(90);
+	glm::mat2 rot90DegreesM = Util::rotationMat2(90);
 
 	for(Player *p : Game::Players) {
 		movDir += glm::normalize(rot90DegreesM * (pos - p->pos));

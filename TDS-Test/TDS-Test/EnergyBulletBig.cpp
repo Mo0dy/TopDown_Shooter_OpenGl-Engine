@@ -14,7 +14,7 @@ GLboolean EnergyBulletBig::updateE(GLfloat dt) {
 EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBullet(position, newAngle)
 {
 	velocity = 15;
-	vel = Util::create2DrotMatrix(glm::degrees(newAngle)) * glm::vec2(0, 1) * velocity;
+	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * velocity;
 	mass = 200000;
 	etex.setTexSize(glm::vec2(1.7, 3.5));
 	damage = 90;

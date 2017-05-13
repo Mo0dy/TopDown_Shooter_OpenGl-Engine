@@ -30,6 +30,7 @@ public:
 
 protected:
 	virtual void updatePos(GLfloat dt);
+	virtual GLfloat calcMovAngle(GLfloat currAngle, glm::vec2 goalVec);
 
 	State state;
 	glm::vec2 vel; // velocity in m/s

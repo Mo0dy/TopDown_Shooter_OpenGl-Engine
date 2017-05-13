@@ -65,7 +65,7 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 
 void E_Drone::setBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(angle, vel);
+	GLfloat dA = calcMovAngle(angle, vel);
 	if (abs(dA) > 0) {
 		if (turnSpeed * dt > abs(dA)) {
 			angle += dA;

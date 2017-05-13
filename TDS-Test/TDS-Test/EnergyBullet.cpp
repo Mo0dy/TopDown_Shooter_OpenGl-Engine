@@ -8,10 +8,11 @@ void EnergyBullet::loadEnergyBullet() {
 EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat newAngle): Bullet(position, newAngle)
 {
 	velocity = 20;
-	vel = Util::create2DrotMatrix(newAngle) * glm::vec2(0, 1) * velocity;
+	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * velocity;
 	mass = 1;
 	etex = ResourceManager::GetEtex("EnergyBall");
 	etex.setTexSize(glm::vec2(0.25, 0.6));
+	angle = newAngle;
 	damage = 10;
 }
 

@@ -34,8 +34,8 @@ public:
 	virtual void setColor(glm::vec3 color);
 
 	virtual void updateHitboxes();
+	virtual void updateAni();
 
 protected:
-	virtual void updateAni();
 };
 

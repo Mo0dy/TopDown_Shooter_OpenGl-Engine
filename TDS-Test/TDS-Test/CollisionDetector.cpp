@@ -27,11 +27,11 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 		for (Hitbox* mEH : dE->Hitboxes) {
 
 			mymEH = *mEH;
-			mymEH.pos = Util::create2DrotMatrix(dE->angle) * mymEH.pos + dE->pos;
+			mymEH.pos = Util::rotationMat2(dE->angle) * mymEH.pos + dE->pos;
 			mymEH.angle += dE->angle;
 
 			// This should probably only be done if the hitboxes have the potential to collide?
-			glm::mat2 rotMat = Util::create2DrotMatrix(mymEH.angle);
+			glm::mat2 rotMat = Util::rotationMat2(mymEH.angle);
 			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.size.x, 0) * 0.5f;
 			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.size.y) * 0.5f;
 			E1corners[0] = mymEH.pos + rotVec1 + rotVec2;
@@ -48,16 +48,16 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 			Renderer::drawLineBuffer.push_back(myVertex(E1corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
 #endif // DEBUG_HITBOXES
 
-			Axis[0] = Util::create2DrotMatrix(mymEH.angle) * glm::vec2(1, 0);
-			Axis[1] = Util::create2DrotMatrix(mymEH.angle) * glm::vec2(0, 1);
+			Axis[0] = Util::rotationMat2(mymEH.angle) * glm::vec2(1, 0);
+			Axis[1] = Util::rotationMat2(mymEH.angle) * glm::vec2(0, 1);
 
 			for (Hitbox* cEH : sE->Hitboxes) {
 				// Calculation WCS position of the Hitbox
 				mycEH = *cEH;
-				mycEH.pos = Util::create2DrotMatrix(sE->angle) * mycEH.pos + sE->pos;
+				mycEH.pos = Util::rotationMat2(sE->angle) * mycEH.pos + sE->pos;
 				mycEH.angle += sE->angle;
 
-				rotMat = Util::create2DrotMatrix(mycEH.angle);
+				rotMat = Util::rotationMat2(mycEH.angle);
 				rotVec1 = rotMat * glm::vec2(mycEH.size.x, 0) * 0.5f;
 				rotVec2 = rotMat * glm::vec2(0, mycEH.size.y) * 0.5f;
 				E2corners[0] = mycEH.pos + rotVec1 + rotVec2;
@@ -75,8 +75,8 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 #endif // DEBUG_HITBOXES
 
 
-				Axis[2] = Util::create2DrotMatrix(mycEH.angle) * glm::vec2(1, 0);
-				Axis[3] = Util::create2DrotMatrix(mycEH.angle) * glm::vec2(0, 1);
+				Axis[2] = Util::rotationMat2(mycEH.angle) * glm::vec2(1, 0);
+				Axis[3] = Util::rotationMat2(mycEH.angle) * glm::vec2(0, 1);
 
 				*penDepth = doSingleCheck(mymEH, mycEH, minColAxis);
 				if (*penDepth > 0) {
