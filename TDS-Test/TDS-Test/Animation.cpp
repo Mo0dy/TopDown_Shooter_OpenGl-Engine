@@ -25,7 +25,7 @@ void Animation::load(std::string name, GLfloat width) {
 }
 
 void Animation::enforceWidth(GLfloat width) {
-	for (Etex e : Etextures) {
+	for (Etex &e : Etextures) {
 		e.setTexSize(width);
 	}
 }

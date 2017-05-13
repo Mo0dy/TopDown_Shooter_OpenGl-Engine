@@ -251,12 +251,12 @@ void Game::Update(GLfloat dt) {
 		for (Enemy *e : Enemies) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithEnemy(e);
-				e->ColWithDyn(b, penDepth, -colAxis);
+				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithStat(e, penDepth);
+				b->ColWithStat(e, 0);
 			}
 		}
 	}

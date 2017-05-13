@@ -23,7 +23,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
-	if (glm::distance(dE->pos, sE->pos) <= (glm::length(dE->etex.getTexSize()) + glm::length(dE->etex.getTexSize())) / 2.0f) {
+	if (glm::distance(dE->pos, sE->pos) <= (glm::length(sE->etex.getTexSize()) + glm::length(dE->etex.getTexSize())) / 2.0f) {
 		for (Hitbox* mEH : dE->Hitboxes) {
 
 			mymEH = *mEH;

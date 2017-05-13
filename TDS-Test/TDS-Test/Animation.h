@@ -34,8 +34,9 @@ public:
 	
 	std::vector<Etex> Etextures;
 
-protected:
 	GLboolean repeat;
+
+protected:
 	GLboolean state;
 	GLfloat startTime;
 };

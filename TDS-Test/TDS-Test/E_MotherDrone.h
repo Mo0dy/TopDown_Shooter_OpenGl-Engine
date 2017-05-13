@@ -10,5 +10,6 @@ public:
 	~E_MotherDrone();
 
 	GLboolean updateE(GLfloat dt);
+	//void updateAni();
 };
 

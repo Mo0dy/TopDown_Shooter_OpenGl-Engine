@@ -39,12 +39,12 @@ void DynE::updatePos(GLfloat dt) {
 
 	glm::vec2 dV = dt * force / mass;
 
-	//if (vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
-	//	vel = glm::vec2(0, 0);
-	//}
-	//else {
+	if (vel.x * (vel.x + dV.x) < 0 && vel.y * (vel.y + dV.y) < 0) {
+		vel = glm::vec2(0, 0);
+	}
+	else {
 		vel += dV;
-	//}
+	}
 
 	pos += dt * vel;
 

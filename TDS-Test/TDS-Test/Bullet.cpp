@@ -17,9 +17,21 @@ GLboolean Bullet::updateE(GLfloat dt) {
 
 void Bullet::ColWithEnemy(Enemy* enemy) {
 	collision = GL_TRUE;
-	enemy->health -= damage;
+	if (!checkWhitelist(enemy)) {
+		enemy->health -= damage;
+		whitelist.push_back(enemy);
+	}
 }
 
 void Bullet::ColWithStat(Entity* cE, GLfloat colDepth) {
 	collision = GL_TRUE;
+}
+
+GLboolean Bullet::checkWhitelist(Enemy* enemy) {
+	for (Entity *e : whitelist) {
+		if (e == enemy) {
+			return GL_TRUE;
+		}
+	}
+	return GL_FALSE;
 }

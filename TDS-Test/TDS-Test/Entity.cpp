@@ -42,8 +42,10 @@ void Entity::setColor(glm::vec3 color) {
 }
 
 void Entity::updateAni() {
-	etex = Animations[ani].getETex();
-	updateHitboxes();
+	if (Animations[ani].getState()) {
+		etex = Animations[ani].getETex();
+		updateHitboxes();
+	}
 }
 
 void Entity::updateHitboxes() {

@@ -2,9 +2,7 @@
 
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 {
-	for (Etex e : Animations[ani].Etextures) {
-		e.setTexSize(5);
-	}
+	Animations[ani].enforceWidth(5);
 	maxHealth = 10000;
 	health = maxHealth;
 	movForce = 1500;
@@ -19,6 +17,8 @@ E_MotherDrone::~E_MotherDrone()
 
 GLboolean E_MotherDrone::updateE(GLfloat dt) {
 	lastAttack += dt;
+
+	updateAni();
 
 	if (!attacking && lastAttack > attackSpeed) {
 		attacking = GL_TRUE;
@@ -41,3 +41,7 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 	updatePos(dt);
 	return glm::length(vel) > 0;
 }
+
+//void E_MotherDrone::updateAni() {
+//	etex.tex = Animations[ani].getETex().tex;
+//}

@@ -31,9 +31,30 @@ void CompE::combineHitboxes() {
 	}
 }
 
+void CompE::updateAni() {
+	for (auto const& x : subEntities) {
+		x.second->updateAni();
+	}
+}
+
+void CompE::setSubESize(glm::vec2 size, std::string name) {
+	if (glm::length(size)) {
+		this->etex.setTexSize(size);
+	}
+	subEntities[name]->etex.setTexSize(size);
+}
+
+void CompE::setSubESize(GLfloat width, std::string name) {
+	subEntities[name]->etex.setTexSize(width);
+	if (glm::length(subEntities[name]->etex.getTexSize()) > glm::length(this->etex.getTexSize())) {
+		this->etex.setTexSize(subEntities[name]->etex.getTexSize());
+	}
+}
+
 void CompE::setColor(glm::vec3 color) {
 	for (auto const& x : subEntities) {
 		x.second->color = color;
 	}
 }
+
 std::map <std::string, SubE*> CompE::getSubE() { return subEntities; }

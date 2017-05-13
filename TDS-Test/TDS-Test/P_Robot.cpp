@@ -10,7 +10,7 @@ void Robot::loadRobot() {
 	ResourceManager::LoadEtex("Textures", "D_Bot", ".png", GL_TRUE, "D_Bot", GL_FALSE);
 	ResourceManager::LoadEtex("Textures", "U_Bot", ".png", GL_TRUE, "U_Bot", GL_FALSE);
 
-	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", HBOX_AUTOFIT);
+	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", HBOX_LOAD_ONE);
 }
 
 Robot::Robot(glm::vec2 position) : Player(position)
@@ -34,16 +34,16 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	subEntities["body"] = new SubE(glm::vec2(0));
 
 	subEntities["tracks"]->etex = ResourceManager::GetEtex("D_Bot");
-	subEntities["tracks"]->etex.setTexSize(glm::vec2(1.05));
-
 	subEntities["body"]->etex = ResourceManager::GetEtex("U_Bot");
-	subEntities["body"]->etex.setTexSize(glm::vec2(1.5, 0.85));
-
 	subEntities["tracks"]->etex.fitHitboxToTex();
 	subEntities["body"]->etex.fitHitboxToTex();
+	setSubESize(1.05, "tracks");
+	setSubESize(1.5, "body");
 
 	subEntities["tracks"]->updateHitboxes();
 	subEntities["body"]->updateHitboxes();
+
+	subEntities["body"]->Animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
 
 	state = STOPPING;
 
@@ -67,6 +67,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 		if (health < 0) {
 			death = true;
 		}
+
+		updateAni();
 
 		setColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
 
@@ -138,8 +140,6 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 		updatePos(dt);
 
-		LOG(pos.x << "|" << pos.y);
-
 		updateSupE();
 		combineHitboxes();
 
@@ -147,12 +147,14 @@ GLboolean Robot::updateE(GLfloat dt) {
 		bodyDir = glm::vec2(0);
 		return glm::length(vel) > 0;
 	}
-	LOG("d|" << pos.x << "|" << pos.y);
 	return GL_FALSE;
 }
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
+		subEntities["body"]->Animations["ShootSmallB"].animationTime = shootDelay;
+		subEntities["body"]->Animations["ShootSmallB"].startAnimation();
+		subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
 		Game::Bullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
 		Game::Bullets.back()->whitelist.push_back(this);

@@ -31,7 +31,7 @@ void LevelTest::updateL(GLfloat dt) {
 
 	if (Game::Enemies.size() < Game::Players.size() * 10) {
 		if (glm::length(Game::Enemies[0]->getVel()) > 0) {
-			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos - glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->etex.getTexSize().y));
+			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos + glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->etex.getTexSize().y));
 		}
 	}
 

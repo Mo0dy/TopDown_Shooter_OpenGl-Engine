@@ -19,6 +19,7 @@ public:
 	GLfloat damage;
 
 protected:
+	GLboolean checkWhitelist(Enemy* enemy);
 	GLfloat velocity;
 };
 

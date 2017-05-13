@@ -14,9 +14,12 @@ public:
 
 	virtual void updateSupE();
 	virtual void combineHitboxes();
+	void updateAni();
 
 	// Getters and setter
 	void setColor(glm::vec3 color);
+	void setSubESize(glm::vec2 size, std::string name);
+	void setSubESize(GLfloat width, std::string name);
 	std::map<std::string, SubE*> getSubE();
 };
 
