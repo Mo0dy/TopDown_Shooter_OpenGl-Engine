@@ -17,7 +17,7 @@ GLfloat Util::CAM_MAX_ZOOM = 25;
 #endif // !DEBUG
 
 // Game
-GLuint Util::PLAYER_AMOUNT = 2;
+GLuint Util::PLAYER_AMOUNT = 1;
 glm::vec3 Util::PLAYER_COLORS[] = {
 	glm::vec3(0.0f, 1.0f, 0.0f),
 	glm::vec3(0.0f, 0.0f, 1.0f),

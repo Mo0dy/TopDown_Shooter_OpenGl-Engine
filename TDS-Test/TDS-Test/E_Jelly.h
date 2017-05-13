@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Util.h"
 
 class E_Jelly : public Enemy
 {
@@ -10,7 +11,13 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 	GLfloat jellySize;
+	
+	GLfloat lastJump;
+	GLfloat jumpTime;
+	GLfloat jumping;
 
+	GLfloat verticalVel;
+	GLfloat height;
 protected:
 };
 

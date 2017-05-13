@@ -3,7 +3,7 @@
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 {
 	Animations[ani].enforceWidth(5);
-	maxHealth = 10000;
+	maxHealth = 4000;
 	health = maxHealth;
 	movForce = 1500;
 	mass = 300;
@@ -49,7 +49,3 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 	}
 	return GL_FALSE;
 }
-
-//void E_MotherDrone::updateAni() {
-//	etex.tex = Animations[ani].getETex().tex;
-//}
