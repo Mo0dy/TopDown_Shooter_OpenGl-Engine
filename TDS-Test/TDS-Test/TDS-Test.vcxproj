@@ -135,6 +135,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBullet.h" />
     <ClInclude Include="EnergyBulletBig.h" />
+    <ClInclude Include="E_Jelly.h" />
     <ClInclude Include="E_MotherDrone.h" />
     <ClInclude Include="LevelTest.h" />
     <ClInclude Include="P_Robot.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnergyBullet.cpp" />
     <ClCompile Include="EnergyBulletBig.cpp" />
+    <ClCompile Include="E_Jelly.cpp" />
     <ClCompile Include="E_MotherDrone.cpp" />
     <ClCompile Include="LevelTest.cpp" />
     <ClCompile Include="P_Robot.cpp" />

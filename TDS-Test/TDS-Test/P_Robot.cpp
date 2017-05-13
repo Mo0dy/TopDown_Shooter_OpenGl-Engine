@@ -64,8 +64,9 @@ Robot::~Robot()
 
 GLboolean Robot::updateE(GLfloat dt) {
 	if (!death) {
-		if (health < 0) {
-			death = true;
+		if (health <= 0) {
+			death = GL_TRUE;
+			return GL_FALSE;
 		}
 
 		updateAni();

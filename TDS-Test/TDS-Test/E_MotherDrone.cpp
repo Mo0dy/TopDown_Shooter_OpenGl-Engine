@@ -16,30 +16,38 @@ E_MotherDrone::~E_MotherDrone()
 }
 
 GLboolean E_MotherDrone::updateE(GLfloat dt) {
-	lastAttack += dt;
+	if (!death)
+	{
+		if (health <= 0) {
+			death = GL_TRUE;
+			return GL_FALSE;
+		}
+		lastAttack += dt;
 
-	updateAni();
+		updateAni();
 
-	if (!attacking && lastAttack > attackSpeed) {
-		attacking = GL_TRUE;
+		if (!attacking && lastAttack > attackSpeed) {
+			attacking = GL_TRUE;
+		}
+
+		glm::vec2 movDir = glm::vec2(0);
+
+		glm::mat2 rot90DegreesM = Util::rotationMat2(90);
+
+		for (Player *p : Game::Players) {
+			movDir += glm::normalize(rot90DegreesM * (pos - p->pos));
+			movDir += glm::normalize(p->pos - pos) * glm::pow(glm::distance(p->pos, pos) - 20, 3) * 0.2f;
+		}
+
+		addForce(glm::normalize(movDir) * movForce);
+
+		color = glm::vec3(1.0f, health / maxHealth, 1.0f);
+		setBodyAngle(dt);
+
+		updatePos(dt);
+		return glm::length(vel) > 0;
 	}
-
-	glm::vec2 movDir = glm::vec2(0);
-
-	glm::mat2 rot90DegreesM = Util::rotationMat2(90);
-
-	for(Player *p : Game::Players) {
-		movDir += glm::normalize(rot90DegreesM * (pos - p->pos));
-		movDir += glm::normalize(p->pos - pos) * glm::pow(glm::distance(p->pos, pos) - 20, 3) * 0.2f;
-	}
-
-	addForce(glm::normalize(movDir) * movForce);
-
-	color = glm::vec3(1.0f, health / maxHealth, 1.0f);
-	setBodyAngle(dt);
-	
-	updatePos(dt);
-	return glm::length(vel) > 0;
+	return GL_FALSE;
 }
 
 //void E_MotherDrone::updateAni() {

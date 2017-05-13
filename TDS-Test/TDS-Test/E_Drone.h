@@ -14,12 +14,6 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 
-	void setBodyAngle(GLfloat dt);
-	GLfloat movForce;
-	GLfloat turnSpeed;
-
 	GLfloat swarmFactor;
 	GLfloat swarmPot;
-
-	GLfloat maxHealth;
 };

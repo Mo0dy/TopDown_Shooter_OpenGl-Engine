@@ -17,5 +17,13 @@ public:
 	GLfloat attackSpeed;
 	GLboolean attacking;
 	GLfloat damage;
+
+	GLfloat maxHealth;
+	GLboolean death;
+
+	void setBodyAngle(GLfloat dt);
+	GLfloat movForce;
+	GLfloat turnSpeed;
+
 };
 

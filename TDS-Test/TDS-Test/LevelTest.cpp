@@ -2,6 +2,7 @@
 #include "E_Drone.h"
 #include "E_MotherDrone.h"
 #include "StaticEntity.h"
+#include "E_Jelly.h"
 
 void LevelTest::loadLevelTest() {
 	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", GL_FALSE);
@@ -29,9 +30,22 @@ void LevelTest::updateL(GLfloat dt) {
 		//std::cout << "Time = " << time << std::endl;
 	}
 
-	if (Game::Enemies.size() < Game::Players.size() * 10) {
+	if (Game::Enemies.size() < Game::Players.size() * 2) {
 		if (glm::length(Game::Enemies[0]->getVel()) > 0) {
 			Game::Enemies.push_back(new E_Drone(Game::Enemies[0]->pos + glm::normalize(Game::Enemies[0]->getVel()) * -0.5f * Game::Enemies[0]->etex.getTexSize().y));
+		}
+	}
+
+	for (int i = 0; i < Game::Enemies.size(); i++) {
+		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::Enemies[i]);
+		if (testJelly != NULL) {
+			if (testJelly->death) {
+				if (testJelly->jellySize > 1)
+				{
+					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+				}
+			}
 		}
 	}
 
@@ -75,6 +89,7 @@ void LevelTest::reset() {
 		}
 
 	Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
+	Game::Enemies.push_back(new E_Jelly(glm::vec2(5), 2));
 
 	//for (int i = 0; i < 1; i++) {
 	//	for (int j = 0; j < 1; j++) {
