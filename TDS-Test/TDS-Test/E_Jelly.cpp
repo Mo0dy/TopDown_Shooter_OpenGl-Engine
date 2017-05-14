@@ -11,34 +11,34 @@ void E_Jelly::Load_E_Jelly() {
 E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 {
 	jellySize = size;
-
 	height = 1;
 
 	//Set texture and hitbox
 	etex = ResourceManager::GetEtex("Pudding");
 	etex.setTexSize(glm::vec2(size));
 	updateHitboxes();
-
-	//Set color to RGB 13, 255, 26.
-	setColor(glm::vec3(0.05, 1, 0.1));
-
-	//Health is higher for a bigger jelly.
-	maxHealth = 50 * size;
-	health = maxHealth;
-
 	dynFricCoeff = -2.5;
 
+	//Set color to RGB 13, 255, 26.
+	setColor(glm::vec3(0, 1, 0.2));
+
+	//Health is higher for a bigger jelly.
+	maxHealth = MAX_HEALTH * glm::pow(size / JELLY_START_SIZE, 2);
+	health = maxHealth;
+
 	//Damage and Mass are also higher if the jelly is bigger.
-	damage = 800 * size;
+	damage = 800 * glm::pow(size / JELLY_START_SIZE, 2);
 	attackSpeed = 2;
-	mass = 7.5 * size;
-	movForce = 150;
+	mass = 100 * glm::pow(size / JELLY_START_SIZE, 2);
+	movForce = 1000 * glm::pow(size / JELLY_START_SIZE, 2);
+	initJumpVel = MAX_INIT_JUMP_VELOCITY - MAX_INIT_JUMP_VELOCITY * 0.5f * glm::pow(size / JELLY_START_SIZE, 2);
 
 	verticalVel = 0;
 	turnSpeed = 40;
 	jumpTime = 1;
 	lastJump = 0;
 	jumping = GL_FALSE;
+	state = MOVING;
 }
 
 //Destructor
@@ -70,21 +70,19 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 
 		//Do stuff regarding jumping (I'm not sure how this works exactly)
 		if (height <= 1) {
+			state = STOPPING;
 			height = 1;
-			if (jumpTime - 0.2 < lastJump) {
-				state = MOVING;
-			}
-			else {
-				state = STOPPING;
-			}
-			
 			if (jumping) {
 				jumping = GL_FALSE;
 				lastJump = 0;
 			}
 			else if (jumpTime < lastJump) {
-				verticalVel = 5;
+				verticalVel = initJumpVel;
+				vel = glm::normalize(vel) * initJumpVel * 4.0f;
 				jumping = GL_TRUE;
+			}
+			else if(jumpTime - 0.1 < lastJump) {
+				state = MOVING;
 			}
 
 			//Decide which player to attack (aka who is closest)
@@ -99,9 +97,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 			glm::vec2 movDir = gPlayer->pos - pos;
 
 			addForce(glm::normalize(movDir) * movForce);
-
 			setBodyAngle(dt);
-
 		}
 		else {
 			state = MOVING;

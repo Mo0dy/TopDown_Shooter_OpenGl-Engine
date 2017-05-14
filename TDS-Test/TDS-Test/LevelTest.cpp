@@ -124,7 +124,7 @@ void LevelTest::reset() {
 	//	}
 
 	//Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
-	//Game::Enemies.push_back(new E_Jelly(glm::vec2(5), 1));
+	Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
 
 	//for (int i = 0; i < 1; i++) {
 	//	for (int j = 0; j < 1; j++) {
@@ -157,7 +157,7 @@ void LevelTest::spawnNextWave() {
 		Game::Enemies.push_back(new E_MotherDrone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
-		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, 1));
+		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
 	}
 	wavecounter++;
 }
