@@ -2,6 +2,11 @@
 #include "Enemy.h"
 #include "Util.h"
 
+static const GLfloat JELLY_START_SIZE = 1;
+static const GLfloat MIN_JELLY_SIZE = 0.5;
+static const GLfloat MAX_INIT_JUMP_VELOCITY = 4;
+static const GLfloat MAX_HEALTH = 500;
+
 class E_Jelly : public Enemy
 {
 public:
@@ -15,6 +20,7 @@ public:
 	GLfloat lastJump;
 	GLfloat jumpTime;
 	GLfloat jumping;
+	GLfloat initJumpVel;
 
 	GLfloat verticalVel;
 	GLfloat height;

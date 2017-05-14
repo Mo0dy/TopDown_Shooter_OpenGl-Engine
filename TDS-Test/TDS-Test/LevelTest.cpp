@@ -5,16 +5,26 @@
 #include "E_Jelly.h"
 
 void LevelTest::loadLevelTest() {
-	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", GL_FALSE);
+	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", GL_TRUE);
+	ResourceManager::LoadEtex("Textures\\Houses\\House1", "", ".png", GL_TRUE, "House1", GL_TRUE);
+	ResourceManager::LoadEtex("Textures", "Well", ".png", GL_TRUE, "Well", GL_FALSE);
 }
 
 LevelTest::LevelTest()
 {
 	background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelTest_T_Island"));
 	background.etex.setTexSize(150);
+	background.updateHitboxes();
 	size = background.etex.getTexSize();
-	//entities.push_back(new StaticEntity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), testEtex, GL_TRUE));
-	//entities.back()->Hitboxes = testEtex.getAbsHitboxes();
+
+	for (housePos hP : TOWN) {
+		entities.push_back(new StaticEntity(hP.pos, hP.width, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
+		entities.back()->updateHitboxes();
+	}
+
+	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
+	entities.back()->etex.fitHitboxToTex();
+	entities.back()->updateHitboxes();
 }
 
 LevelTest::~LevelTest()
@@ -84,6 +94,10 @@ void LevelTest::updateL(GLfloat dt) {
 }
 
 void LevelTest::reset() {
+	//background.etex.setRelHitboxes(ResourceManager::loadrHitboxFromFile("Textures\\HIsland.txt"));
+	//background.updateHitboxes();
+	//size = background.etex.getTexSize();
+
 	time = 0;
 	Game::deleteEntities();
 	Game::clearEntities();
@@ -110,7 +124,7 @@ void LevelTest::reset() {
 	//	}
 
 	//Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
-	//Game::Enemies.push_back(new E_Jelly(glm::vec2(5), 1));
+	Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
 
 	//for (int i = 0; i < 1; i++) {
 	//	for (int j = 0; j < 1; j++) {
@@ -143,7 +157,7 @@ void LevelTest::spawnNextWave() {
 		Game::Enemies.push_back(new E_MotherDrone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
-		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, 1));
+		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
 	}
 	wavecounter++;
 }
