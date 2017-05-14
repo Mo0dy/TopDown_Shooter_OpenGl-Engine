@@ -45,7 +45,7 @@ void Game::Init() {
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
-	level = new LevelBanana;
+	level = new LevelTest;
 
 	reset();
 }
