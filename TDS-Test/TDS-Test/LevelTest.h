@@ -7,7 +7,8 @@
 #define MOTHER_DRONE 1
 #define SLIME 2
 
-static const GLuint WAVES[6][3] = {
+static const GLuint WAVES[7][3] = {
+	{0, 1, 0},
 	{10, 0, 1},
 	{10, 0, 5},
 	{0, 1, 0},
@@ -16,7 +17,7 @@ static const GLuint WAVES[6][3] = {
 	{0, 2, 0}
 };
 
-static const GLuint MAX_WAVE = 3;
+static const GLuint MAX_WAVE = 7;
 
 struct housePos {
 	housePos(GLfloat posX, GLfloat posY, GLfloat angleDegrees, GLfloat width): pos(glm::vec2(posX, posY)), angle(glm::radians(angleDegrees)), width(width) {

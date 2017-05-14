@@ -47,7 +47,7 @@ void LevelTest::updateL(GLfloat dt) {
 		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::Enemies[i]);
 		if (testMDrone != NULL) {
 			if (!testMDrone->death) {
-				if (Game::Enemies.size() < Game::Players.size() * 10) {
+				if (Game::Enemies.size() < Game::Players.size() * 5) {
 					if (glm::length(Game::Enemies[0]->getVel()) > 0) {
 						Game::Enemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
 					}
@@ -124,7 +124,7 @@ void LevelTest::reset() {
 	//	}
 
 	//Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
-	Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
+	//Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
 
 	//for (int i = 0; i < 1; i++) {
 	//	for (int j = 0; j < 1; j++) {
