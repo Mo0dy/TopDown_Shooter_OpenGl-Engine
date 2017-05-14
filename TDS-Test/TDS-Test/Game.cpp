@@ -7,6 +7,7 @@
 #include "LevelTest.h"
 #include "E_Drone.h"
 #include "E_Jelly.h"
+#include "LevelBanana.h"
 
 std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::dynEntities; // a vector that includes all neutral
@@ -38,12 +39,13 @@ void Game::Init() {
 	Robot::loadRobot();
 	EnergyBullet::loadEnergyBullet();
 	LevelTest::loadLevelTest();
+	LevelBanana::loadLevelBanana();
 	E_Jelly::Load_E_Jelly();
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
-	level = new LevelTest;
+	level = new LevelBanana;
 
 	reset();
 }
