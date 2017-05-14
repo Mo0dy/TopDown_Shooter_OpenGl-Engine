@@ -114,10 +114,10 @@
     <ClInclude Include="E_Jelly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E_Medic.h">
+    <ClInclude Include="LevelBanana.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LevelBanana.h">
+    <ClInclude Include="E_Medic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,11 +203,11 @@
     <ClCompile Include="E_Jelly.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="E_Medic.cpp">
-      <Filter>Source Files\Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="LevelBanana.cpp">
       <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="E_Medic.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

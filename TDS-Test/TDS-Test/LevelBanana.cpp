@@ -3,6 +3,7 @@
 #include "E_MotherDrone.h"
 #include "StaticEntity.h"
 #include "E_Jelly.h"
+#include "E_Medic.h"
 
 void LevelBanana::loadLevelBanana() {
 	ResourceManager::LoadEtex("Textures", "BananaIsland", ".jpg", GL_TRUE, "LevelBanana_T_Island", GL_FALSE);
@@ -49,7 +50,7 @@ void LevelBanana::updateL(GLfloat dt) {
 		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::Enemies[i]);
 		if (testJelly != NULL) {
 			if (testJelly->death) {
-				if (testJelly->jellySize > 0.4)
+				if (testJelly->jellySize >= 0.5)
 				{
 					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
 					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
@@ -142,6 +143,9 @@ void LevelBanana::spawnNextWave() {
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
 		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, 1));
+	}
+	for (int i = 0; i < WAVES[wavecounter][MEDIC]; i++) {
+		Game::Enemies.push_back(new E_Medic(wave_SpawnPos));
 	}
 	wavecounter++;
 }
