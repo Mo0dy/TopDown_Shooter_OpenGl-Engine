@@ -232,6 +232,9 @@ void Game::Update(GLfloat dt) {
 				Players[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
+		if (colDec->doCCheck(Players[i], &level->background, &penDepth, &colAxis)) {
+			Players[i]->ColWithStat(&level->background, penDepth, colAxis);
+		}
 	}
 
 	// We should probably only check for all Enemies that moved but for now this is fine

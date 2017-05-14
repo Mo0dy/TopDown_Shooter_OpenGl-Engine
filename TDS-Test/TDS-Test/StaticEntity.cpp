@@ -6,7 +6,7 @@ StaticEntity::StaticEntity(glm::vec2 position, GLfloat width, GLfloat angle, Ani
 	Animations[this->ani].enforceWidth(width);
 }
 StaticEntity::StaticEntity(glm::vec2 position, GLfloat width, GLfloat angle, Etex etex, GLboolean concealing) : Entity(position, angle, etex), concealing(concealing) {
-	etex.setTexSize(width);
+	this->etex.setTexSize(width);
 }
 
 StaticEntity::~StaticEntity()

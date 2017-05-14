@@ -127,18 +127,18 @@ std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path) {
 		std::vector<std::string> numbers(1);
 
 		for (char& c : hitboxConfig) {
-			if (c == ',') {
+			if (c == ',' || c == ';') {
 				numbers.push_back("");
 			}
 			else {
-				if (c != '\n') {
+				if (c != '\n' || c != ' ') {
 					numbers.back() += c;
 				}
 			}
 		}
 
 		for (int i = 0; i < numbers.size() - 4; i += 5) {
-			hitboxes.push_back(new rHitbox(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), strtof(numbers[i + 4].c_str(), 0)));
+			hitboxes.push_back(new rHitbox(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
 		}
 	}
 	catch (std::exception e)
