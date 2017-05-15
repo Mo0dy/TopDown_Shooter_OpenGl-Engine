@@ -17,7 +17,7 @@ GLfloat Util::CAM_MAX_ZOOM = 25;
 #endif // !DEBUG
 
 // Game
-GLuint Util::PLAYER_AMOUNT = 1;
+GLuint Util::PLAYER_AMOUNT = 2;
 glm::vec3 Util::PLAYER_COLORS[] = {
 	glm::vec3(0.0f, 1.0f, 0.0f),
 	glm::vec3(0.0f, 0.0f, 1.0f),
@@ -30,9 +30,9 @@ GLfloat Util::GRAV_ACC = 9.81f;
 GLfloat Util::COEFFFICIENT_OF_RESTITUTION = 1;
 
 // Rendering
-GLboolean Util::FULLSCREEN = GL_FALSE;
-GLuint Util::SCREEN_WIDTH = 1200;
-GLuint Util::SCREEN_HEIGHT = 900;
+GLboolean Util::FULLSCREEN = GL_TRUE;
+GLuint Util::SCREEN_WIDTH = 1920;
+GLuint Util::SCREEN_HEIGHT = 1080;
 
 // Other
 GLfloat Util::CONTROLLER_STICK_MAX = 32767.0f;

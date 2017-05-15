@@ -6,18 +6,18 @@
 #define DRONE 0
 #define MOTHER_DRONE 1
 #define SLIME 2
-#define MEDIC 3
 
-static const GLuint WAVES[6][4] = {
-	{10, 0, 1, 0},
-	{8, 0, 5, 1},
-	{0, 1, 0, 1},
-	{0, 0, 20, 2},
-	{15, 1, 0, 0},
-	{0, 2, 0, 1}
+static const GLuint WAVES[7][3] = {
+	{0, 1, 0},
+	{10, 0, 1},
+	{10, 0, 5},
+	{0, 1, 0},
+	{0, 0, 20},
+	{15, 1, 0},
+	{0, 2, 0}
 };
 
-static const GLuint MAX_WAVE = 3;
+static const GLuint MAX_WAVE = 7;
 
 struct housePos {
 	housePos(GLfloat posX, GLfloat posY, GLfloat angleDegrees, GLfloat width): pos(glm::vec2(posX, posY)), angle(glm::radians(angleDegrees)), width(width) {
