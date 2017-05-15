@@ -36,9 +36,13 @@ void LevelBanana::updateL(GLfloat dt) {
 		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::Enemies[i]);
 		if (testMDrone != NULL) {
 			if (!testMDrone->death) {
-				if (Game::Enemies.size() < Game::Players.size() * 10) {
+				if (Game::Enemies.size() < Game::Players.size() * 12) {
 					if (glm::length(Game::Enemies[0]->getVel()) > 0) {
-						Game::Enemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+						if (testMDrone->spawning) {
+							Game::Enemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+							testMDrone->spawning = GL_FALSE;
+							testMDrone->lastSpawn = 0;
+						}
 					}
 				}
 			}
