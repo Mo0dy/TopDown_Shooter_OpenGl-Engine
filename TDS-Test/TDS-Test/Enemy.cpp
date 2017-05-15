@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Game.h"
 
-Enemy::Enemy(glm::vec2 position) : DynE(position), lastAttack(9999), attacking(GL_TRUE), death(GL_FALSE)
+Enemy::Enemy(glm::vec2 position) : LivingE(position), lastAttack(9999), attacking(GL_TRUE), death(GL_FALSE)
 {
 }
 

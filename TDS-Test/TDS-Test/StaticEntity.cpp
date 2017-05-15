@@ -3,7 +3,7 @@
 StaticEntity::StaticEntity() {
 }
 StaticEntity::StaticEntity(glm::vec2 position, GLfloat width, GLfloat angle, Animation ani, std::string aniName, GLboolean concealing) : Entity(position, angle, ani, aniName), concealing(concealing) {
-	Animations[this->ani].enforceWidth(width);
+	animations[this->ani].enforceWidth(width);
 }
 StaticEntity::StaticEntity(glm::vec2 position, GLfloat width, GLfloat angle, Etex etex, GLboolean concealing) : Entity(position, angle, etex), concealing(concealing) {
 	this->etex.setTexSize(width);

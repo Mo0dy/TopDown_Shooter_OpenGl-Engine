@@ -43,13 +43,13 @@ void LevelTest::updateL(GLfloat dt) {
 	//}
 
 	// Adding child drones
-	for (int i = 0; i < Game::Enemies.size(); i++) {
-		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::Enemies[i]);
+	for (int i = 0; i < Game::sEnemies.size(); i++) {
+		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::sEnemies[i]);
 		if (testMDrone != NULL) {
 			if (!testMDrone->death) {
-				if (Game::Enemies.size() < Game::Players.size() * 5) {
-					if (glm::length(Game::Enemies[0]->getVel()) > 0) {
-						Game::Enemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+				if (Game::sEnemies.size() < Game::sPlayers.size() * 5) {
+					if (glm::length(Game::sEnemies[0]->getVel()) > 0) {
+						Game::sEnemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
 					}
 				}
 			}
@@ -57,20 +57,20 @@ void LevelTest::updateL(GLfloat dt) {
 	}
 
 	// Multiplying jelly
-	for (int i = 0; i < Game::Enemies.size(); i++) {
-		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::Enemies[i]);
+	for (int i = 0; i < Game::sEnemies.size(); i++) {
+		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::sEnemies[i]);
 		if (testJelly != NULL) {
 			if (testJelly->death) {
 				if (testJelly->jellySize > 0.4)
 				{
-					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::Enemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
 				}
 			}
 		}
 	}
 
-	if (Game::Enemies.size() == 0) {
+	if (Game::sEnemies.size() == 0) {
 		if (wavecounter < MAX_WAVE) {
 			spawnNextWave();
 		}
@@ -106,8 +106,8 @@ void LevelTest::reset() {
 	spawnNextWave();
 
 	for (int i = 0; i < Util::PLAYER_AMOUNT; i++) {
-		Game::Players.push_back(new Robot(glm::vec2(0, 3 * i)));
-		Game::Players.back()->color = Util::PLAYER_COLORS[i];
+		Game::sPlayers.push_back(new Robot(glm::vec2(0, 3 * i)));
+		Game::sPlayers.back()->color = Util::PLAYER_COLORS[i];
 	}
 		
 	//glm::vec2 motherDrone_SpawnPos;
@@ -151,13 +151,13 @@ void LevelTest::spawnNextWave() {
 	}
 
 	for (int i = 0; i < WAVES[wavecounter][DRONE]; i++) {
-		Game::Enemies.push_back(new E_Drone(wave_SpawnPos));
+		Game::sEnemies.push_back(new E_Drone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][MOTHER_DRONE]; i++) {
-		Game::Enemies.push_back(new E_MotherDrone(wave_SpawnPos));
+		Game::sEnemies.push_back(new E_MotherDrone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
-		Game::Enemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
+		Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
 	}
 	wavecounter++;
 }

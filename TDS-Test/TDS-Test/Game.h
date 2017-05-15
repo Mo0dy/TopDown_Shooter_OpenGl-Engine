@@ -40,16 +40,17 @@ public:
 	void Update(GLfloat dt); // Function to update objects
 	void Render(); // Function to render objects
 
-	static std::vector<Entity*> statEntities; // a vector that includes all static entities
-	static std::vector<DynE*> dynEntities; // a vector that includes all dynamic entities
-	static std::vector<Player*> Players;
-	static std::vector<Bullet*> Bullets;
-	static std::vector<Enemy*> Enemies;
-	static std::vector<DynE*> movedE;
+	// These vectors hold all entities in the game
+	static std::vector<Entity*> sStatEntities; // neutral static entities
+	static std::vector<DynE*> sDynEntities; // neutral dynamic (moving) entities
+	static std::vector<Player*> sPlayers; 
+	static std::vector<Bullet*> sBullets; 
+	static std::vector<Enemy*> sEnemies;
+	static std::vector<DynE*> sMovedE; // Entities that moved this frame. These will actively check for collision
 
-	static GLuint killcount;
+	static std::vector<Entity*> sSpawnE; // Entities that will be added next frame
 
-	static void deleteEntities();
+	static void deleteEntities(); 
 	static void clearEntities();
 
 private:

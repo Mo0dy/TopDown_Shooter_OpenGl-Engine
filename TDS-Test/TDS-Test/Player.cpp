@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(glm::vec2 position) : CompE(position) {
+Player::Player(glm::vec2 position) : LivingE(position) {
 }
 
 Player::~Player()

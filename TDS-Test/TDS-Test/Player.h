@@ -1,11 +1,11 @@
 #pragma once
 
-#include "CompE.h"
+#include "LivingE.h"
 #include "Bullet.h"
 #include <Windows.h>
 #include <Xinput.h>
 
-class Player : public CompE
+class Player : public LivingE
 {
 public:
 	XINPUT_GAMEPAD gPad;
@@ -15,10 +15,6 @@ public:
 
 	// Getters and setters:
 	GLfloat getInherentF();
-
-	GLfloat health;
-
-	GLboolean death;
 
 protected:
 	GLfloat inherentForce;

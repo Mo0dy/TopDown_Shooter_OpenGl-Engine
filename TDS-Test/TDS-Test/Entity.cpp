@@ -1,54 +1,43 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 
-Entity::Entity() : pos(glm::vec2(0)), angle(0), color(1), etex(Etex()) {
+Entity::Entity() {
 }
-Entity::Entity(glm::vec2 position) : pos(position), angle(0), color(1), etex(Etex()) {
+Entity::Entity(glm::vec2 position) : pos(position) {
 }
-Entity::Entity(glm::vec2 position, Etex etex) : pos(position), angle(0), color(1), etex(etex) {
+Entity::Entity(glm::vec2 position, Texture2D texture) : pos(position), tex(texture) {
 }
-Entity::Entity(glm::vec2 position, GLfloat angle, Etex etex) : pos(position), angle(angle), color(1), etex(etex) {
+Entity::Entity(glm::vec2 position, GLfloat angle, Texture2D texture) : pos(position), angle(angle), tex(texture) {
 }
-Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position), angle(0), color(1), ani(aniName), etex(ani.getETex(0)) {
-	Animations[aniName] = ani;
+Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position) {
+	animations[aniName] = ani;
 }
-Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle), color(1), ani(aniName), etex(ani.getETex(0)) {
-	Animations[aniName] = ani;
+Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle) {
+	animations[aniName] = ani;
 }
 
 Entity::~Entity()
 {
 }
 
-GLboolean Entity::updateE(GLfloat dt) {
-	if (Animations[ani].getSize() > 0) {
-		updateAni();
+GLboolean Entity::UpdateE(GLfloat dt) {
+	if (animations[ani].getSize() > 0) {
+		UpdateAni();
 	}
-	updateHitboxes();
 	return GL_FALSE; // static entities never move
 }
 
-GLboolean Entity::checkForErase(glm::vec2 levelSize) {
-	if (pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
-		return GL_TRUE;
-	}
-	else {
-		return GL_FALSE;
+void Entity::UpdateAni() {
+	if (animations[ani].getState()) {
+		tex = *animations[ani].getETex().tex;
+		hitboxes = animations[ani].getETex().absHitboxes;
 	}
 }
 
-void Entity::setColor(glm::vec3 color) {
-	this->color = color;
-}
+// Getters and setters
+void Entity::SetColor(glm::vec3 color) { this->color = color; }
 
-void Entity::updateAni() {
-	if (Animations[ani].getState()) {
-		etex = Animations[ani].getETex();
-		updateHitboxes();
-	}
-}
-
-void Entity::updateHitboxes() {
-	etex.updateAbsHitboxes();
-	Hitboxes = etex.getAbsHitboxes();
-}
+GLboolean Entity::GetErase() { return erase; }
+glm::vec2 Entity::GetPos() { return pos; }
+GLfloat Entity::GetAngle() { return angle; }
+glm::vec3 Entity::GetColor() { return color;  }

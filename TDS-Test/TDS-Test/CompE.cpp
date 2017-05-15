@@ -21,19 +21,19 @@ void CompE::updateSupE() {
 
 void CompE::combineHitboxes() {
 	// Maybe this should only be done if changes happen?
-	Hitboxes.clear();
+	hitboxes.clear();
 	for (auto const& x : subEntities) {
-		for (Hitbox *h : x.second->Hitboxes) {
-			this->Hitboxes.push_back(h);
-			this->Hitboxes.back()->pos = x.second->rPos;
-			this->Hitboxes.back()->angle = x.second->rAngle; // <- problem is here !!!!
+		for (Hitbox *h : x.second->hitboxes) {
+			this->hitboxes.push_back(h);
+			this->hitboxes.back()->pos = x.second->rPos;
+			this->hitboxes.back()->angle = x.second->rAngle; // <- problem is here !!!!
 		}
 	}
 }
 
 void CompE::updateAni() {
 	for (auto const& x : subEntities) {
-		x.second->updateAni();
+		x.second->UpdateAni();
 	}
 }
 

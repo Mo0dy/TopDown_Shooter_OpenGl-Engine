@@ -22,9 +22,9 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	turnSpeed = 10;
 
 	//Set animation
-	Animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
-	Animations["Flying"].animationTime = 1;
-	Animations["Flying"].startAnimation();
+	animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
+	animations["Flying"].animationTime = 1;
+	animations["Flying"].startAnimation();
 
 	ani = "Flying";
 
@@ -56,18 +56,18 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 		}
 
 		//Find the closest player to attack
-		Player* gPlayer = Game::Players[0];
+		Player* gPlayer = Game::sPlayers[0];
 
-		for (int i = 0; i < Game::Players.size(); i++) {
-			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::Players[i]->pos)) {
-				gPlayer = Game::Players[i];
+		for (int i = 0; i < Game::sPlayers.size(); i++) {
+			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::sPlayers[i]->pos)) {
+				gPlayer = Game::sPlayers[i];
 			}
 		}
 
 		glm::vec2 movDir = glm::normalize(gPlayer->pos - pos) * movForce;
 
 		//Drones all hate eachother and try to stay away from other enemies
-		for (Enemy *e : Game::Enemies) {
+		for (Enemy *e : Game::sEnemies) {
 			if (glm::distance(pos, e->pos) > 0.4) {
 				movDir += glm::normalize(pos - e->pos) * swarmFactor / glm::pow(glm::distance(pos, e->pos), 2);
 			}

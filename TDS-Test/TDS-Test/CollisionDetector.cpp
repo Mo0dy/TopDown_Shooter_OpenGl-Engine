@@ -24,7 +24,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
 	if (glm::distance(dE->pos, sE->pos) <= (glm::length(sE->etex.getTexSize()) + glm::length(dE->etex.getTexSize())) / 2.0f) {
-		for (Hitbox* mEH : dE->Hitboxes) {
+		for (Hitbox* mEH : dE->hitboxes) {
 
 			mymEH = *mEH;
 			mymEH.pos = Util::rotationMat2(dE->angle) * mymEH.pos + dE->pos;
@@ -51,7 +51,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 			Axis[0] = Util::rotationMat2(mymEH.angle) * glm::vec2(1, 0);
 			Axis[1] = Util::rotationMat2(mymEH.angle) * glm::vec2(0, 1);
 
-			for (Hitbox* cEH : sE->Hitboxes) {
+			for (Hitbox* cEH : sE->hitboxes) {
 				// Calculation WCS position of the Hitbox
 				mycEH = *cEH;
 				mycEH.pos = Util::rotationMat2(sE->angle) * mycEH.pos + sE->pos;

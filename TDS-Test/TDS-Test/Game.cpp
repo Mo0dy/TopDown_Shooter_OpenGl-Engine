@@ -9,12 +9,14 @@
 #include "E_Jelly.h"
 #include "LevelBanana.h"
 
-std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
-std::vector<DynE*> Game::dynEntities; // a vector that includes all neutral
-std::vector<Enemy*> Game::Enemies;
-std::vector<Player*> Game::Players;
-std::vector<Bullet*> Game::Bullets;
-std::vector<DynE*> Game::movedE;
+std::vector<Entity*> Game::sStatEntities; // a vector that includes all static entities
+std::vector<DynE*> Game::sDynEntities; // a vector that includes all neutral
+std::vector<Enemy*> Game::sEnemies;
+std::vector<Player*> Game::sPlayers;
+std::vector<Bullet*> Game::sBullets;
+std::vector<DynE*> Game::sMovedE;
+
+std::vector<Entity*> Game::sSpawnE;
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -100,8 +102,8 @@ void Game::ProcessInput(GLfloat dt) {
 			controlledPlayers++;
 		}
 
-		if (controlledPlayers > Players.size()) {
-			controlledPlayers = Players.size();
+		if (controlledPlayers > sPlayers.size()) {
+			controlledPlayers = sPlayers.size();
 		}
 
 		for (int i = 0; i < controlledPlayers; i++) {
@@ -123,7 +125,7 @@ void Game::ProcessInput(GLfloat dt) {
 		}
 
 		for (GLuint i = 0; i < controlledPlayers; i++) {
-			Players[i]->gPad = cState[i]->Gamepad;
+			sPlayers[i]->gPad = cState[i]->Gamepad;
 		}
 	}
 
@@ -195,20 +197,20 @@ void Game::Update(GLfloat dt) {
 	LOG("FPS = " << 1 / dt);
 #endif //LOG_FPS
 
-	camera->updatePos(Width, Height, Players);
+	camera->updatePos(Width, Height, sPlayers);
 
-	for (Player *e : Players) {
+	for (Player *e : sPlayers) {
 		e->updateE(dt);
 	}
-	for (Bullet *e : Bullets) {
+	for (Bullet *e : sBullets) {
 		e->updateE(dt);
 	}
-	for (Enemy *e : Enemies) {
+	for (Enemy *e : sEnemies) {
 		e->updateE(dt);
 	}
-	for (DynE *e : dynEntities) {
+	for (DynE *e : sDynEntities) {
 		if (e->updateE(dt)) {
-			movedE.push_back(e);
+			sMovedE.push_back(e);
 		}
 	}
 	level->updateL(dt);
@@ -216,46 +218,46 @@ void Game::Update(GLfloat dt) {
 	// Collision detection
 	GLfloat penDepth;
 	glm::vec2 colAxis;
-	for (int i = 0; i < Players.size(); i++) {
-		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
-				Players[i]->ColWithDyn(e, penDepth, colAxis);
-				e->ColWithPlayer(Players[i], penDepth, -colAxis);
+	for (int i = 0; i < sPlayers.size(); i++) {
+		for (Enemy *e : sEnemies) {
+			if (colDec->doCCheck(sPlayers[i], e, &penDepth, &colAxis)) {
+				sPlayers[i]->ColWithDyn(e, penDepth, colAxis);
+				e->ColWithPlayer(sPlayers[i], penDepth, -colAxis);
 			}
 		}
-		for (int j = i + 1; j < Players.size(); j++) {
-			if (colDec->doCCheck(Players[i], Players[j], &penDepth, &colAxis)) {
-				Players[i]->ColWithDyn(Players[j], penDepth, colAxis);
-				Players[j]->ColWithDyn(Players[i], penDepth, -colAxis);
+		for (int j = i + 1; j < sPlayers.size(); j++) {
+			if (colDec->doCCheck(sPlayers[i], sPlayers[j], &penDepth, &colAxis)) {
+				sPlayers[i]->ColWithDyn(sPlayers[j], penDepth, colAxis);
+				sPlayers[j]->ColWithDyn(sPlayers[i], penDepth, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
-				Players[i]->ColWithStat(e, penDepth, colAxis);
+			if (colDec->doCCheck(sPlayers[i], e, &penDepth, &colAxis)) {
+				sPlayers[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
-		if (colDec->doCCheck(Players[i], &level->background, &penDepth, &colAxis)) {
-			Players[i]->ColWithStat(&level->background, penDepth, colAxis);
+		if (colDec->doCCheck(sPlayers[i], &level->background, &penDepth, &colAxis)) {
+			sPlayers[i]->ColWithStat(&level->background, penDepth, colAxis);
 		}
 	}
 
 	// We should probably only check for all Enemies that moved but for now this is fine
-	for (int i = 0; i < Enemies.size(); i++) {
-		for (int j = i + 1; j < Enemies.size(); j++) {
-			if (colDec->doCCheck(Enemies[i], Enemies[j], &penDepth, &colAxis)) {
-				Enemies[i]->ColWithDyn(Enemies[j], penDepth, colAxis);
-				Enemies[j]->ColWithDyn(Enemies[i], penDepth, -colAxis);
+	for (int i = 0; i < sEnemies.size(); i++) {
+		for (int j = i + 1; j < sEnemies.size(); j++) {
+			if (colDec->doCCheck(sEnemies[i], sEnemies[j], &penDepth, &colAxis)) {
+				sEnemies[i]->ColWithDyn(sEnemies[j], penDepth, colAxis);
+				sEnemies[j]->ColWithDyn(sEnemies[i], penDepth, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(Enemies[i], e, &penDepth, &colAxis)) {
-				Enemies[i]->ColWithStat(e, penDepth, colAxis);
+			if (colDec->doCCheck(sEnemies[i], e, &penDepth, &colAxis)) {
+				sEnemies[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
 
-	for (Bullet *b : Bullets) {
-		for (Enemy *e : Enemies) {
+	for (Bullet *b : sBullets) {
+		for (Enemy *e : sEnemies) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithEnemy(e);
 				e->ColWithDyn(b, 0, -colAxis);
@@ -268,7 +270,7 @@ void Game::Update(GLfloat dt) {
 		}
 	}
 
-	movedE.clear();
+	sMovedE.clear();
 
 	checkForErase();
 }
@@ -276,19 +278,19 @@ void Game::Update(GLfloat dt) {
 void Game::Render() {
 	// combine this in one function (by combining all vectors)
 	renderer->RenderSprite(level->background, *camera);
-	for (Entity* e : statEntities) {
+	for (Entity* e : sStatEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : Bullets) {
+	for (Entity* e : sBullets) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : dynEntities) {
+	for (Entity* e : sDynEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : Enemies) {
+	for (Entity* e : sEnemies) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Player* p : Players) {
+	for (Player* p : sPlayers) {
 		for (std::string s : p->renderList) {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
@@ -310,58 +312,56 @@ void Game::reset() {
 }
 
 void Game::checkForErase() {
-	for (int i = 0; i < Bullets.size(); i++) {
-		if (Bullets[i]->checkForErase(level->size)) {
-			delete Bullets[i];
-			Bullets.erase(Bullets.begin() + i);
+	for (int i = 0; i < sBullets.size(); i++) {
+		if (sBullets[i]->checkForErase(level->size)) {
+			delete sBullets[i];
+			sBullets.erase(sBullets.begin() + i);
 		}
 	}
-	for (int i = 0; i < Players.size(); i++) {
-		if (Players[i]->checkForErase(level->size)) {
-			Players[i]->pos = glm::vec2(0);
-			Players[i]->death = GL_TRUE;
-		}
-		if (Players[i]->death && Players.size() > 1) {
-			delete Players[i];
-			Players.erase(Players.begin() + i);
+	for (int i = 0; i < sPlayers.size(); i++) {
+		if (sPlayers[i]->checkForErase(level->size)) {
+			delete sPlayers[i];
+			sPlayers.erase(sPlayers.begin() + i);
 		}
 	}
-	for (int i = 0; i < dynEntities.size(); i++) {
-		if (dynEntities[i]->checkForErase(level->size)) {
-			delete dynEntities[i];
-			dynEntities.erase(dynEntities.begin() + i);
+	for (int i = 0; i < sDynEntities.size(); i++) {
+		if (sDynEntities[i]->checkForErase(level->size)) {
+			delete sDynEntities[i];
+			sDynEntities.erase(sDynEntities.begin() + i);
 		}
 	}
-	for (int i = 0; i < Enemies.size(); i++) {
-		if (Enemies[i]->checkForErase(level->size)) {
-			delete Enemies[i];
-			Enemies.erase(Enemies.begin() + i);
+	for (int i = 0; i < sEnemies.size(); i++) {
+		if (sEnemies[i]->checkForErase(level->size)) {
+			delete sEnemies[i];
+			sEnemies.erase(sEnemies.begin() + i);
 		}
 	}
 }
 
 void Game::deleteEntities() {
-	for (Entity *e : statEntities) {
+	for (Entity *e : sStatEntities) {
 		delete e;
 	}
-	for (Entity *e : dynEntities) {
+	for (Entity *e : sDynEntities) {
 		delete e;
 	}
-	for (Entity *e : Players) {
+	for (Entity *e : sPlayers) {
 		delete e;
 	}
-	for (Entity *e : Bullets) {
+	for (Entity *e : sBullets) {
 		delete e;
 	}
-	for (Entity *e : Enemies) {
+	for (Entity *e : sEnemies) {
 		delete e;
 	}
 }
 
 void Game::clearEntities() {
-	Players.clear();
-	statEntities.clear();
-	dynEntities.clear();
-	Bullets.clear();
-	Enemies.clear();
+	sPlayers.clear();
+	sStatEntities.clear();
+	sDynEntities.clear();
+	sBullets.clear();
+	sEnemies.clear();
+	sMovedE.clear();
+	sSpawnE.clear();
 }

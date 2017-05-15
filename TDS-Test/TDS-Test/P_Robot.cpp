@@ -43,7 +43,7 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	subEntities["tracks"]->updateHitboxes();
 	subEntities["body"]->updateHitboxes();
 
-	subEntities["body"]->Animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
+	subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
 
 	state = STOPPING;
 
@@ -153,20 +153,20 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
-		subEntities["body"]->Animations["ShootSmallB"].animationTime = shootDelay;
-		subEntities["body"]->Animations["ShootSmallB"].startAnimation();
+		subEntities["body"]->animations["ShootSmallB"].animationTime = shootDelay;
+		subEntities["body"]->animations["ShootSmallB"].startAnimation();
 		subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
-		Game::Bullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
-		Game::Bullets.back()->whitelist.push_back(this);
+		Game::sBullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
+		Game::sBullets.back()->whitelist.push_back(this);
 	}
 }
 
 void Robot::shootBigB() {
 	if (lastShotBigB > shootDelayBigB) {
 		lastShotBigB = 0;
-		Game::Bullets.push_back(new EnergyBulletBig(pos, subEntities["body"]->angle));
-		Game::Bullets.back()->whitelist.push_back(this);
+		Game::sBullets.push_back(new EnergyBulletBig(pos, subEntities["body"]->angle));
+		Game::sBullets.back()->whitelist.push_back(this);
 	}
 }
 

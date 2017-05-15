@@ -1,13 +1,11 @@
 #pragma once
-#include "Player.h"
+#include "LivingE.h"
 
-class Enemy: public DynE
+class Enemy: public LivingE
 {
 public:
 	Enemy(glm::vec2 position);
 	~Enemy();
-	
-	GLfloat health;
 
 	void ColWithPlayer(class Player* player, GLfloat colDepth, glm::vec2 colAxis);
 
@@ -17,9 +15,6 @@ public:
 	GLfloat attackSpeed;
 	GLboolean attacking;
 	GLfloat damage;
-
-	GLfloat maxHealth;
-	GLboolean death;
 
 	void setBodyAngle(GLfloat dt);
 	GLfloat movForce;

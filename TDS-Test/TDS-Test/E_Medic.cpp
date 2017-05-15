@@ -50,10 +50,10 @@ GLboolean E_Medic::updateE(GLfloat dt)
 		}
 		
 		//Decide which player to attack (aka who is closest)
-		Player* gPlayer = Game::Players[0];
-		for (int i = 0; i < Game::Players.size(); i++) {
-			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::Players[i]->pos)) {
-				gPlayer = Game::Players[i];
+		Player* gPlayer = Game::sPlayers[0];
+		for (int i = 0; i < Game::sPlayers.size(); i++) {
+			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::sPlayers[i]->pos)) {
+				gPlayer = Game::sPlayers[i];
 			}
 		}
 		

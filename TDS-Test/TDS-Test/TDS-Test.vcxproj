@@ -138,8 +138,10 @@
     <ClInclude Include="E_Jelly.h" />
     <ClInclude Include="E_Medic.h" />
     <ClInclude Include="E_MotherDrone.h" />
+    <ClInclude Include="HitObject.h" />
     <ClInclude Include="LevelBanana.h" />
     <ClInclude Include="LevelTest.h" />
+    <ClInclude Include="LivingE.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="StaticEntity.h" />
@@ -168,8 +170,10 @@
     <ClCompile Include="E_Jelly.cpp" />
     <ClCompile Include="E_Medic.cpp" />
     <ClCompile Include="E_MotherDrone.cpp" />
+    <ClCompile Include="HitObject.cpp" />
     <ClCompile Include="LevelBanana.cpp" />
     <ClCompile Include="LevelTest.cpp" />
+    <ClCompile Include="LivingE.cpp" />
     <ClCompile Include="P_Robot.cpp" />
     <ClCompile Include="DynE.cpp" />
     <ClCompile Include="Entity.cpp" />

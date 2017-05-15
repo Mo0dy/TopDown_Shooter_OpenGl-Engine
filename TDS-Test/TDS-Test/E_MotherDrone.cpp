@@ -3,7 +3,7 @@
 //Constructor
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
 {
-	Animations[ani].enforceWidth(5);
+	animations[ani].enforceWidth(5);
 	maxHealth = 4000;
 	health = maxHealth;
 	movForce = 1500;
@@ -41,7 +41,7 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 		glm::mat2 rot90DegreesM = Util::rotationMat2(90);
 
 		//Please replace this comment for this for loop, I'm just not sure what happens here.
-		for (Player *p : Game::Players) {
+		for (Player *p : Game::sPlayers) {
 			movDir += glm::normalize(rot90DegreesM * (pos - p->pos));
 			movDir += glm::normalize(p->pos - pos) * glm::pow(glm::distance(p->pos, pos) - 20, 3) * 0.2f;
 		}
