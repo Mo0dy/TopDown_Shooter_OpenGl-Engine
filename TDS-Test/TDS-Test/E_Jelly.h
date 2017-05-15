@@ -5,7 +5,7 @@
 static const GLfloat JELLY_START_SIZE = 1;
 static const GLfloat MIN_JELLY_SIZE = 0.5;
 static const GLfloat MAX_INIT_JUMP_VELOCITY = 4;
-static const GLfloat MAX_HEALTH = 500;
+static const GLfloat MAX_HEALTH = 100;
 
 class E_Jelly : public Enemy
 {

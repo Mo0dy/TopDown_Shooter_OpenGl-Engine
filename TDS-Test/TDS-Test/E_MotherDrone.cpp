@@ -1,10 +1,10 @@
 #include "E_MotherDrone.h"
 
 //Constructor
-E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position)
+E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position), lastSpawn(9999), spawning(GL_TRUE), spawnSpeed(3.5)
 {
-	animations[ani].enforceWidth(5);
-	maxHealth = 4000;
+	Animations[ani].enforceWidth(5);
+	maxHealth = 2500;
 	health = maxHealth;
 	movForce = 1500;
 	mass = 300;
@@ -27,6 +27,7 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 			death = GL_TRUE;
 			return GL_FALSE;
 		}
+		lastSpawn += dt;
 		lastAttack += dt;
 
 		updateAni();
@@ -34,6 +35,11 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 		//Check if attacking is possible
 		if (!attacking && lastAttack > attackSpeed) {
 			attacking = GL_TRUE;
+		}
+
+		//Check if ready to spawn new drones
+		if (lastSpawn > spawnSpeed) {
+			spawning = GL_TRUE;
 		}
 
 		glm::vec2 movDir = glm::vec2(0);

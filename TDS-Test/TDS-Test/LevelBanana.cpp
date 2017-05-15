@@ -3,6 +3,7 @@
 #include "E_MotherDrone.h"
 #include "StaticEntity.h"
 #include "E_Jelly.h"
+#include "E_Medic.h"
 
 void LevelBanana::loadLevelBanana() {
 	ResourceManager::LoadEtex("Textures", "BananaIsland", ".jpg", GL_TRUE, "LevelBanana_T_Island", GL_FALSE);
@@ -35,9 +36,13 @@ void LevelBanana::updateL(GLfloat dt) {
 		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::sEnemies[i]);
 		if (testMDrone != NULL) {
 			if (!testMDrone->death) {
-				if (Game::sEnemies.size() < Game::sPlayers.size() * 10) {
+				if (Game::sEnemies.size() < Game::sPlayers.size() * 12) {
 					if (glm::length(Game::sEnemies[0]->getVel()) > 0) {
-						Game::sEnemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+						if (testMDrone->spawning) {
+							Game::sEnemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+							testMDrone->spawning = GL_FALSE;
+							testMDrone->lastSpawn = 0;
+						}
 					}
 				}
 			}
@@ -49,7 +54,7 @@ void LevelBanana::updateL(GLfloat dt) {
 		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::sEnemies[i]);
 		if (testJelly != NULL) {
 			if (testJelly->death) {
-				if (testJelly->jellySize > 0.4)
+				if (testJelly->jellySize >= 0.5)
 				{
 					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
 					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
@@ -142,6 +147,9 @@ void LevelBanana::spawnNextWave() {
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
 		Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, 1));
+	}
+	for (int i = 0; i < WAVES[wavecounter][MEDIC]; i++) {
+		Game::Enemies.push_back(new E_Medic(wave_SpawnPos));
 	}
 	wavecounter++;
 }

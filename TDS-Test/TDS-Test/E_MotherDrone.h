@@ -11,5 +11,9 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 	//void updateAni();
+
+	GLfloat lastSpawn;
+	GLboolean spawning;
+	GLfloat spawnSpeed;
 };
 

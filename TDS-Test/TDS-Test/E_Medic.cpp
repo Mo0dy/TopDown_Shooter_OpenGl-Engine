@@ -15,17 +15,20 @@ E_Medic::E_Medic(glm::vec2 position) : Enemy(position)
 	updateHitboxes();
 
 	//Very low health, one shot will be more than enough to kill
-	maxHealth = 40;
+	maxHealth = 50;
 	health = maxHealth;
 
 	dynFricCoeff = -2.5;
 
-	damage = 500;
-	attackSpeed = 0;
+	damage = 400;
+	healing = 1000;
+	attackSpeed = 1;
 	mass = 7.5;
-	movForce = 200;
+	movForce = 150;
 
-	turnSpeed = 1;
+	turnSpeed = 5;
+
+	state = MOVING;
 }
 
 
@@ -39,14 +42,23 @@ GLboolean E_Medic::updateE(GLfloat dt)
 	if (!death) {
 		//Check if it died
 		if (health <= 0) {
+			if (attacking) 
+			{
+				for (int i = 0; i < Game::Players.size(); i++)
+				{
+					Game::Players[i]->health += healing;
+				}
+			}
 			death = GL_TRUE;
 			return GL_FALSE;
 		}
-		setColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
+
+		//setColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
 
 		//Check if this enemy has attacked, if it has, kill it.
 		if (!attacking) {
-			
+			death = GL_TRUE;
+			health = 0;
 		}
 		
 		//Decide which player to attack (aka who is closest)
