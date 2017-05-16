@@ -15,20 +15,20 @@ public:
 
 	virtual ~DynE();
 
-	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
+	void AddForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
 
-	virtual GLboolean updateE(GLfloat dt); // call this function every update. returns true if moved
+	virtual GLboolean UpdateE(GLfloat dt); // call this function every update. returns true if moved
 
 	// Should be private but its debugging
 
 	
-	glm::vec2 getVel();
-	GLfloat getAbsVel();
-	GLfloat getMass();
+	glm::vec2 GetVel();
+	GLfloat GetAbsVel();
+	GLfloat GetMass();
 
 protected:
-	virtual void updatePos(GLfloat dt);
-	virtual GLfloat calcMovAngle(GLfloat currAngle, glm::vec2 goalVec);
+	virtual void UpdatePos(GLfloat dt);
+	virtual GLfloat CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec);
 
 	State state;
 	glm::vec2 vel; // velocity in m/s
@@ -43,6 +43,6 @@ protected:
 	glm::vec2 colVel;
 
 	// Utility functions
-	glm::vec2 fricRes(); // calculates friction
-	glm::vec2 airRes(); // calculates air resistance
+	glm::vec2 FricRes(); // calculates friction
+	glm::vec2 AirRes(); // calculates air resistance
 };

@@ -8,9 +8,9 @@ LivingE::~LivingE()
 {
 }
 
-void LivingE::GetAttacked(GLfloat damage) {
+void LivingE::AddDamage(GLfloat damage) {
 	health -= damage;
 }
 
 // Getters and setters
-GLboolean LivingE::getDeath() { return death;  }
+GLboolean LivingE::GetDeath() { return death;  }

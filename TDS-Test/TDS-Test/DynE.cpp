@@ -15,12 +15,12 @@ DynE::~DynE()
 {
 }
 
-GLboolean DynE::updateE(GLfloat dt) {
-	updatePos(dt);
+GLboolean DynE::UpdateE(GLfloat dt) {
+	UpdatePos(dt);
 	return glm::length(vel) > 0;
 }
 
-void DynE::updatePos(GLfloat dt) {
+void DynE::UpdatePos(GLfloat dt) {
 	if (collision) {
 #ifdef DEBUG_FORCES
 		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
@@ -31,9 +31,9 @@ void DynE::updatePos(GLfloat dt) {
 	}
 
 	switch (state) {
-	case MOVING: addForce(airRes());
+	case MOVING: AddForce(AirRes());
 		break;
-	case STOPPING: addForce(fricRes() + airRes());
+	case STOPPING: AddForce(FricRes() + AirRes());
 	}
 
 	glm::vec2 dV = dt * force / mass;
@@ -56,7 +56,7 @@ void DynE::updatePos(GLfloat dt) {
 }
 
 // Utitlity functions
-glm::vec2 DynE::fricRes() {
+glm::vec2 DynE::FricRes() {
 	if (glm::length(vel) > 0) {
 		return glm::normalize(vel) * dynFricCoeff * mass * Util::GRAV_ACC; // Dynamic Friction
 	}
@@ -70,14 +70,14 @@ glm::vec2 DynE::fricRes() {
 	}
 }
 
-glm::vec2 DynE::airRes() {
+glm::vec2 DynE::AirRes() {
 	if (glm::length(vel) > 0) {
 		return glm::normalize(vel) * glm::pow(glm::length(vel), 2) * airFricCoeff;
 	}
 	return glm::vec2(0, 0);
 }
 
-GLfloat DynE::calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
+GLfloat DynE::CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
 	goalVec = glm::normalize(goalVec);
 	GLfloat goalAngle;
 	if (goalVec.x != 0) {
@@ -106,7 +106,7 @@ GLfloat DynE::calcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
 }
 
 // Getters and Setters
-void DynE::addForce(glm::vec2 f) { force += f; }
-glm::vec2 DynE::getVel() { return vel;  }
-GLfloat DynE::getAbsVel() { return glm::length(vel);  }
-GLfloat DynE::getMass() { return mass; }
+void DynE::AddForce(glm::vec2 f) { force += f; }
+glm::vec2 DynE::GetVel() { return vel;  }
+GLfloat DynE::GetAbsVel() { return glm::length(vel);  }
+GLfloat DynE::GetMass() { return mass; }
