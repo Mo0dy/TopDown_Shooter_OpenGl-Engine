@@ -19,9 +19,7 @@ public:
 
 	virtual GLboolean UpdateE(GLfloat dt); // call this function every update. returns true if moved
 
-	// Should be private but its debugging
-
-	
+	// Should be private but its debugging	
 	glm::vec2 GetVel();
 	GLfloat GetAbsVel();
 	GLfloat GetMass();
