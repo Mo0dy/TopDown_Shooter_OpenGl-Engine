@@ -76,7 +76,7 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 		addForce(glm::normalize(movDir) * movForce);
 		updatePos(dt);
 		color = glm::vec3(1.0f, health / maxHealth, 1.0f);
-		setBodyAngle(dt);
+		SetBodyAngle(dt);
 
 		return glm::length(vel) > 0;
 	}

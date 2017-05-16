@@ -137,7 +137,7 @@ GLboolean Robot::updateE(GLfloat dt) {
 		}
 
 		setTrackAngle(dt);
-		setBodyAngle(dt);
+		SetBodyAngle(dt);
 
 		updatePos(dt);
 
@@ -170,7 +170,7 @@ void Robot::shootBigB() {
 	}
 }
 
-void Robot::setBodyAngle(GLfloat dt) {
+void Robot::SetBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
 	subEntities["body"]->rAngle = glm::mod<GLfloat>(subEntities["body"]->rAngle, 2 * glm::pi<GLfloat>());
 	GLfloat dA = calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);

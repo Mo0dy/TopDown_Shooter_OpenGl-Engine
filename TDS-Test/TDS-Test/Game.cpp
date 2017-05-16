@@ -274,7 +274,7 @@ void Game::Update(GLfloat dt) {
 
 	sMovedE.clear();
 
-	checkForErase();
+	CheckForErase();
 }
 
 void Game::Render() {
@@ -313,27 +313,27 @@ void Game::reset() {
 	level->reset();
 }
 
-void Game::checkForErase() {
+void Game::CheckForErase() {
 	for (int i = 0; i < sBullets.size(); i++) {
-		if (sBullets[i]->checkForErase(level->size)) {
+		if (sBullets[i]->CheckForErase(level->size)) {
 			delete sBullets[i];
 			sBullets.erase(sBullets.begin() + i);
 		}
 	}
 	for (int i = 0; i < sPlayers.size(); i++) {
-		if (sPlayers[i]->checkForErase(level->size)) {
+		if (sPlayers[i]->CheckForErase(level->size)) {
 			delete sPlayers[i];
 			sPlayers.erase(sPlayers.begin() + i);
 		}
 	}
 	for (int i = 0; i < sDynEntities.size(); i++) {
-		if (sDynEntities[i]->checkForErase(level->size)) {
+		if (sDynEntities[i]->CheckForErase(level->size)) {
 			delete sDynEntities[i];
 			sDynEntities.erase(sDynEntities.begin() + i);
 		}
 	}
 	for (int i = 0; i < sEnemies.size(); i++) {
-		if (sEnemies[i]->checkForErase(level->size)) {
+		if (sEnemies[i]->CheckForErase(level->size)) {
 			delete sEnemies[i];
 			sEnemies.erase(sEnemies.begin() + i);
 		}

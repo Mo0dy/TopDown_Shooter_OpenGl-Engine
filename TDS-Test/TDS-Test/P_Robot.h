@@ -37,7 +37,7 @@ private:
 
 	MOV_STATE movState;
 
-	void setBodyAngle(GLfloat dt);
+	void SetBodyAngle(GLfloat dt);
 	void setTrackAngle(GLfloat dt);
 
 	GLfloat bodyTurnSpeed;

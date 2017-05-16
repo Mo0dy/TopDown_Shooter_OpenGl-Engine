@@ -26,7 +26,7 @@ EnergyBulletBig::~EnergyBulletBig()
 {
 }
 
-GLboolean EnergyBulletBig::checkForErase(glm::vec2 levelSize) {
+GLboolean EnergyBulletBig::CheckForErase(glm::vec2 levelSize) {
 	if (pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
 		return GL_TRUE;
 	}

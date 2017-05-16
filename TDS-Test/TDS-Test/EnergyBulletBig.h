@@ -10,6 +10,6 @@ public:
 
 	GLboolean updateE(GLfloat dt);
 
-	GLboolean checkForErase(glm::vec2 levelSize);
+	GLboolean CheckForErase(glm::vec2 levelSize);
 };
 

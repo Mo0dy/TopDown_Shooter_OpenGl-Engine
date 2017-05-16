@@ -10,7 +10,7 @@ Enemy::~Enemy()
 }
 
 //Checks if this is dead or out of bounds
-GLboolean Enemy::checkForErase(glm::vec2 levelSize) {
+GLboolean Enemy::CheckForErase(glm::vec2 levelSize) {
 	if (death || pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
 		return GL_TRUE;
 	}
@@ -28,7 +28,7 @@ void Enemy::ColWithPlayer(Player* player, GLfloat colDepth, glm::vec2 colAxis) {
 	lastAttack = 0;
 }
 
-void Enemy::setBodyAngle(GLfloat dt) {
+void Enemy::SetBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
 	GLfloat dA = calcMovAngle(angle, vel);
 	if (abs(dA) > 0) {

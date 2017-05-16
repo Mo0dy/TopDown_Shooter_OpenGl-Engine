@@ -22,7 +22,7 @@ EnergyBullet::~EnergyBullet()
 {
 }
 
-GLboolean EnergyBullet::checkForErase(glm::vec2 levelSize) {
+GLboolean EnergyBullet::CheckForErase(glm::vec2 levelSize) {
 	if (collision || pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
 		return GL_TRUE;
 	}

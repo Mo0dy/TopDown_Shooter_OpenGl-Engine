@@ -97,7 +97,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 			glm::vec2 movDir = gPlayer->pos - pos;
 
 			addForce(glm::normalize(movDir) * movForce);
-			setBodyAngle(dt);
+			SetBodyAngle(dt);
 		}
 		else {
 			state = MOVING;
