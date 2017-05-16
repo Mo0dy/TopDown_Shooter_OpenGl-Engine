@@ -37,8 +37,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	subEntities["body"]->etex = ResourceManager::GetEtex("U_Bot");
 	subEntities["tracks"]->etex.fitHitboxToTex();
 	subEntities["body"]->etex.fitHitboxToTex();
-	setSubESize(1.05, "tracks");
-	setSubESize(1.5, "body");
+	SetSubESize(1.05, "tracks");
+	SetSubESize(1.5, "body");
 
 	subEntities["tracks"]->updateHitboxes();
 	subEntities["body"]->updateHitboxes();
@@ -49,10 +49,10 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	shootDelay = 0.1;
 	shootDelayBigB = 5;
-	setColor(glm::vec3(1.0f));
+	SetColor(glm::vec3(1.0f));
 
-	renderList.push_back("tracks");
-	renderList.push_back("body");
+	renderOrder.push_back("tracks");
+	renderOrder.push_back("body");
 
 	lastShot = 100;
 	lastShotBigB = 100;
@@ -69,9 +69,9 @@ GLboolean Robot::updateE(GLfloat dt) {
 			return GL_FALSE;
 		}
 
-		updateAni();
+		UpdateAni();
 
-		setColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
+		SetColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
 
 		movState = NORMAL;
 		state = STOPPING;
@@ -141,8 +141,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 		updatePos(dt);
 
-		updateSupE();
-		combineHitboxes();
+		UpdateSubE();
+		CombineHitboxes();
 
 		movDir = glm::vec2(0);
 		bodyDir = glm::vec2(0);

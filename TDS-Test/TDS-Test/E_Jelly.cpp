@@ -20,7 +20,7 @@ E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 	dynFricCoeff = -2.5;
 
 	//Set color to RGB 13, 255, 26.
-	setColor(glm::vec3(0, 1, 0.2));
+	SetColor(glm::vec3(0, 1, 0.2));
 
 	//Health is higher for a bigger jelly.
 	maxHealth = MAX_HEALTH * glm::pow(size / JELLY_START_SIZE, 2);
@@ -57,7 +57,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 			return GL_FALSE;
 		}
 		lastJump += dt;
-		setColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
+		SetColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
 
 		//Check if attack is possible
 		lastAttack += dt;

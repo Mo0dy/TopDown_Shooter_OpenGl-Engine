@@ -10,16 +10,15 @@ public:
 	virtual ~CompE();
 
 	std::map<std::string, SubE*> subEntities;
-	std::vector<std::string> renderList;
+	std::vector<std::string> renderOrder;
 
-	virtual void updateSupE();
-	virtual void combineHitboxes();
-	void updateAni();
+	virtual void UpdateSubE();
+	virtual void CombineHitboxes();
+	void UpdateAni();
 
 	// Getters and setter
-	void setColor(glm::vec3 color);
-	void setSubESize(glm::vec2 size, std::string name);
-	void setSubESize(GLfloat width, std::string name);
-	std::map<std::string, SubE*> getSubE();
+	void SetColor(glm::vec3 color);
+	void SetSubESize(glm::vec2 size, std::string name);
+	void SetSubESize(GLfloat width, std::string name);
+	std::map<std::string, SubE*> GetSubE();
 };
-

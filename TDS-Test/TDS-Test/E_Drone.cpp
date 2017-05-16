@@ -48,7 +48,7 @@ GLboolean E_Drone::updateE(GLfloat dt) {
 			return GL_FALSE;
 		}
 		lastAttack += dt;
-		updateAni();
+		UpdateAni();
 
 		//Check if attacking is possible
 		if (!attacking && lastAttack > attackSpeed) {

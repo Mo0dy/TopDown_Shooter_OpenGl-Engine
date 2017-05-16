@@ -30,7 +30,7 @@ GLboolean E_MotherDrone::updateE(GLfloat dt) {
 		lastSpawn += dt;
 		lastAttack += dt;
 
-		updateAni();
+		UpdateAni();
 
 		//Check if attacking is possible
 		if (!attacking && lastAttack > attackSpeed) {

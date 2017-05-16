@@ -293,7 +293,7 @@ void Game::Render() {
 		renderer->RenderSprite(*e, *camera);
 	}
 	for (Player* p : sPlayers) {
-		for (std::string s : p->renderList) {
+		for (std::string s : p->renderOrder) {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
 	}
