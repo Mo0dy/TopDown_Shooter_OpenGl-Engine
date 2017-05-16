@@ -7,6 +7,6 @@ Player::~Player()
 {
 }
 
-GLfloat Player::getInherentF() {
+GLfloat Player::GetInherentF() {
 	return inherentForce;
 }
