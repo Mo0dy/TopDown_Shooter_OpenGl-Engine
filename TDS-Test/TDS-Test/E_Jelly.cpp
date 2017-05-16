@@ -38,7 +38,7 @@ E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 	jumpTime = 1;
 	lastJump = 0;
 	jumping = GL_FALSE;
-	state = MOVING;
+	state = NO_DYN_FRIC;
 }
 
 //Destructor
@@ -47,7 +47,7 @@ E_Jelly::~E_Jelly()
 }
 
 //Update
-GLboolean E_Jelly::updateE(GLfloat dt)
+GLboolean E_Jelly::UpdateE(GLfloat dt)
 {
 	//Only update if alive
 	if (!death) {
@@ -70,7 +70,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 
 		//Do stuff regarding jumping (I'm not sure how this works exactly)
 		if (height <= 1) {
-			state = STOPPING;
+			state = DYN_FRIC;
 			height = 1;
 			if (jumping) {
 				jumping = GL_FALSE;
@@ -82,7 +82,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 				jumping = GL_TRUE;
 			}
 			else if(jumpTime - 0.1 < lastJump) {
-				state = MOVING;
+				state = NO_DYN_FRIC;
 			}
 
 			//Decide which player to attack (aka who is closest)
@@ -100,7 +100,7 @@ GLboolean E_Jelly::updateE(GLfloat dt)
 			SetBodyAngle(dt);
 		}
 		else {
-			state = MOVING;
+			state = NO_DYN_FRIC;
 		}
 
 		//Larger texture if it's higher

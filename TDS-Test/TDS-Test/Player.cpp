@@ -7,6 +7,5 @@ Player::~Player()
 {
 }
 
-GLfloat Player::GetInherentF() {
-	return inherentForce;
-}
+void Player::SetGamepad(const XINPUT_GAMEPAD gPad) { this->gPad = gPad; }
+void Player::SetKeys(GLboolean* keys) { this->keys = keys; }

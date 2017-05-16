@@ -12,7 +12,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	health = maxHealth;
 	mass = 10;
 	movForce = 120;
-	state = MOVING;
+	state = NO_DYN_FRIC;
 	airFricCoeff = -1;
 
 	damage = 400;
@@ -38,7 +38,7 @@ E_Drone::~E_Drone()
 }
 
 //Update
-GLboolean E_Drone::updateE(GLfloat dt) {
+GLboolean E_Drone::UpdateE(GLfloat dt) {
 	//Don't update if it's dead
 	if (!death) 
 	{

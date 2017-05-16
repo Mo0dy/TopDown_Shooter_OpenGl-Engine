@@ -11,7 +11,7 @@ public:
 
 	E_Medic(glm::vec2 position);
 	~E_Medic();
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 
 	GLfloat healing;
 };

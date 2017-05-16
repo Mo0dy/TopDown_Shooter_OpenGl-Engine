@@ -30,17 +30,18 @@ void Etex::FitHObj()
 }
 
 // Getters and setters
-const Texture2D* const Etex::GetTex()
+const Texture2D* const Etex::GetTex() const
 {
 	return &tex;
 }
 
-glm::vec2 Etex::GetTexSize()
+glm::vec2 Etex::GetTexSize() const
 {
 	return texSize;
 }
 
-std::vector<HitObject> Etex::GetHitObjs() {
+std::vector<HitObject> Etex::GetHitObjs() const 
+{
 	return hObjs;
 }
 

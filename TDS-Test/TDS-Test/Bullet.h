@@ -1,25 +1,24 @@
 #pragma once
 
 #include "Util.h"
-#include "DynE.h"
-#include "Enemy.h"
+#include "LivingE.h"
 
 class Bullet : public DynE
 {
 public:
-	Bullet(glm::vec2 position, GLfloat newAngle);
-	~Bullet();
+	Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const LivingE*> whitelist);
+	virtual ~Bullet();
 
-	GLboolean updateE(GLfloat dt);
-
-	virtual void ColWithEnemy(class Enemy* enemy);
-	void ColWithStat(Entity* cE, GLfloat colDepth);
-
-	std::vector<Entity*> whitelist;
-	GLfloat damage;
+	GLboolean UpdateE(GLfloat dt);
+	void ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithLivingE(LivingE* lE);
 
 protected:
-	GLboolean checkWhitelist(Enemy* enemy);
-	GLfloat velocity;
+	std::vector<const LivingE*> whitelist; // Stores all entities that don't get damaged;
+	GLfloat damage;
+	GLfloat vel;
+
+	// Utility functions
+	GLboolean checkWL(const LivingE* cLE);
 };
 

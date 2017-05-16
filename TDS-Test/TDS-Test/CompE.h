@@ -12,13 +12,12 @@ public:
 	std::map<std::string, SubE*> subEntities;
 	std::vector<std::string> renderOrder;
 
-	virtual void UpdateSubE();
-	virtual void CombineHitboxes();
+	GLboolean UpdateE(GLfloat dt);
+	virtual void UpdateSubE(GLfloat dt);
 	void UpdateAni();
 
 	// Getters and setter
 	void SetColor(glm::vec3 color);
 	void SetSubESize(glm::vec2 size, std::string name);
 	void SetSubESize(GLfloat width, std::string name);
-	std::map<std::string, SubE*> GetSubE();
 };

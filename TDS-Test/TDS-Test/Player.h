@@ -8,16 +8,15 @@
 class Player : public LivingE
 {
 public:
-	XINPUT_GAMEPAD gPad;
-	const GLboolean* keys[1024];
 
 	Player(glm::vec2 position);
 	virtual ~Player();
 
-	// Getters and setters:
-	GLfloat GetInherentF();
+	void SetGamepad(const XINPUT_GAMEPAD gPad);
+	void SetKeys(GLboolean *keys);
 
 protected:
-	GLfloat inherentForce;
+	XINPUT_GAMEPAD gPad;
+	GLboolean* keys;
 };
 

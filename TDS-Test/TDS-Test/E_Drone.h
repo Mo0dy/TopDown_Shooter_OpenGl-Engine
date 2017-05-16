@@ -12,7 +12,7 @@ public:
 	E_Drone(glm::vec2 position);
 	virtual ~E_Drone();
 
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 
 	GLfloat swarmFactor;
 	GLfloat swarmPot;

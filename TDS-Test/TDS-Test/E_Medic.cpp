@@ -28,7 +28,7 @@ E_Medic::E_Medic(glm::vec2 position) : Enemy(position)
 
 	turnSpeed = 5;
 
-	state = MOVING;
+	state = NO_DYN_FRIC;
 }
 
 
@@ -36,7 +36,7 @@ E_Medic::~E_Medic()
 {
 }
 
-GLboolean E_Medic::updateE(GLfloat dt) 
+GLboolean E_Medic::UpdateE(GLfloat dt) 
 {
 	//Only update if alive
 	if (!death) {

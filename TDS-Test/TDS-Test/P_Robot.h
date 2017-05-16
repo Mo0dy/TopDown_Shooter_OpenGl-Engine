@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "EnergyBullet.h"
+#include "SE_BodyPart.h"
 
 class Robot : public Player
 {
@@ -17,14 +18,12 @@ public:
 	Robot(glm::vec2 position);
 	~Robot();
 
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 
 	void shoot();
 	void shootBigB();
 
 private:
-	const GLfloat MAX_HEALTH = 2000;
-
 	glm::vec2 movDir;
 	glm::vec2 bodyDir;
 
@@ -35,12 +34,13 @@ private:
 	GLfloat shootDelayBigB;
 	GLfloat accuracy; // +- shooting angle;
 
+	// There should be in a body and track object
+	GLfloat bodyTurnSpeed;
+	GLfloat trackTurnSpeed;
+
 	MOV_STATE movState;
 
 	void SetBodyAngle(GLfloat dt);
-	void setTrackAngle(GLfloat dt);
-
-	GLfloat bodyTurnSpeed;
-	GLfloat trackTurnSpeed;
+	void SetTrackAngle(GLfloat dt);
 };
 

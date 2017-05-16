@@ -3,8 +3,8 @@
 #include "Entity.h"
 
 enum State {
-	STOPPING,
-	MOVING
+	DYN_FRIC,
+	NO_DYN_FRIC
 };
 
 class DynE : public Entity // Dynamic entity
@@ -12,6 +12,8 @@ class DynE : public Entity // Dynamic entity
 public:
 	DynE(glm::vec2 position);
 	DynE(glm::vec2 position, GLfloat angle);
+	DynE(glm::vec2 position, GLfloat angle, glm::vec2 vel);
+	DynE(glm::vec2 position, GLfloat angle, GLfloat vel);
 
 	virtual ~DynE();
 
@@ -20,9 +22,12 @@ public:
 	virtual GLboolean UpdateE(GLfloat dt); // call this function every update. returns true if moved
 
 	// Should be private but its debugging	
-	glm::vec2 GetVel();
-	GLfloat GetAbsVel();
-	GLfloat GetMass();
+	glm::vec2 GetVel() const;
+	GLfloat GetAbsVel() const;
+	GLfloat GetMass() const;
+
+	void ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis);
+	void ColWithDyn(const DynE* dE, GLfloat penDepth, glm::vec2 colAxis);
 
 protected:
 	virtual void UpdatePos(GLfloat dt);

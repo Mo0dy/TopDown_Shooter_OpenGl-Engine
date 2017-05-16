@@ -1,7 +1,7 @@
 #include "EnergyBulletBig.h"
 #include "Game.h"
 
-GLboolean EnergyBulletBig::updateE(GLfloat dt) {
+GLboolean EnergyBulletBig::UpdateE(GLfloat dt) {
 	//for (Enemy *e : Game::Enemies) {
 	//	if (glm::distance(e->pos, pos) < 3) {
 	//		e->addForce(glm::normalize(e->pos - pos) * 1000.0f);
@@ -13,8 +13,8 @@ GLboolean EnergyBulletBig::updateE(GLfloat dt) {
 
 EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBullet(position, newAngle)
 {
-	velocity = 15;
-	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * velocity;
+	vel = 15;
+	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * vel;
 	mass = 200000;
 	etex.setTexSize(glm::vec2(1.7, 3.5));
 	damage = 90;

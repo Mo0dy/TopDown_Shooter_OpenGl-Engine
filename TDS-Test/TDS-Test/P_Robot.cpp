@@ -17,35 +17,27 @@ Robot::Robot(glm::vec2 position) : Player(position)
 {
 	// Settings
 	inherentForce = 2500;
-	bodyTurnSpeed = 10;
-	trackTurnSpeed = 5;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
 	accuracy = 0.1;
-	health = MAX_HEALTH;
+	maxHealth = 2000;
+	health = maxHealth;
 
 	death = GL_FALSE;
 
 	bulletSpawn = glm::vec2(100, 100);
 
-	subEntities["tracks"] = new SubE(glm::vec2(0));
-	subEntities["body"] = new SubE(glm::vec2(0));
+	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), glm::vec2(1.05));
+	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), glm::vec2(1.5));
 
-	subEntities["tracks"]->etex = ResourceManager::GetEtex("D_Bot");
-	subEntities["body"]->etex = ResourceManager::GetEtex("U_Bot");
-	subEntities["tracks"]->etex.fitHitboxToTex();
-	subEntities["body"]->etex.fitHitboxToTex();
-	SetSubESize(1.05, "tracks");
-	SetSubESize(1.5, "body");
+	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
+	
+	bodyTurnSpeed = 10;
+	trackTurnSpeed = 5;
 
-	subEntities["tracks"]->updateHitboxes();
-	subEntities["body"]->updateHitboxes();
-
-	subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
-
-	state = STOPPING;
+	state = DYN_FRIC;
 
 	shootDelay = 0.1;
 	shootDelayBigB = 5;
@@ -62,30 +54,25 @@ Robot::~Robot()
 {
 }
 
-GLboolean Robot::updateE(GLfloat dt) {
+GLboolean Robot::UpdateE(GLfloat dt) {
 	if (!death) {
 		if (health <= 0) {
 			death = GL_TRUE;
 			return GL_FALSE;
 		}
-
-		UpdateAni();
-
-		SetColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
+		SetColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
 
 		movState = NORMAL;
-		state = STOPPING;
+		state = DYN_FRIC;
 		accuracy = 0.1;
 		lastShot += dt;
 		lastShotBigB += dt;
 		// updating values according to collision
 
-		force += airRes();
-
 		if (abs(gPad.sThumbLX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > Util::CONTROLLER_DEADZONE) {
 			movDir += glm::vec2(gPad.sThumbLX, 0);
 			movDir += glm::vec2(0, gPad.sThumbLY);
-			state = MOVING;
+			state = NO_DYN_FRIC;
 		}
 
 		if (abs(gPad.sThumbRX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > Util::CONTROLLER_DEADZONE) {
@@ -136,13 +123,12 @@ GLboolean Robot::updateE(GLfloat dt) {
 			shootBigB();
 		}
 
-		setTrackAngle(dt);
+		SetTrackAngle(dt);
 		SetBodyAngle(dt);
 
-		updatePos(dt);
+		UpdatePos(dt);
 
-		UpdateSubE();
-		CombineHitboxes();
+		UpdateSubE(dt);
 
 		movDir = glm::vec2(0);
 		bodyDir = glm::vec2(0);
@@ -153,9 +139,9 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
-		subEntities["body"]->animations["ShootSmallB"].aniTime = shootDelay;
-		subEntities["body"]->animations["ShootSmallB"].Start();
-		subEntities["body"]->ani = "ShootSmallB";
+		//subEntities["body"]->animations["ShootSmallB"].aniTime = shootDelay;
+		//subEntities["body"]->animations["ShootSmallB"].Start();
+		//subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
 		Game::sBullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
 		Game::sBullets.back()->whitelist.push_back(this);
@@ -184,7 +170,7 @@ void Robot::SetBodyAngle(GLfloat dt) {
 	}
 }
 
-void Robot::setTrackAngle(GLfloat dt) {
+void Robot::SetTrackAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
 	GLfloat dA = calcMovAngle(angle, vel);
 

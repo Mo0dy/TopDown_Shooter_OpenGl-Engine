@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Levels\StaticEntities">
       <UniqueIdentifier>{37a93833-5b28-4fae-9c87-82ef4146ae15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\SubEntities">
+      <UniqueIdentifier>{d45851b8-76b8-4484-be08-8b0ccd98aa79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="LivingE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SE_BodyPart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -182,9 +188,6 @@
     <ClCompile Include="CompE.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="SubE.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="EnergyBulletBig.cpp">
       <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
@@ -220,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="LivingE.cpp">
       <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SubE.cpp">
+      <Filter>Source Files\Entities\SubEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="SE_BodyPart.cpp">
+      <Filter>Source Files\Entities\SubEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

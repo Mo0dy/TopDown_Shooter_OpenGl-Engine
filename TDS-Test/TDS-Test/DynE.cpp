@@ -3,12 +3,20 @@
 #include <iostream>
 #include "Renderer.h"
 
-DynE::DynE(glm::vec2 position) : Entity(position), mass(10), force(0, 0), vel(0, 0), dynFricCoeff(-0.5f), statFricCoeff(-0.7f), airFricCoeff(-1.0f), state(STOPPING), collision(GL_FALSE)
+DynE::DynE(glm::vec2 position) : Entity(position, 0.0f), mass(1), force(0), vel(0), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
 {
 }
 
-DynE::DynE(glm::vec2 position, GLfloat angle) : DynE(position) {
-	this->angle = angle;
+DynE::DynE(glm::vec2 position, GLfloat angle) : Entity(position, angle), mass(1), force(0), vel(0), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
+{
+}
+
+DynE::DynE(glm::vec2 position, GLfloat angle, glm::vec2 vel) : Entity(position, angle), mass(1), force(0), vel(vel), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
+{
+}
+
+DynE::DynE(glm::vec2 position, GLfloat angle, GLfloat vel) : Entity(position, angle), mass(1), force(0), vel(glm::vec2(glm::cos(angle), glm::sin(angle)) * vel), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
+{
 }
 
 DynE::~DynE()
@@ -31,9 +39,9 @@ void DynE::UpdatePos(GLfloat dt) {
 	}
 
 	switch (state) {
-	case MOVING: AddForce(AirRes());
+	case NO_DYN_FRIC: AddForce(AirRes());
 		break;
-	case STOPPING: AddForce(FricRes() + AirRes());
+	case DYN_FRIC: AddForce(FricRes() + AirRes());
 	}
 
 	glm::vec2 dV = dt * force / mass;
@@ -105,8 +113,31 @@ GLfloat DynE::CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
 	return dA;
 }
 
+void DynE::ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis) {
+	collision = GL_TRUE;
+	glm::vec2 n = glm::normalize(colAxis);
+	pos += -n * penDepth;
+	colVel = vel;
+}
+
+void DynE::ColWithDyn(const class DynE* dE, GLfloat penDepth, glm::vec2 colAxis) {
+	collision = GL_TRUE;
+	glm::vec2 n = glm::normalize(colAxis);
+
+	GLfloat v1p = glm::dot(vel, n);
+	GLfloat v2p = glm::dot(dE->GetVel(), n);
+
+	colVel = vel;
+
+	//if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
+	colVel = vel - dE->mass * Util::COEFFFICIENT_OF_RESTITUTION * (v1p - v2p) / (mass + dE->mass) * n; // <-- partly inelastiv collision
+	//}
+	pos += -n * 0.5f * penDepth;
+}
+
 // Getters and Setters
 void DynE::AddForce(glm::vec2 f) { force += f; }
-glm::vec2 DynE::GetVel() { return vel;  }
-GLfloat DynE::GetAbsVel() { return glm::length(vel);  }
-GLfloat DynE::GetMass() { return mass; }
+glm::vec2 DynE::GetVel() const { return vel;  }
+GLfloat DynE::GetAbsVel() const { return glm::length(vel);  }
+GLfloat DynE::GetMass() const { return mass; }
+

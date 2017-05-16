@@ -7,8 +7,8 @@ void EnergyBullet::loadEnergyBullet() {
 
 EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat newAngle): Bullet(position, newAngle)
 {
-	velocity = 20;
-	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * velocity;
+	vel = 20;
+	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * vel;
 	mass = 10;
 	etex = ResourceManager::GetEtex("EnergyBall");
 	etex.fitHitboxToTex();

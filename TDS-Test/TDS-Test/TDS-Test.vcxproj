@@ -144,6 +144,7 @@
     <ClInclude Include="LivingE.h" />
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="SE_BodyPart.h" />
     <ClInclude Include="StaticEntity.h" />
     <ClInclude Include="SubE.h" />
     <ClInclude Include="Util.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SE_BodyPart.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Util.cpp" />

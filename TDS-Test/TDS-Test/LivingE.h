@@ -8,12 +8,15 @@ public:
 	LivingE(glm::vec2 position);
 	~LivingE();
 
-	virtual void AddDamage(GLfloat damage);
+	GLboolean UpdateE(GLfloat dt);
+	void GetAttacked(GLfloat damage);
 
 	// Getters and setters
-	GLboolean GetDeath();
+	GLboolean GetDeath() const;
+	GLfloat GetInherentF() const;
 
 protected:
+	GLfloat inherentF;
 	GLfloat maxHealth;
 	GLfloat health;
 	GLboolean death;

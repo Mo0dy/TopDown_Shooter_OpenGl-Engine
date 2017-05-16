@@ -18,7 +18,7 @@ E_MotherDrone::~E_MotherDrone()
 }
 
 //Update
-GLboolean E_MotherDrone::updateE(GLfloat dt) {
+GLboolean E_MotherDrone::UpdateE(GLfloat dt) {
 	//Don't update if dead
 	if (!death)
 	{

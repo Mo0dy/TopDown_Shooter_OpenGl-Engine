@@ -11,6 +11,7 @@ class Entity
 public:
 	Entity();
 	Entity(glm::vec2 position);
+	Entity(glm::vec2 position, GLfloat angle);
 	Entity(glm::vec2 position, const Texture2D* texture);
 	Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture);
 	Entity(glm::vec2 position, Animation ani, std::string aniName);
@@ -18,7 +19,6 @@ public:
 
 	virtual ~Entity();
 
-	const Texture2D *tex;
 	std::vector<HitObject> hitboxes;
 	std::map<std::string, Animation> animations;
 	std::string ani; // The name of the currently Played Animation
@@ -33,14 +33,23 @@ public:
 	virtual void ColWithEnemy(const class Enemy* e, GLfloat penDepth, glm::vec2 colAxis);
 	virtual void ColWithPlayer(const class Player* p, GLfloat penDepth, glm::vec2 colAxis);
 
-	GLboolean GetErase();
-	glm::vec2 GetPos();
-	GLfloat GetAngle();
-	glm::vec3 GetColor();
+	virtual void GetAttacked(GLfloat damage);
+
+	GLboolean GetErase() const;
+	glm::vec2 GetPos() const;
+	glm::vec2 GetSize() const;
+	GLfloat GetAngle() const;
+	glm::vec3 GetColor() const;
+	const Texture2D* GetTex() const;
+
+	void SetSize(glm::vec2 size);
+	void SetSize(GLfloat width);
 
 protected:
+	const Texture2D *tex;
 	GLboolean erase;
 	glm::vec2 pos; // The position in WCS coordinates
+	glm::vec2 size;
 	GLfloat angle; // The angle of the entitie in radians
 	glm::vec3 color; // The color will be overlayed on the texture
 };

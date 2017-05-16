@@ -202,16 +202,16 @@ void Game::Update(GLfloat dt) {
 	camera->updatePos(Width, Height, sPlayers);
 
 	for (Player *e : sPlayers) {
-		e->updateE(dt);
+		e->UpdateE(dt);
 	}
 	for (Bullet *e : sBullets) {
-		e->updateE(dt);
+		e->UpdateE(dt);
 	}
 	for (Enemy *e : sEnemies) {
-		e->updateE(dt);
+		e->UpdateE(dt);
 	}
 	for (DynE *e : sDynEntities) {
-		if (e->updateE(dt)) {
+		if (e->UpdateE(dt)) {
 			sMovedE.push_back(e);
 		}
 	}

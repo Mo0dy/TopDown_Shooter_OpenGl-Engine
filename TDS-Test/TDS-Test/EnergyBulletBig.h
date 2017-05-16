@@ -8,7 +8,7 @@ public:
 	EnergyBulletBig(glm::vec2 position, GLfloat newAngle);
 	~EnergyBulletBig();
 
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 
 	GLboolean CheckForErase(glm::vec2 levelSize);
 };

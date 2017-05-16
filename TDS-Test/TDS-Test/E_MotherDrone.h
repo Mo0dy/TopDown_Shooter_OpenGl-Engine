@@ -9,7 +9,7 @@ public:
 	E_MotherDrone(glm::vec2 position);
 	~E_MotherDrone();
 
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 	//void updateAni();
 
 	GLfloat lastSpawn;
