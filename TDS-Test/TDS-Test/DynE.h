@@ -18,8 +18,6 @@ public:
 	void addForce(glm::vec2 f); // the function that gets called if an external force acts upon the entity
 
 	virtual GLboolean updateE(GLfloat dt); // call this function every update. returns true if moved
-	virtual void ColWithDyn(DynE* cE, GLfloat colDepth, glm::vec2 minColAxis);
-	virtual void ColWithStat(Entity* cE, GLfloat colDepth, glm::vec2 minColAxis);
 
 	// Should be private but its debugging
 

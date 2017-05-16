@@ -17,7 +17,6 @@ DynE::~DynE()
 
 GLboolean DynE::updateE(GLfloat dt) {
 	updatePos(dt);
-	updateHitboxes();
 	return glm::length(vel) > 0;
 }
 
@@ -54,37 +53,6 @@ void DynE::updatePos(GLfloat dt) {
 #endif // DEBUG_FORCES
 
 	force = glm::vec2(0, 0);
-}
-
-void DynE::ColWithStat(Entity *cE, GLfloat colDepth, glm::vec2 minColAxis) {
-	collision = GL_TRUE;
-	glm::vec2 n = glm::normalize(minColAxis);
-	//if (colDepth < LINEAR_COL_FORCE_INTERVAL) {
-		pos += -n * colDepth;
-	//}
-	//else {
-	//	addForce(-n * colDepth * MAC_COL_FORCE);
-	//}
-	colVel = vel;
-}
-
-void DynE::ColWithDyn(DynE *cE, GLfloat colDepth, glm::vec2 minColAxis) {
-	collision = GL_TRUE;
-	glm::vec2 n = glm::normalize(minColAxis);
-
-	GLfloat v1p = glm::dot(vel, n);
-	GLfloat v2p = glm::dot(cE->vel, n);
-
-	colVel = vel;
-
-	//if ((v1p > 0 && v2p < v1p) || (v1p < 0 && v2p > v1p)) {
-		// colVel = vel + 2 * ((cE->mass * v2p - cE->mass * v1p) / (mass + cE->mass)) * n; // <-- elastic collision
-		colVel = vel - cE->mass * Util::COEFFFICIENT_OF_RESTITUTION * (v1p - v2p) / (mass + cE->mass) * n; // <-- partly inelastiv collision
-	//}
-	pos += -n * 0.5f * colDepth; // Push out of the collision depth
-	//if (pos == cE->pos) {
-	//	pos += 0.0001;
-	//}
 }
 
 // Utitlity functions

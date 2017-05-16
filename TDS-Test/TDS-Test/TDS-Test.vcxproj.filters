@@ -173,9 +173,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files\Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="CompE.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -207,6 +204,9 @@
       <Filter>Source Files\Levels</Filter>
     </ClCompile>
     <ClCompile Include="E_Medic.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
