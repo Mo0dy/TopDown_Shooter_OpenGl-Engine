@@ -1,0 +1,16 @@
+Support:
+
+Attack:
+> Primary
+	Bolt Action Rifle
+> Secondary
+	
+Abilities:
+> Ability 1:
+	
+> Ability 2: Trap
+	> Stage1 explosive trap
+	> Stage2 permanent vision on trap
+
+> MovAbility:
+	

@@ -13,30 +13,28 @@ public:
 	Animation(std::string name, GLfloat width, GLboolean repeat);
 	~Animation();
 
-	void startAnimation();
-	void stopAnimation();
+	void Start();
+	void Stop();
 
-	void setFPS(GLfloat fps);
+	void LoadFromRM(std::string name);
+	void LoadFromRM(std::string name, GLfloat width);
 
-	void load(std::string name);
-	void load(std::string name, GLfloat width);
-
-	void enforceWidth(GLfloat width);
-
-	GLfloat width;
+	void EnforceWidth(GLfloat width);
 
 	// Getters and setters
-	Etex& getETex();
-	Etex& getETex(GLuint pos);
-	GLint getSize();
-	GLboolean getState();
-	GLfloat animationTime;
+	void SetFPS(GLfloat fps);
+	void SetAniTime(GLfloat aniTime);
+
+	Etex& GetETex();
+	Etex& GetETex(GLuint pos);
+	GLint GetNumber();
+	GLboolean GetState();
 	
 	std::vector<Etex> Etextures;
 
-	GLboolean repeat;
-
 protected:
+	GLfloat aniTime;
+	GLboolean repeat;
 	GLboolean state;
 	GLfloat startTime;
 };

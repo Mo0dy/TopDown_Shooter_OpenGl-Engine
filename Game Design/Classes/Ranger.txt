@@ -1,0 +1,21 @@
+Ranger:
+
+Attack:
+> Primary
+	Automatic Rifle
+> Secondary
+	Grenade Launcher
+
+Abilities:
+> Ability 1: 
+	
+> Ability 2: Drone
+	> Stage1 = Drone that can be send out to gain vision and pick up items
+	> Stage2 = Drone can melee attack and confuse targets
+	> Stage3 = Drone can shoot
+	> Stage4 = Drone can self destruct for enourmous damage. But must be reconstructed after finishing the level
+
+> MovAbility
+	> Stage1 = Combat Roll
+	> Stage2 += No damage while rolling
+	> Stage3 += invis while holding (for a time)

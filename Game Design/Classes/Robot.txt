@@ -1,0 +1,20 @@
+Robot:
+
+Attack:
+> Primary
+	Minigun
+> Secondary
+	EnergyBall
+
+Abilities:
+> Ability 1: Shield
+	> Stage1 = Weak forward facing personal shield
+	> Stage2 = Stronger circular groupshield
+
+> Ability 2: Transform to "Plane"
+
+
+> MovAbility
+	> Stage1 = No Movement, Increased Damage, Increased Viewrange
+	> Stage2 += Artillery gun
+	> Stage3 += explosive ammunition

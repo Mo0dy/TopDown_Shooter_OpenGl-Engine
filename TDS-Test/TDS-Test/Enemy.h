@@ -19,6 +19,5 @@ public:
 	void setBodyAngle(GLfloat dt);
 	GLfloat movForce;
 	GLfloat turnSpeed;
-
 };
 

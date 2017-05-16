@@ -23,8 +23,8 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 
 	//Set animation
 	animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
-	animations["Flying"].animationTime = 1;
-	animations["Flying"].startAnimation();
+	animations["Flying"].aniTime = 1;
+	animations["Flying"].Start();
 
 	ani = "Flying";
 

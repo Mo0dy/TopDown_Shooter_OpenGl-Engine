@@ -1,36 +1,34 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 
-Entity::Entity() {
-}
-Entity::Entity(glm::vec2 position) : pos(position) {
-}
-Entity::Entity(glm::vec2 position, Texture2D texture) : pos(position), tex(texture) {
-}
-Entity::Entity(glm::vec2 position, GLfloat angle, Texture2D texture) : pos(position), angle(angle), tex(texture) {
-}
-Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position) {
-	animations[aniName] = ani;
-}
-Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle) {
-	animations[aniName] = ani;
-}
-
-Entity::~Entity()
+Entity::Entity() {}
+Entity::Entity(glm::vec2 position) : pos(position) {}
+Entity::Entity(glm::vec2 position, Texture2D texture) : pos(position), tex(texture) {}
+Entity::Entity(glm::vec2 position, GLfloat angle, Texture2D texture) : pos(position), angle(angle), tex(texture) {}
+Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position)
 {
+	animations[aniName] = ani;
+}
+Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle)
+{
+	animations[aniName] = ani;
 }
 
-GLboolean Entity::UpdateE(GLfloat dt) {
-	if (animations[ani].getSize() > 0) {
+Entity::~Entity() {}
+
+GLboolean Entity::UpdateE(GLfloat dt) 
+{
+	if (animations[ani].GetNumber() > 0) {
 		UpdateAni();
 	}
 	return GL_FALSE; // static entities never move
 }
 
-void Entity::UpdateAni() {
-	if (animations[ani].getState()) {
-		tex = *animations[ani].getETex().tex;
-		hitboxes = animations[ani].getETex().absHitboxes;
+void Entity::UpdateAni() 
+{
+	if (animations[ani].GetState()) {
+		tex = *animations[ani].GetETex().tex;
+		hitboxes = animations[ani].GetETex().absHitboxes;
 	}
 }
 

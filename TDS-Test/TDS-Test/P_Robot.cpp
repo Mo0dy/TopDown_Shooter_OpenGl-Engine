@@ -153,8 +153,8 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
-		subEntities["body"]->animations["ShootSmallB"].animationTime = shootDelay;
-		subEntities["body"]->animations["ShootSmallB"].startAnimation();
+		subEntities["body"]->animations["ShootSmallB"].aniTime = shootDelay;
+		subEntities["body"]->animations["ShootSmallB"].Start();
 		subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
 		Game::sBullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));

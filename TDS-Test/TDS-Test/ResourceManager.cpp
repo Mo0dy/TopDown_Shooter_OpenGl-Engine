@@ -160,13 +160,13 @@ void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLin
 		Etex* etex = new Etex();
 		LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL, etex);
 		Animations[name].push_back(*etex);
-		Animations[name].back().setTexSize(width);
+		Animations[name].back().SetTexSize(width);
 
 		if (loadHitboxes == HBOX_LOAD_ONE) {
 			Animations[name].back().setRelHitboxes(temHbox);
 		}
 		else if (loadHitboxes == HBOX_AUTOFIT) {
-			Animations[name].back().fitHitboxToTex();
+			Animations[name].back().FitHObj();
 		}
 	}
 }
