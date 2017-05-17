@@ -2,26 +2,27 @@
 
 SubE::SubE(CompE* masterE) : masterE(masterE), rPos(glm::vec2(0)), rAngle(0)
 {
-	this->UpdateE(0);
+	//this->UpdateE(0);
 }
 
-SubE::SubE(CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size) : masterE(masterE), rPos(rPos)
+SubE::SubE(CompE* masterE, glm::vec2 rPos, const Etex* etex, GLfloat width) : Entity(etex, width), masterE(masterE), rPos(rPos)
 {
-	this->size = size;
-	Etex myEtex = *etex;
-	myEtex.SetTexSize(size);
-	this->tex = myEtex.GetTex();
-	this->hitObjs = myEtex.GetHitObjs();
+	//this->UpdateE(0);
+}
+
+SubE::SubE(CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size) : Entity(etex, size), masterE(masterE), rPos(rPos)
+{
+	//this->UpdateE(0);
 }
 
 SubE::SubE(CompE* masterE, glm::vec2 rPos) : masterE(masterE), rPos(rPos), rAngle(0)
 {
-	this->UpdateE(0);
+	//this->UpdateE(0);
 }
 
 SubE::SubE(CompE* masterE, glm::vec2 rPos, GLfloat rAngle) : masterE(masterE), rPos(rPos), rAngle(rAngle)
 {
-
+	//this->UpdateE(0);
 }
 
 SubE::~SubE()

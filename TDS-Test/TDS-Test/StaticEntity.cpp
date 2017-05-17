@@ -9,7 +9,6 @@ StaticEntity::StaticEntity(glm::vec2 position, GLfloat width, GLfloat angle, Ete
 	// This should be done in an entity constructor
 	this->pos = position;
 	this->angle = angle;
-	this->SetSize(width);
 }
 
 StaticEntity::~StaticEntity()

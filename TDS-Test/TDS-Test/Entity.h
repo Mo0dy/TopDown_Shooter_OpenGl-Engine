@@ -10,13 +10,15 @@ class Entity
 {
 public:
 	Entity();
-	Entity(Etex *etex, GLfloat width);
 	Entity(glm::vec2 position);
 	Entity(glm::vec2 position, GLfloat angle);
 	Entity(glm::vec2 position, const Texture2D* texture);
 	Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture);
 	Entity(glm::vec2 position, Animation ani, std::string aniName);
 	Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName);
+
+	Entity(const Etex* etex, GLfloat width);
+	Entity(const Etex* etex, glm::vec2 size);
 
 	virtual ~Entity();
 

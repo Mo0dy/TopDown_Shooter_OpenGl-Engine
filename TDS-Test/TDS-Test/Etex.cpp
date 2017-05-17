@@ -40,21 +40,28 @@ glm::vec2 Etex::GetTexSize() const
 	return texSize;
 }
 
+glm::vec2 Etex::GetTexSize(GLfloat width) const
+{
+	return glm::vec2(width, tex->Height / tex->Width * width);
+}
+
 std::vector<HitObject> Etex::GetHitObjs() const 
 {
 	return hObjs;
 }
 
-std::vector<HitObject> Etex::GetHitObjs(glm::vec2 size)
+std::vector<HitObject> Etex::GetHitObjs(glm::vec2 size) const
 {
-	this->SetTexSize(size);
-	return hObjs;
+	std::vector<HitObject> tempHObjs;
+	for (HitObject rHO : rHObjs) {
+		tempHObjs.push_back(HitObject(size * rHO.GetPos() * 0.5f, size * rHO.GetSize(), rHO.GetAngle()));
+	}
+	return tempHObjs;
 }
 
-std::vector<HitObject> Etex::GetHitObjs(GLfloat size)
+std::vector<HitObject> Etex::GetHitObjs(GLfloat width) const
 {
-	this->SetTexSize(size);
-	return hObjs;
+	return GetHitObjs(glm::vec2(width, tex->Height / tex->Width * width));
 }
 
 void Etex::SetTexSize(glm::vec2 textureSize)

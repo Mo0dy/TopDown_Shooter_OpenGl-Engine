@@ -7,6 +7,7 @@ class SubE : public Entity
 public:
 	SubE(class CompE* masterE);
 	SubE(class CompE* masterE, glm::vec2 rPos);
+	SubE(class CompE* masterE, glm::vec2 rPos, const Etex* etex, GLfloat width);
 	SubE(class CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size);
 	SubE(class CompE* masterE, glm::vec2 rPos, GLfloat rAngle);
 	virtual ~SubE();

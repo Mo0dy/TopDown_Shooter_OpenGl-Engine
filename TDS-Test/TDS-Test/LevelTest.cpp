@@ -18,7 +18,6 @@ LevelTest::LevelTest()
 	for (housePos hP : TOWN) {
 		entities.push_back(new StaticEntity(hP.pos, hP.width, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
 	}
-
 	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
 }
 

@@ -18,9 +18,10 @@ public:
 	// Getters and setters
 	const Texture2D* const GetTex() const;
 	glm::vec2 GetTexSize() const;
+	glm::vec2 GetTexSize(GLfloat width) const;
 	std::vector<HitObject> GetHitObjs() const;
-	std::vector<HitObject> GetHitObjs(glm::vec2 size);
-	std::vector<HitObject> GetHitObjs(GLfloat size);
+	std::vector<HitObject> GetHitObjs(glm::vec2 size) const;
+	std::vector<HitObject> GetHitObjs(GLfloat width) const;
 	void SetTexSize(glm::vec2 textureSize);
 	void SetTexSize(GLfloat width); // Sets to the texture size to a given width and retains aspect ratio
 	void AddRHitbox(HitObject rHObj);

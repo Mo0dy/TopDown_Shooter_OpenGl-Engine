@@ -4,6 +4,10 @@ SE_BodyPart::SE_BodyPart(CompE* masterE) : SubE(masterE)
 {
 }
 
+SE_BodyPart::SE_BodyPart(CompE* masterE, glm::vec2 rPos, const Etex* etex, GLfloat width) : SubE(masterE, rPos, etex, width)
+{
+}
+
 SE_BodyPart::SE_BodyPart(CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size) : SubE(masterE, rPos, etex, size)
 {
 }

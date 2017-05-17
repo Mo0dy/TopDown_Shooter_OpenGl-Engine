@@ -2,19 +2,22 @@
 #include "ResourceManager.h"
 
 Entity::Entity() {}
-Entity::Entity(Etex *etex, GLfloat width) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(width)), size(etex->GetTexSize()) {}
-Entity::Entity(glm::vec2 position) : pos(position), angle(0) {}
-Entity::Entity(glm::vec2 position, GLfloat angle) : pos(position), angle(angle) {}
-Entity::Entity(glm::vec2 position, const Texture2D* texture) : pos(position), tex(texture) {}
-Entity::Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture) : pos(position), angle(angle), tex(texture) {}
-Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position)
+
+Entity::Entity(glm::vec2 position) : pos(position), angle(0), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, GLfloat angle) : pos(position), angle(angle), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, const Texture2D* texture) : pos(position), tex(texture), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture) : pos(position), angle(angle), tex(texture), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position), color(glm::vec3(1))
 {
 	animations[aniName] = ani;
 }
-Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle)
+Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle), color(glm::vec3(1))
 {
 	animations[aniName] = ani;
 }
+
+Entity::Entity(const Etex *etex, GLfloat width) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(width)), size(etex->GetTexSize(width)), color(glm::vec3(1)) {}
+Entity::Entity(const Etex* etex, glm::vec2 size) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(size)), size(size), color(glm::vec3(1)) {}
 
 Entity::~Entity() {}
 
@@ -30,6 +33,7 @@ void Entity::UpdateAni()
 {
 	if (animations[ani].GetState()) {
 		tex = animations[ani].GetETex().GetTex();
+		size = animations[ani].GetETex().GetTexSize();
 		hitObjs = animations[ani].GetETex().GetHitObjs();
 	}
 }
