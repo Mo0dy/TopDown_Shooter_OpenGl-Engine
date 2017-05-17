@@ -20,3 +20,16 @@ GLfloat HitObject::GetAngle()
 {
 	return angle;
 }
+
+void HitObject::SetPos(glm::vec2 pos)
+{
+	this->pos = pos;
+}
+void HitObject::SetSize(glm::vec2 size)
+{
+	this->size = size;
+}
+void HitObject::SetAngle(GLfloat angle)
+{
+	this->angle = angle;
+}

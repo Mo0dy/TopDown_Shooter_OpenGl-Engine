@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Game.h"
 
-Enemy::Enemy(glm::vec2 position) : LivingE(position), lastAttack(9999), attacking(GL_TRUE), death(GL_FALSE)
+Enemy::Enemy(glm::vec2 position) : LivingE(position), lastAttack(9999), attacking(GL_TRUE)
 {
 }
 
@@ -22,7 +22,7 @@ GLboolean Enemy::CheckForErase(glm::vec2 levelSize) {
 void Enemy::ColWithPlayer(Player* player, GLfloat colDepth, glm::vec2 colAxis) {
 	ColWithDyn(player, colDepth, colAxis);
 	if (attacking) {
-		player->health -= damage;
+		player->GetAttacked(damage);
 	}
 	attacking = GL_FALSE;
 	lastAttack = 0;
@@ -30,7 +30,7 @@ void Enemy::ColWithPlayer(Player* player, GLfloat colDepth, glm::vec2 colAxis) {
 
 void Enemy::SetBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = calcMovAngle(angle, vel);
+	GLfloat dA = CalcMovAngle(angle, vel);
 	if (abs(dA) > 0) {
 		if (turnSpeed * dt > abs(dA)) {
 			angle += dA;

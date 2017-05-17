@@ -11,7 +11,7 @@ SubE::SubE(CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size) : m
 	Etex myEtex = *etex;
 	myEtex.SetTexSize(size);
 	this->tex = myEtex.GetTex();
-	this->hitboxes = myEtex.GetHitObjs();
+	this->hitObjs = myEtex.GetHitObjs();
 }
 
 SubE::SubE(CompE* masterE, glm::vec2 rPos) : masterE(masterE), rPos(rPos), rAngle(0)
@@ -33,4 +33,21 @@ GLboolean SubE::UpdateE(GLfloat dt)
 	pos = masterE->GetPos() + rPos;
 	angle = masterE->GetAngle() + rAngle;
 	return GL_TRUE;
+}
+
+glm::vec2 SubE::GetRPos() const
+{
+	return this->rPos;
+}
+GLfloat SubE::GetRAngle() const
+{
+	return this->rAngle;
+}
+void SubE::SetRPos(glm::vec2 rPos)
+{
+	this->rPos = rPos;
+}
+void SubE::SetRAngle(GLfloat rAngle) 
+{
+	this->rAngle = rAngle;
 }

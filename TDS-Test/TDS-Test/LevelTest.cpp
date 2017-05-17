@@ -12,19 +12,14 @@ void LevelTest::loadLevelTest() {
 
 LevelTest::LevelTest()
 {
-	background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelTest_T_Island"));
-	background.etex.setTexSize(150);
-	background.updateHitboxes();
-	size = background.etex.getTexSize();
+	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150);
+	size = background.GetSize();
 
 	for (housePos hP : TOWN) {
 		entities.push_back(new StaticEntity(hP.pos, hP.width, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
-		entities.back()->updateHitboxes();
 	}
 
 	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
-	entities.back()->etex.fitHitboxToTex();
-	entities.back()->updateHitboxes();
 }
 
 LevelTest::~LevelTest()
@@ -33,7 +28,7 @@ LevelTest::~LevelTest()
 
 GLfloat time;
 
-void LevelTest::updateL(GLfloat dt) {
+void LevelTest::UpdateL(GLfloat dt) {
 
 
 	//if (Game::Enemies.size() < Game::Players.size() * 2) {
@@ -46,10 +41,10 @@ void LevelTest::updateL(GLfloat dt) {
 	for (int i = 0; i < Game::sEnemies.size(); i++) {
 		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::sEnemies[i]);
 		if (testMDrone != NULL) {
-			if (!testMDrone->death) {
+			if (!testMDrone->GetDeath()) {
 				if (Game::sEnemies.size() < Game::sPlayers.size() * 5) {
-					if (glm::length(Game::sEnemies[0]->getVel()) > 0) {
-						Game::sEnemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+					if (glm::length(Game::sEnemies[0]->GetVel()) > 0) {
+						Game::sEnemies.push_back(new E_Drone(testMDrone->GetPos() + glm::normalize(testMDrone->GetVel()) * -0.5f * testMDrone->GetSize().y));
 					}
 				}
 			}
@@ -60,11 +55,11 @@ void LevelTest::updateL(GLfloat dt) {
 	for (int i = 0; i < Game::sEnemies.size(); i++) {
 		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::sEnemies[i]);
 		if (testJelly != NULL) {
-			if (testJelly->death) {
+			if (testJelly->GetDeath()) {
 				if (testJelly->jellySize > 0.4)
 				{
-					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
 				}
 			}
 		}
@@ -93,7 +88,7 @@ void LevelTest::updateL(GLfloat dt) {
 	//}
 }
 
-void LevelTest::reset() {
+void LevelTest::Reset() {
 	//background.etex.setRelHitboxes(ResourceManager::loadrHitboxFromFile("Textures\\HIsland.txt"));
 	//background.updateHitboxes();
 	//size = background.etex.getTexSize();
@@ -107,7 +102,7 @@ void LevelTest::reset() {
 
 	for (int i = 0; i < Util::PLAYER_AMOUNT; i++) {
 		Game::sPlayers.push_back(new Robot(glm::vec2(0, 3 * i)));
-		Game::sPlayers.back()->color = Util::PLAYER_COLORS[i];
+		Game::sPlayers.back()->SetColor(Util::PLAYER_COLORS[i]);
 	}
 		
 	//glm::vec2 motherDrone_SpawnPos;

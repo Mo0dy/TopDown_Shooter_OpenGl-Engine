@@ -12,11 +12,13 @@ E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 {
 	jellySize = size;
 	height = 1;
+	this->size = glm::vec2(jellySize);
 
 	//Set texture and hitbox
-	etex = ResourceManager::GetEtex("Pudding");
-	etex.setTexSize(glm::vec2(size));
-	updateHitboxes();
+
+	tex = ResourceManager::GetEtex("Pudding").GetTex();
+	hitObjs = ResourceManager::GetEtex("Pudding").GetHitObjs(this->size);
+
 	dynFricCoeff = -2.5;
 
 	//Set color to RGB 13, 255, 26.
@@ -88,15 +90,15 @@ GLboolean E_Jelly::UpdateE(GLfloat dt)
 			//Decide which player to attack (aka who is closest)
 			Player* gPlayer = Game::sPlayers[0];
 			for (int i = 0; i < Game::sPlayers.size(); i++) {
-				if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::sPlayers[i]->pos)) {
+				if (glm::distance(pos, gPlayer->GetPos()) > glm::distance(pos, Game::sPlayers[i]->GetPos())) {
 					gPlayer = Game::sPlayers[i];
 				}
 			}
 
 			//Add forces towards the player
-			glm::vec2 movDir = gPlayer->pos - pos;
+			glm::vec2 movDir = gPlayer->GetPos() - pos;
 
-			addForce(glm::normalize(movDir) * movForce);
+			AddForce(glm::normalize(movDir) * movForce);
 			SetBodyAngle(dt);
 		}
 		else {
@@ -104,8 +106,8 @@ GLboolean E_Jelly::UpdateE(GLfloat dt)
 		}
 
 		//Larger texture if it's higher
-		etex.setTexSize(glm::vec2(jellySize * height));
-		updatePos(dt);
+		this->size = glm::vec2(jellySize * height);
+		UpdatePos(dt);
 		
 		return glm::length(vel) > 0;
 	}

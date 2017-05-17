@@ -11,9 +11,9 @@ void LevelBanana::loadLevelBanana() {
 
 LevelBanana::LevelBanana()
 {
-	background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelBanana_T_Island"));
-	background.etex.setTexSize(150);
-	size = background.etex.getTexSize();
+	//background = Entity(glm::vec2(0), ResourceManager::GetEtex("LevelBanana_T_Island"));
+	//background.etex.setTexSize(150);
+	//size = background.etex.getTexSize();
 	//entities.push_back(new StaticEntity(glm::vec2(10, 10), 10, 0.25f * glm::pi<GLfloat>(), testEtex, GL_TRUE));
 	//entities.back()->Hitboxes = testEtex.getAbsHitboxes();
 }
@@ -22,7 +22,7 @@ LevelBanana::~LevelBanana()
 {
 }
 
-void LevelBanana::updateL(GLfloat dt) {
+void LevelBanana::UpdateL(GLfloat dt) {
 
 
 	//if (Game::Enemies.size() < Game::Players.size() * 2) {
@@ -35,11 +35,11 @@ void LevelBanana::updateL(GLfloat dt) {
 	for (int i = 0; i < Game::sEnemies.size(); i++) {
 		E_MotherDrone* testMDrone = dynamic_cast<E_MotherDrone*>(Game::sEnemies[i]);
 		if (testMDrone != NULL) {
-			if (!testMDrone->death) {
+			if (!testMDrone->GetDeath()) {
 				if (Game::sEnemies.size() < Game::sPlayers.size() * 12) {
-					if (glm::length(Game::sEnemies[0]->getVel()) > 0) {
+					if (glm::length(Game::sEnemies[0]->GetVel()) > 0) {
 						if (testMDrone->spawning) {
-							Game::sEnemies.push_back(new E_Drone(testMDrone->pos + glm::normalize(testMDrone->getVel()) * -0.5f * testMDrone->etex.getTexSize().y));
+							Game::sEnemies.push_back(new E_Drone(testMDrone->GetPos() + glm::normalize(testMDrone->GetVel()) * -0.5f * testMDrone->GetSize().y));
 							testMDrone->spawning = GL_FALSE;
 							testMDrone->lastSpawn = 0;
 						}
@@ -53,11 +53,11 @@ void LevelBanana::updateL(GLfloat dt) {
 	for (int i = 0; i < Game::sEnemies.size(); i++) {
 		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::sEnemies[i]);
 		if (testJelly != NULL) {
-			if (testJelly->death) {
+			if (testJelly->GetDeath()) {
 				if (testJelly->jellySize >= 0.5)
 				{
-					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::sEnemies.push_back(new E_Jelly(testJelly->pos + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
 				}
 			}
 		}
@@ -86,7 +86,7 @@ void LevelBanana::updateL(GLfloat dt) {
 	//}
 }
 
-void LevelBanana::reset() 
+void LevelBanana::Reset() 
 {
 	Game::deleteEntities();
 	Game::clearEntities();
@@ -96,7 +96,7 @@ void LevelBanana::reset()
 
 	for (int i = 0; i < Util::PLAYER_AMOUNT; i++) {
 		Game::sPlayers.push_back(new Robot(glm::vec2(0, 3 * i)));
-		Game::sPlayers.back()->color = Util::PLAYER_COLORS[i];
+		Game::sPlayers.back()->SetColor(Util::PLAYER_COLORS[i]);
 	}
 
 	//glm::vec2 motherDrone_SpawnPos;
@@ -149,7 +149,7 @@ void LevelBanana::spawnNextWave() {
 		Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, 1));
 	}
 	for (int i = 0; i < WAVES[wavecounter][MEDIC]; i++) {
-		Game::Enemies.push_back(new E_Medic(wave_SpawnPos));
+		Game::sEnemies.push_back(new E_Medic(wave_SpawnPos));
 	}
 	wavecounter++;
 }

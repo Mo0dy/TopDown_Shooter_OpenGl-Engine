@@ -14,7 +14,7 @@ public:
 	Entity background;
 	std::vector<Entity*> entities;
 
-	virtual void updateL(GLfloat dt);
-	virtual void reset();
+	virtual void UpdateL(GLfloat dt);
+	virtual void Reset();
 };
 

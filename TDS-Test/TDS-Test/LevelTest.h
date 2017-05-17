@@ -45,12 +45,12 @@ public:
 
 	static void loadLevelTest();
 
-	void updateL(GLfloat dt);
+	void UpdateL(GLfloat dt);
 
 	LevelTest();
 	~LevelTest();
 
-	void reset();
+	void Reset();
 
 	GLuint wavecounter;
 

@@ -5,7 +5,7 @@
 class EnergyBulletBig : public EnergyBullet
 {
 public:
-	EnergyBulletBig(glm::vec2 position, GLfloat newAngle);
+	EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist);
 	~EnergyBulletBig();
 
 	GLboolean UpdateE(GLfloat dt);

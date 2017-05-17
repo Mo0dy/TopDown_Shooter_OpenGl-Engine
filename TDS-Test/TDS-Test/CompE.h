@@ -9,7 +9,7 @@ public:
 	CompE(glm::vec2 position);
 	virtual ~CompE();
 
-	std::map<std::string, SubE*> subEntities;
+	std::map<std::string, class SubE*> subEntities;
 	std::vector<std::string> renderOrder;
 
 	GLboolean UpdateE(GLfloat dt);

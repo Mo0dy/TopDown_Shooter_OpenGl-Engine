@@ -11,15 +11,15 @@ GLboolean EnergyBulletBig::UpdateE(GLfloat dt) {
 	return GL_TRUE;
 }
 
-EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBullet(position, newAngle)
-{
-	vel = 15;
-	vel = Util::rotationMat2(newAngle) * glm::vec2(0, 1) * vel;
-	mass = 200000;
-	etex.setTexSize(glm::vec2(1.7, 3.5));
-	damage = 90;
 
-	color = glm::vec3(1.0f, 0.0f, 0.0f);
+EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist) : EnergyBullet(position, angle, whitelist)
+{
+	this->mass = 200000;
+	this->tex = ResourceManager::GetEtex("EnergyBall").GetTex();
+	this->hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(1.7, 3.5));
+	this->size = glm::vec2(1.7, 3.5);
+	this->damage = 90;
+	this->vel = glm::normalize(vel) * 15; // This should be done differently
 }
 
 EnergyBulletBig::~EnergyBulletBig()

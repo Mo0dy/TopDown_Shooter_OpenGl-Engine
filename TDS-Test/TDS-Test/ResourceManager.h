@@ -38,7 +38,7 @@ public:
 
 	static Etex GetEtex(std::string name);
 
-	static std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path);
+	static std::vector<HitObject*> ResourceManager::loadrHitboxFromFile(const char* path);
 
 	static void LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, loadHboxSwitch loadHitboxes);
 

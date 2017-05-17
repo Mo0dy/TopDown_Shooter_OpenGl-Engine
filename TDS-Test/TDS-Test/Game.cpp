@@ -49,9 +49,9 @@ void Game::Init() {
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
-	level = new LevelBanana;
+	level = new LevelTest;
 
-	reset();
+	Reset();
 }
 
 #ifdef KEYBOARD_SUPPORT
@@ -72,7 +72,7 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (!Keys[GLFW_KEY_R] && Press_R_Flag) {
 		Press_R_Flag = false;
-		reset();
+		Reset();
 	}
 	if (Keys[GLFW_KEY_M]) {
 		Press_M_Flag = true;
@@ -122,12 +122,12 @@ void Game::ProcessInput(GLfloat dt) {
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
-				reset();
+				Reset();
 			}
 		}
 
 		for (GLuint i = 0; i < controlledPlayers; i++) {
-			sPlayers[i]->gPad = cState[i]->Gamepad;
+			sPlayers[i]->SetGamepad(cState[i]->Gamepad);
 		}
 	}
 
@@ -215,7 +215,7 @@ void Game::Update(GLfloat dt) {
 			sMovedE.push_back(e);
 		}
 	}
-	level->updateL(dt);
+	level->UpdateL(dt);
 
 	// Collision detection
 	GLfloat penDepth;
@@ -261,19 +261,18 @@ void Game::Update(GLfloat dt) {
 	for (Bullet *b : sBullets) {
 		for (Enemy *e : sEnemies) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithEnemy(e);
+				b->ColWithEnemy(e, penDepth, colAxis);
 				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithStat(e, 0);
+				b->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
 
 	sMovedE.clear();
-
 	CheckForErase();
 }
 
@@ -309,31 +308,31 @@ DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 	return XInputGetState(index, state);
 }
 
-void Game::reset() {
-	level->reset();
+void Game::Reset() {
+	level->Reset();
 }
 
 void Game::CheckForErase() {
 	for (int i = 0; i < sBullets.size(); i++) {
-		if (sBullets[i]->CheckForErase(level->size)) {
+		if (sBullets[i]->GetErase()) {
 			delete sBullets[i];
 			sBullets.erase(sBullets.begin() + i);
 		}
 	}
 	for (int i = 0; i < sPlayers.size(); i++) {
-		if (sPlayers[i]->CheckForErase(level->size)) {
+		if (sPlayers[i]->GetErase()) {
 			delete sPlayers[i];
 			sPlayers.erase(sPlayers.begin() + i);
 		}
 	}
 	for (int i = 0; i < sDynEntities.size(); i++) {
-		if (sDynEntities[i]->CheckForErase(level->size)) {
+		if (sDynEntities[i]->GetErase()) {
 			delete sDynEntities[i];
 			sDynEntities.erase(sDynEntities.begin() + i);
 		}
 	}
 	for (int i = 0; i < sEnemies.size(); i++) {
-		if (sEnemies[i]->CheckForErase(level->size)) {
+		if (sEnemies[i]->GetErase()) {
 			delete sEnemies[i];
 			sEnemies.erase(sEnemies.begin() + i);
 		}

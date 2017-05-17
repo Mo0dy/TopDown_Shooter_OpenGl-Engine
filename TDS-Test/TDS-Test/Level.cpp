@@ -12,9 +12,9 @@ Level::~Level()
 	}
 }
 
-void Level::updateL(GLfloat dt) {
+void Level::UpdateL(GLfloat dt) {
 }
 
-void Level::reset() {
+void Level::Reset() {
 }
 

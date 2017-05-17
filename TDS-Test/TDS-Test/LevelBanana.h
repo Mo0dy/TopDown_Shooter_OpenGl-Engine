@@ -11,12 +11,12 @@ public:
 
 	static void loadLevelBanana();
 
-	void updateL(GLfloat dt);
+	void UpdateL(GLfloat dt);
 
 	LevelBanana();
 	~LevelBanana();
 
-	void reset();
+	void Reset();
 
 protected:
 	void spawnNextWave();

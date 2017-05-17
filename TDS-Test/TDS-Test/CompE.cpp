@@ -26,6 +26,10 @@ void CompE::UpdateSubE(GLfloat dt)
 }
 
 void CompE::UpdateAni() {
+	if (animations[ani].GetState()) {
+		tex = animations[ani].GetETex().GetTex();
+		hitObjs = animations[ani].GetETex().GetHitObjs();
+	}
 	for (auto& x : subEntities) 
 	{
 		x.second->UpdateAni();
@@ -56,6 +60,6 @@ void CompE::SetColor(glm::vec3 color)
 {
 	for (auto& x : subEntities)
 	{
-		x.second.SetColor(color);
+		x.second->SetColor(color);
 	}
 }

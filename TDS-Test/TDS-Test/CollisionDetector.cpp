@@ -18,26 +18,26 @@ glm::mat2 rotMat2;
 
 GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
 	// Utility variables
-	Hitbox mycEH;
-	Hitbox mymEH;
+	HitObject mycEH;
+	HitObject mymEH;
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
-	if (glm::distance(dE->pos, sE->pos) <= (glm::length(sE->etex.getTexSize()) + glm::length(dE->etex.getTexSize())) / 2.0f) {
-		for (Hitbox* mEH : dE->hitboxes) {
+	if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
+		for (HitObject mEH : dE->hitObjs) {
 
-			mymEH = *mEH;
-			mymEH.pos = Util::rotationMat2(dE->angle) * mymEH.pos + dE->pos;
-			mymEH.angle += dE->angle;
+			mymEH = mEH;
+			mymEH.GetPos() = Util::rotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos();
+			mymEH.SetAngle(mymEH.GetAngle() + dE->GetAngle());
 
 			// This should probably only be done if the hitboxes have the potential to collide?
-			glm::mat2 rotMat = Util::rotationMat2(mymEH.angle);
-			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.size.x, 0) * 0.5f;
-			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.size.y) * 0.5f;
-			E1corners[0] = mymEH.pos + rotVec1 + rotVec2;
-			E1corners[1] = mymEH.pos + rotVec1 - rotVec2;
-			E1corners[2] = mymEH.pos - rotVec1 - rotVec2;
-			E1corners[3] = mymEH.pos - rotVec1 + rotVec2;
+			glm::mat2 rotMat = Util::rotationMat2(mymEH.GetAngle());
+			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.GetSize().x, 0) * 0.5f;
+			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.GetSize().y) * 0.5f;
+			E1corners[0] = mymEH.GetPos() + rotVec1 + rotVec2;
+			E1corners[1] = mymEH.GetPos() + rotVec1 - rotVec2;
+			E1corners[2] = mymEH.GetPos() - rotVec1 - rotVec2;
+			E1corners[3] = mymEH.GetPos() - rotVec1 + rotVec2;
 
 #ifdef DEBUG_HITBOXES
 			for (int i = 0; i < 3; i++) {
@@ -48,22 +48,22 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 			Renderer::drawLineBuffer.push_back(myVertex(E1corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
 #endif // DEBUG_HITBOXES
 
-			Axis[0] = Util::rotationMat2(mymEH.angle) * glm::vec2(1, 0);
-			Axis[1] = Util::rotationMat2(mymEH.angle) * glm::vec2(0, 1);
+			Axis[0] = Util::rotationMat2(mymEH.GetAngle()) * glm::vec2(1, 0);
+			Axis[1] = Util::rotationMat2(mymEH.GetAngle()) * glm::vec2(0, 1);
 
-			for (Hitbox* cEH : sE->hitboxes) {
+			for (HitObject cEH : sE->hitObjs) {
 				// Calculation WCS position of the Hitbox
-				mycEH = *cEH;
-				mycEH.pos = Util::rotationMat2(sE->angle) * mycEH.pos + sE->pos;
-				mycEH.angle += sE->angle;
+				mycEH = cEH;
+				mycEH.GetPos() = Util::rotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos();
+				mycEH.SetAngle(mycEH.GetAngle() + sE->GetAngle());
 
-				rotMat = Util::rotationMat2(mycEH.angle);
-				rotVec1 = rotMat * glm::vec2(mycEH.size.x, 0) * 0.5f;
-				rotVec2 = rotMat * glm::vec2(0, mycEH.size.y) * 0.5f;
-				E2corners[0] = mycEH.pos + rotVec1 + rotVec2;
-				E2corners[1] = mycEH.pos + rotVec1 - rotVec2;
-				E2corners[2] = mycEH.pos - rotVec1 - rotVec2;
-				E2corners[3] = mycEH.pos - rotVec1 + rotVec2;
+				rotMat = Util::rotationMat2(mycEH.GetAngle());
+				rotVec1 = rotMat * glm::vec2(mycEH.GetSize().x, 0) * 0.5f;
+				rotVec2 = rotMat * glm::vec2(0, mycEH.GetSize().y) * 0.5f;
+				E2corners[0] = mycEH.GetPos() + rotVec1 + rotVec2;
+				E2corners[1] = mycEH.GetPos() + rotVec1 - rotVec2;
+				E2corners[2] = mycEH.GetPos() - rotVec1 - rotVec2;
+				E2corners[3] = mycEH.GetPos() - rotVec1 + rotVec2;
 
 #ifdef DEBUG_HITBOXES
 				for (int i = 0; i < 3; i++) {
@@ -75,8 +75,8 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 #endif // DEBUG_HITBOXES
 
 
-				Axis[2] = Util::rotationMat2(mycEH.angle) * glm::vec2(1, 0);
-				Axis[3] = Util::rotationMat2(mycEH.angle) * glm::vec2(0, 1);
+				Axis[2] = Util::rotationMat2(mycEH.GetAngle()) * glm::vec2(1, 0);
+				Axis[3] = Util::rotationMat2(mycEH.GetAngle()) * glm::vec2(0, 1);
 
 				*penDepth = doSingleCheck(mymEH, mycEH, minColAxis);
 				if (*penDepth > 0) {
@@ -88,9 +88,9 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 	return GL_FALSE;
 }
 
-GLfloat CollisionDetector::doSingleCheck(Hitbox& h1, Hitbox& h2, glm::vec2* const minColAxis) {
+GLfloat CollisionDetector::doSingleCheck(HitObject& h1, HitObject& h2, glm::vec2* const minColAxis) {
 	// This should probably be checked in the upper function?
-	if (glm::distance(h1.pos, h2.pos) > (glm::length(h1.size) + glm::length(h2.size)) / 2.0f) { // rough check for possible collision
+	if (glm::distance(h1.GetPos(), h2.GetPos()) > (glm::length(h1.GetSize()) + glm::length(h2.GetSize())) / 2.0f) { // rough check for possible collision
 		return -1;
 	}
 

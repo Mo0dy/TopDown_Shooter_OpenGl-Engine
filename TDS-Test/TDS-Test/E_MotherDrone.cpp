@@ -3,7 +3,7 @@
 //Constructor
 E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position), lastSpawn(9999), spawning(GL_TRUE), spawnSpeed(3.5)
 {
-	Animations[ani].enforceWidth(5);
+	animations[ani].EnforceWidth(5);
 	maxHealth = 2500;
 	health = maxHealth;
 	movForce = 1500;
@@ -48,16 +48,16 @@ GLboolean E_MotherDrone::UpdateE(GLfloat dt) {
 
 		//Please replace this comment for this for loop, I'm just not sure what happens here.
 		for (Player *p : Game::sPlayers) {
-			movDir += glm::normalize(rot90DegreesM * (pos - p->pos));
-			movDir += glm::normalize(p->pos - pos) * glm::pow(glm::distance(p->pos, pos) - 20, 3) * 0.2f;
+			movDir += glm::normalize(rot90DegreesM * (pos - p->GetPos()));
+			movDir += glm::normalize(p->GetPos() - pos) * glm::pow(glm::distance(p->GetPos(), pos) - 20, 3) * 0.2f;
 		}
 
-		addForce(glm::normalize(movDir) * movForce);
+		AddForce(glm::normalize(movDir) * movForce);
 
 		color = glm::vec3(1.0f, health / maxHealth, 1.0f);
 		SetBodyAngle(dt);
 
-		updatePos(dt);
+		UpdatePos(dt);
 		return glm::length(vel) > 0;
 	}
 	return GL_FALSE;

@@ -61,7 +61,7 @@ private:
 
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);
-	void reset();
+	void Reset();
 	void CheckForErase();
 };
 

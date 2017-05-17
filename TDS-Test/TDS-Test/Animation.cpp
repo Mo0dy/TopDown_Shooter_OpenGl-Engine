@@ -48,7 +48,7 @@ Etex& Animation::GetETex()
 {
 	if (startTime + aniTime < glfwGetTime() && !repeat) {
 		state = GL_FALSE;
-		Etextures.back();
+		return Etextures.back();
 	}
 	else {
 		GLfloat dt = glm::mod<GLfloat>((startTime - glfwGetTime()), aniTime);

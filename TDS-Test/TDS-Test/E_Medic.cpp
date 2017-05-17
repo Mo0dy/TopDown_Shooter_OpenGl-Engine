@@ -9,10 +9,9 @@ void E_Medic::Load_E_Medic() {
 E_Medic::E_Medic(glm::vec2 position) : Enemy(position)
 {
 	//Set texture and hitbox
-	etex = ResourceManager::GetEtex("Medic");
-	etex.setTexSize(1);
-	etex.fitHitboxToTex();
-	updateHitboxes();
+	this->size = glm::vec2(1);
+	tex = ResourceManager::GetEtex("Medic").GetTex();
+	hitObjs = ResourceManager::GetEtex("Medic").GetHitObjs(this->size);
 
 	//Very low health, one shot will be more than enough to kill
 	maxHealth = 50;
@@ -44,9 +43,10 @@ GLboolean E_Medic::UpdateE(GLfloat dt)
 		if (health <= 0) {
 			if (attacking) 
 			{
-				for (int i = 0; i < Game::Players.size(); i++)
+				for (int i = 0; i < Game::sPlayers.size(); i++)
 				{
-					Game::Players[i]->health += healing;
+					// This should probably be done differently
+					Game::sPlayers[i]->GetAttacked(-healing);
 				}
 			}
 			death = GL_TRUE;
@@ -64,19 +64,19 @@ GLboolean E_Medic::UpdateE(GLfloat dt)
 		//Decide which player to attack (aka who is closest)
 		Player* gPlayer = Game::sPlayers[0];
 		for (int i = 0; i < Game::sPlayers.size(); i++) {
-			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::sPlayers[i]->pos)) {
+			if (glm::distance(pos, gPlayer->GetPos()) > glm::distance(pos, Game::sPlayers[i]->GetPos())) {
 				gPlayer = Game::sPlayers[i];
 			}
 		}
 		
 		//Add forces towards the player
-		glm::vec2 movDir = gPlayer->pos - pos;
+		glm::vec2 movDir = gPlayer->GetPos() - pos;
 
-		addForce(glm::normalize(movDir) * movForce);
+		AddForce(glm::normalize(movDir) * movForce);
 
 		SetBodyAngle(dt);
 
-		updatePos(dt);
+		UpdatePos(dt);
 
 		return glm::length(vel) > 0;
 	}

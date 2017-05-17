@@ -27,7 +27,7 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	death = GL_FALSE;
 
-	bulletSpawn = glm::vec2(100, 100);
+	bulletSpawn = glm::vec2(1, 1);
 
 	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), glm::vec2(1.05));
 	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), glm::vec2(1.5));
@@ -143,36 +143,48 @@ void Robot::shoot() {
 		//subEntities["body"]->animations["ShootSmallB"].Start();
 		//subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
-		Game::sBullets.push_back(new EnergyBullet(pos + Util::rotationMat2(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
-		Game::sBullets.back()->whitelist.push_back(this);
+
+		// This is probably not the best option to whitelist all players
+		std::vector<const LivingE*> whitelist;
+		for (Player *p : Game::sPlayers) {
+			whitelist.push_back(p);
+		}
+		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::rotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 
 void Robot::shootBigB() {
+
+	// This is probably not the best option to whitelist all players
+	std::vector<const LivingE*> whitelist;
+	for (Player *p : Game::sPlayers) {
+		whitelist.push_back(p);
+	}
+
 	if (lastShotBigB > shootDelayBigB) {
 		lastShotBigB = 0;
-		Game::sBullets.push_back(new EnergyBulletBig(pos, subEntities["body"]->angle));
-		Game::sBullets.back()->whitelist.push_back(this);
+		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::rotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 
 void Robot::SetBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	subEntities["body"]->rAngle = glm::mod<GLfloat>(subEntities["body"]->rAngle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);
+
+	subEntities["body"]->SetRAngle(glm::mod<GLfloat>(subEntities["body"]->GetRAngle(), 2 * glm::pi<GLfloat>()));
+	GLfloat dA = CalcMovAngle(subEntities["body"]->GetRAngle() + angle, bodyDir);
 	if (abs(dA) > 0) {
 		if (bodyTurnSpeed * dt > abs(dA)) {
-			subEntities["body"]->rAngle += dA;
+			subEntities["body"]->SetRAngle(dA);
 		}
 		else {
-			subEntities["body"]->rAngle += dA / abs(dA) * bodyTurnSpeed * dt;
+			subEntities["body"]->SetRAngle(dA / abs(dA) * bodyTurnSpeed * dt);
 		}
 	}
 }
 
 void Robot::SetTrackAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = calcMovAngle(angle, vel);
+	GLfloat dA = CalcMovAngle(angle, vel);
 
 	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
 		if (dA > 0) {

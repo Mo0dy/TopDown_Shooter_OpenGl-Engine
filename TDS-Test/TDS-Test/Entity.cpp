@@ -2,7 +2,8 @@
 #include "ResourceManager.h"
 
 Entity::Entity() {}
-Entity::Entity(glm::vec2 position) : pos(position) {}
+Entity::Entity(Etex *etex, GLfloat width) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(width)), size(etex->GetTexSize()) {}
+Entity::Entity(glm::vec2 position) : pos(position), angle(0) {}
 Entity::Entity(glm::vec2 position, GLfloat angle) : pos(position), angle(angle) {}
 Entity::Entity(glm::vec2 position, const Texture2D* texture) : pos(position), tex(texture) {}
 Entity::Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture) : pos(position), angle(angle), tex(texture) {}
@@ -29,7 +30,7 @@ void Entity::UpdateAni()
 {
 	if (animations[ani].GetState()) {
 		tex = animations[ani].GetETex().GetTex();
-		hitboxes = animations[ani].GetETex().GetHitObjs();
+		hitObjs = animations[ani].GetETex().GetHitObjs();
 	}
 }
 

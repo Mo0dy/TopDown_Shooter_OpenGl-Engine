@@ -10,6 +10,7 @@ class Entity
 {
 public:
 	Entity();
+	Entity(Etex *etex, GLfloat width);
 	Entity(glm::vec2 position);
 	Entity(glm::vec2 position, GLfloat angle);
 	Entity(glm::vec2 position, const Texture2D* texture);
@@ -19,7 +20,7 @@ public:
 
 	virtual ~Entity();
 
-	std::vector<HitObject> hitboxes;
+	std::vector<HitObject> hitObjs;
 	std::map<std::string, Animation> animations;
 	std::string ani; // The name of the currently Played Animation
 

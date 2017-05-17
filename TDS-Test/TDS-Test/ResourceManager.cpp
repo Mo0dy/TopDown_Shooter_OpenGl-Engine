@@ -38,9 +38,9 @@ Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::stri
 }
 
 void ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox, Etex* etexToFill) {
-	etexToFill->tex = loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha);
+	etexToFill->SetTex(loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha));
 	if (loadHbox) {
-		etexToFill->setRelHitboxes(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
+		etexToFill->SetRHObjs(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
 	}
 }
 
@@ -107,10 +107,10 @@ Texture2D* ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean al
 	return texture;
 }
 
-std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path) {
+std::vector<HitObject*> ResourceManager::loadrHitboxFromFile(const char* path) {
 	std::string hitboxConfig;
 
-	std::vector<rHitbox*> hitboxes;
+	std::vector<HitObject*> hitObjs;
 
 	try
 	{
@@ -138,7 +138,7 @@ std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path) {
 		}
 
 		for (int i = 0; i < numbers.size() - 4; i += 5) {
-			hitboxes.push_back(new rHitbox(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
+			hitObjs.push_back(new HitObject(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
 		}
 	}
 	catch (std::exception e)
@@ -146,12 +146,12 @@ std::vector<rHitbox*> ResourceManager::loadrHitboxFromFile(const char* path) {
 		std::cout << "ERROR::HITBOX: Failed to read hitbox file" << std::endl;
 	}
 
-	return hitboxes;
+	return hitObjs;
 }
 
 // The Etextures probably shouldn't be saved in the rescource manager ?
 void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, loadHboxSwitch loadHitboxes) {
-	std::vector<rHitbox*> temHbox;
+	std::vector<HitObject*> temHbox;
 	if (loadHitboxes == HBOX_LOAD_ONE) {
 		temHbox = loadrHitboxFromFile((path + "\\H.txt").c_str());
 	}
@@ -163,7 +163,7 @@ void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLin
 		Animations[name].back().SetTexSize(width);
 
 		if (loadHitboxes == HBOX_LOAD_ONE) {
-			Animations[name].back().setRelHitboxes(temHbox);
+			Animations[name].back().SetRHObjs(temHbox);
 		}
 		else if (loadHitboxes == HBOX_AUTOFIT) {
 			Animations[name].back().FitHObj();

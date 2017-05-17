@@ -23,7 +23,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 
 	//Set animation
 	animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
-	animations["Flying"].aniTime = 1;
+	animations["Flying"].SetAniTime(1);
 	animations["Flying"].Start();
 
 	ani = "Flying";
@@ -59,22 +59,22 @@ GLboolean E_Drone::UpdateE(GLfloat dt) {
 		Player* gPlayer = Game::sPlayers[0];
 
 		for (int i = 0; i < Game::sPlayers.size(); i++) {
-			if (glm::distance(pos, gPlayer->pos) > glm::distance(pos, Game::sPlayers[i]->pos)) {
+			if (glm::distance(pos, gPlayer->GetPos()) > glm::distance(pos, Game::sPlayers[i]->GetPos())) {
 				gPlayer = Game::sPlayers[i];
 			}
 		}
 
-		glm::vec2 movDir = glm::normalize(gPlayer->pos - pos) * movForce;
+		glm::vec2 movDir = glm::normalize(gPlayer->GetPos() - pos) * movForce;
 
 		//Drones all hate eachother and try to stay away from other enemies
 		for (Enemy *e : Game::sEnemies) {
-			if (glm::distance(pos, e->pos) > 0.4) {
-				movDir += glm::normalize(pos - e->pos) * swarmFactor / glm::pow(glm::distance(pos, e->pos), 2);
+			if (glm::distance(pos, e->GetPos()) > 0.4) {
+				movDir += glm::normalize(pos - e->GetPos()) * swarmFactor / glm::pow(glm::distance(pos, e->GetPos()), 2);
 			}
 		}
 
-		addForce(glm::normalize(movDir) * movForce);
-		updatePos(dt);
+		AddForce(glm::normalize(movDir) * movForce);
+		UpdatePos(dt);
 		color = glm::vec3(1.0f, health / maxHealth, 1.0f);
 		SetBodyAngle(dt);
 
