@@ -29,8 +29,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	bulletSpawn = glm::vec2(1, 1);
 
-	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
-	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
+	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
+	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
 
 	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
 	
@@ -43,8 +43,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	shootDelayBigB = 5;
 	SetColor(glm::vec3(1.0f));
 
-	renderOrder.push_back("body");
 	renderOrder.push_back("tracks");
+	renderOrder.push_back("body");
 
 	lastShot = 100;
 	lastShotBigB = 100;
@@ -124,12 +124,18 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 			shootBigB();
 		}
 
+		LOG("BodyDir = " << bodyDir.x << ", " << bodyDir.y);
+
 		SetTrackAngle(dt);
 		SetBodyAngle(dt);
 
-		UpdatePos(dt);
+		LOG("tracks = " << subEntities["tracks"]->GetRAngle());
+		LOG("body = " << subEntities["body"]->GetRAngle());
 
+		UpdatePos(dt);
 		UpdateSubE(dt);
+
+		LOG("Robot = " << this->angle);
 
 		movDir = glm::vec2(0);
 		bodyDir = glm::vec2(0);
@@ -175,10 +181,10 @@ void Robot::SetBodyAngle(GLfloat dt) {
 	GLfloat dA = CalcMovAngle(subEntities["body"]->GetRAngle() + angle, bodyDir);
 	if (abs(dA) > 0) {
 		if (bodyTurnSpeed * dt > abs(dA)) {
-			subEntities["body"]->SetRAngle(dA);
+			subEntities["body"]->SetRAngle(subEntities["body"]->GetRAngle() + dA);
 		}
 		else {
-			subEntities["body"]->SetRAngle(dA / abs(dA) * bodyTurnSpeed * dt);
+			subEntities["body"]->SetRAngle(subEntities["body"]->GetRAngle() + dA / abs(dA) * bodyTurnSpeed * dt);
 		}
 	}
 }

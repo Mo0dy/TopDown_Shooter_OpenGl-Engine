@@ -91,7 +91,7 @@ GLfloat DynE::CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
 	if (goalVec.x != 0) {
 		goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
 	}
-	else {
+	else { // if goalVec.x == 0 you can either go exactly to the reight (goalAngle = 0) or to the left (goalAngle = PI)
 		if (goalVec.y > 0) {
 			goalAngle = 0;
 		}
