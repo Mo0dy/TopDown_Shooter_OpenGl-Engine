@@ -11,10 +11,16 @@
 
 #include <vector>
 
-enum loadHboxSwitch {
-	HBOX_LOAD_NONE,
+enum LOAD_ANIMATION_SWITCH {
+	ANI_LOAD_NO_HBOX,
+	ANI_LOAD_ONE_HBOX,
+	ANI_LOAD_ALL_HBOX,
+	ANI_HBOX_AUTOFIT
+};
+
+enum LOAD_HBOX_SWITCH {
 	HBOX_LOAD_ONE,
-	HBOX_LOAD_ALL,
+	HBOX_LOAD_NONE,
 	HBOX_AUTOFIT
 };
 
@@ -33,14 +39,14 @@ public:
 	static Texture2D LoadTexture(const GLchar *file, GLboolean alpha, std::string name); // Loads Texture from file into hasmap under "name"
 	static Texture2D GetTexture(std::string name);
 
-	static Etex LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox);
-	static void LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox, Etex* etexToFill);
+	static Etex LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, LOAD_HBOX_SWITCH loadHbox);
+	static void LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, LOAD_HBOX_SWITCH loadHbox, Etex* etexToFill);
 
 	static Etex GetEtex(std::string name);
 
 	static std::vector<HitObject*> ResourceManager::loadrHitboxFromFile(const char* path);
 
-	static void LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, loadHboxSwitch loadHitboxes);
+	static void LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, LOAD_ANIMATION_SWITCH loadHitboxes);
 
 	static std::vector<Etex> GetAnimation(std::string name);
 

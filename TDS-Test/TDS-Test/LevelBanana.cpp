@@ -6,7 +6,7 @@
 #include "E_Medic.h"
 
 void LevelBanana::loadLevelBanana() {
-	ResourceManager::LoadEtex("Textures", "BananaIsland", ".jpg", GL_TRUE, "LevelBanana_T_Island", GL_FALSE);
+	ResourceManager::LoadEtex("Textures", "BananaIsland", ".jpg", GL_TRUE, "LevelBanana_T_Island", HBOX_LOAD_NONE);
 }
 
 LevelBanana::LevelBanana()

@@ -2,7 +2,7 @@
 
 //Load texture
 void E_Drone::load_E_Drone() {
-	ResourceManager::LoadAnimation("Textures\\A_Drone", ".png", 31, 1.5, GL_TRUE, "E_Drone_A", HBOX_AUTOFIT);
+	ResourceManager::LoadAnimation("Textures\\A_Drone", ".png", 31, 1.5, GL_TRUE, "E_Drone_A", ANI_HBOX_AUTOFIT);
 }
 
 //Constructor

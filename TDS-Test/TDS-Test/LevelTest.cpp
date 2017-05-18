@@ -5,9 +5,9 @@
 #include "E_Jelly.h"
 
 void LevelTest::loadLevelTest() {
-	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", GL_TRUE);
-	ResourceManager::LoadEtex("Textures\\Houses\\House1", "", ".png", GL_TRUE, "House1", GL_TRUE);
-	ResourceManager::LoadEtex("Textures", "Well", ".png", GL_TRUE, "Well", GL_FALSE);
+	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", HBOX_LOAD_ONE);
+	ResourceManager::LoadEtex("Textures\\Houses\\House1", "", ".png", GL_TRUE, "House1", HBOX_LOAD_ONE);
+	ResourceManager::LoadEtex("Textures", "Well", ".png", GL_TRUE, "Well", HBOX_AUTOFIT);
 }
 
 LevelTest::LevelTest()

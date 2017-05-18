@@ -30,17 +30,20 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 	return Textures[name];
 }
 
-Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, GLboolean loadHbox) {
+Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, LOAD_HBOX_SWITCH loadHbox) {
 	Etex* etex = new Etex();
 	LoadTempEtex(path, filename, filetype, alpha, loadHbox, etex); // Problemstelle ==================================================================
 	Etextures[name] = *etex;
 	return Etextures[name];
 }
 
-void ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, GLboolean loadHbox, Etex* etexToFill) {
+void ResourceManager::LoadTempEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, LOAD_HBOX_SWITCH loadHbox, Etex* etexToFill) {
 	etexToFill->SetTex(loadTextureFromFile((path + "\\T" + filename + filetype).c_str(), alpha));
-	if (loadHbox) {
+	if (loadHbox == HBOX_LOAD_ONE) {
 		etexToFill->SetRHObjs(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
+	}
+	else if (loadHbox == ANI_HBOX_AUTOFIT) {
+		etexToFill->FitHObj();
 	}
 }
 
@@ -150,22 +153,30 @@ std::vector<HitObject*> ResourceManager::loadrHitboxFromFile(const char* path) {
 }
 
 // The Etextures probably shouldn't be saved in the rescource manager ?
-void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, loadHboxSwitch loadHitboxes) {
+void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, LOAD_ANIMATION_SWITCH loadHitboxes) {
 	std::vector<HitObject*> temHbox;
-	if (loadHitboxes == HBOX_LOAD_ONE) {
+	if (loadHitboxes == ANI_LOAD_ONE_HBOX) {
 		temHbox = loadrHitboxFromFile((path + "\\H.txt").c_str());
 	}
 
+	LOAD_HBOX_SWITCH loadHbox;
+	if (loadHitboxes == ANI_LOAD_ALL_HBOX) {
+		loadHbox = HBOX_LOAD_ONE;
+	}
+	else {
+		loadHbox = HBOX_LOAD_NONE;
+	}
 	for (int i = 0; i < amount; i++) {
 		Etex* etex = new Etex();
-		LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHitboxes == HBOX_LOAD_ALL, etex);
+
+		LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHbox, etex);
 		Animations[name].push_back(*etex);
 		Animations[name].back().SetTexSize(width);
 
-		if (loadHitboxes == HBOX_LOAD_ONE) {
+		if (loadHitboxes == ANI_LOAD_ONE_HBOX) {
 			Animations[name].back().SetRHObjs(temHbox);
 		}
-		else if (loadHitboxes == HBOX_AUTOFIT) {
+		else if (loadHitboxes == ANI_HBOX_AUTOFIT) {
 			Animations[name].back().FitHObj();
 		}
 	}

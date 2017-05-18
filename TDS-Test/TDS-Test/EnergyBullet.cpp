@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 
 void EnergyBullet::loadEnergyBullet() {
-	ResourceManager::LoadEtex("Textures","EnergyBullet", ".png", GL_TRUE, "EnergyBall", GL_FALSE);
+	ResourceManager::LoadEtex("Textures","EnergyBullet", ".png", GL_TRUE, "EnergyBall", HBOX_AUTOFIT);
 }
 
 EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist) : Bullet(position, 20, angle, whitelist)

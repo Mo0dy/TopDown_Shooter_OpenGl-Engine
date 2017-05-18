@@ -7,10 +7,10 @@
 #include <glm\gtc\random.hpp>
 
 void Robot::loadRobot() {
-	ResourceManager::LoadEtex("Textures", "D_Bot", ".png", GL_TRUE, "D_Bot", GL_FALSE);
-	ResourceManager::LoadEtex("Textures", "U_Bot", ".png", GL_TRUE, "U_Bot", GL_FALSE);
+	ResourceManager::LoadEtex("Textures", "D_Bot", ".png", GL_TRUE, "D_Bot", HBOX_AUTOFIT);
+	ResourceManager::LoadEtex("Textures", "U_Bot", ".png", GL_TRUE, "U_Bot", HBOX_AUTOFIT);
 
-	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", HBOX_LOAD_ONE);
+	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", ANI_LOAD_ONE_HBOX);
 }
 
 Robot::Robot(glm::vec2 position) : Player(position)

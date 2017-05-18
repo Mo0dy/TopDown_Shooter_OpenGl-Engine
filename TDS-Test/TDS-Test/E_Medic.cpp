@@ -2,7 +2,7 @@
 
 //Load textures
 void E_Medic::Load_E_Medic() {
-	ResourceManager::LoadEtex("Textures", "Medic", ".png", GL_TRUE, "Medic", GL_FALSE);
+	ResourceManager::LoadEtex("Textures", "Medic", ".png", GL_TRUE, "Medic", HBOX_AUTOFIT);
 }
 
 //Constructor

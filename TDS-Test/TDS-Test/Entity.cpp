@@ -76,5 +76,5 @@ const Texture2D* Entity::GetTex() const { return this->tex; }
 void Entity::SetSize(glm::vec2 size) { this->size = size; }
 void Entity::SetSize(GLfloat width) 
 {
-	this->size = glm::vec2(width, this->tex->Height / this->tex->Width * width);
+	this->size = glm::vec2(width, (GLfloat) this->tex->Height / this->tex->Width * width);
 }

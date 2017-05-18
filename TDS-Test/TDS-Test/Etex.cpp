@@ -61,7 +61,7 @@ std::vector<HitObject> Etex::GetHitObjs(glm::vec2 size) const
 
 std::vector<HitObject> Etex::GetHitObjs(GLfloat width) const
 {
-	return GetHitObjs(glm::vec2(width, tex->Height / tex->Width * width));
+	return GetHitObjs(glm::vec2(width, (GLfloat) tex->Height / tex->Width * width));
 }
 
 void Etex::SetTexSize(glm::vec2 textureSize)
@@ -72,7 +72,7 @@ void Etex::SetTexSize(glm::vec2 textureSize)
 
 void Etex::SetTexSize(GLfloat width)
 {
-	texSize = glm::vec2(width, tex->Height / tex->Width * width);
+	texSize = glm::vec2(width, (GLfloat) tex->Height / tex->Width * width);
 	UpdateHObjs();
 }
 

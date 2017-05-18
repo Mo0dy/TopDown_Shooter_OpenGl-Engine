@@ -4,7 +4,7 @@
 
 //Load textures
 void E_Jelly::Load_E_Jelly() {
-	ResourceManager::LoadEtex("Textures", "Pudding", ".png", GL_TRUE, "Pudding", GL_TRUE);
+	ResourceManager::LoadEtex("Textures", "Pudding", ".png", GL_TRUE, "Pudding", HBOX_AUTOFIT);
 }
 
 //Constructor
