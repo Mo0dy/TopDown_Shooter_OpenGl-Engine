@@ -29,10 +29,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	bulletSpawn = glm::vec2(1, 1);
 
-	SE_BodyPart *test1 = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.05);
-	SE_BodyPart *test2 = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 1.5);
-	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.05);
-	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 1.5);
+	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
+	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
 
 	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
 	
@@ -45,8 +43,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	shootDelayBigB = 5;
 	SetColor(glm::vec3(1.0f));
 
-	renderOrder.push_back("tracks");
 	renderOrder.push_back("body");
+	renderOrder.push_back("tracks");
 
 	lastShot = 100;
 	lastShotBigB = 100;
@@ -62,6 +60,7 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 			death = GL_TRUE;
 			return GL_FALSE;
 		}
+
 		SetColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
 
 		movState = NORMAL;

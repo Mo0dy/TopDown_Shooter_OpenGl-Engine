@@ -25,7 +25,7 @@ void Etex::UpdateHObjs()
 void Etex::FitHObj()
 {
 	rHObjs.clear();
-	rHObjs.push_back(HitObject(glm::vec2(1), glm::vec2(1), 0));
+	rHObjs.push_back(HitObject(glm::vec2(0), glm::vec2(1), 0));
 	UpdateHObjs();
 }
 
@@ -42,7 +42,7 @@ glm::vec2 Etex::GetTexSize() const
 
 glm::vec2 Etex::GetTexSize(GLfloat width) const
 {
-	return glm::vec2(width, tex->Height / tex->Width * width);
+ 	return glm::vec2(width, (GLfloat) tex->Height / tex->Width * width);
 }
 
 std::vector<HitObject> Etex::GetHitObjs() const 

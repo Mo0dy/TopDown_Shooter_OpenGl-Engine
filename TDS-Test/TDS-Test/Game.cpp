@@ -219,7 +219,7 @@ void Game::Update(GLfloat dt) {
 
 	// Collision detection
 	GLfloat penDepth;
-	glm::vec2 colAxis;
+ 	glm::vec2 colAxis;
 	for (int i = 0; i < sPlayers.size(); i++) {
 		for (Enemy *e : sEnemies) {
 			if (colDec->doCCheck(sPlayers[i], e, &penDepth, &colAxis)) {

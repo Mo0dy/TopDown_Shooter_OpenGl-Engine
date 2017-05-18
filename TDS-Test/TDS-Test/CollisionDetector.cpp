@@ -23,11 +23,11 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
-	if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
+	//if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
 		for (HitObject mEH : dE->hitObjs) {
 
 			mymEH = mEH;
-			mymEH.GetPos() = Util::rotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos();
+			mymEH.SetPos(Util::rotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos());
 			mymEH.SetAngle(mymEH.GetAngle() + dE->GetAngle());
 
 			// This should probably only be done if the hitboxes have the potential to collide?
@@ -54,7 +54,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 			for (HitObject cEH : sE->hitObjs) {
 				// Calculation WCS position of the Hitbox
 				mycEH = cEH;
-				mycEH.GetPos() = Util::rotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos();
+				mycEH.SetPos(Util::rotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos());
 				mycEH.SetAngle(mycEH.GetAngle() + sE->GetAngle());
 
 				rotMat = Util::rotationMat2(mycEH.GetAngle());
@@ -84,7 +84,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 				}
 			}
 		}
-	}
+	//}
 	return GL_FALSE;
 }
 

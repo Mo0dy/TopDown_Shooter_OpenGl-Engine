@@ -3,12 +3,12 @@
 Animation::Animation() {
 }
 
-Animation::Animation(std::string name, GLboolean repeat) : repeat(repeat), Etextures(ResourceManager::Animations[name])
+Animation::Animation(std::string name, GLboolean repeat) : repeat(repeat), Etextures(ResourceManager::GetAnimation(name))
 {
 }
 
 Animation::Animation(std::string name, GLfloat width, GLboolean repeat) : Animation(name, repeat) {
-	EnforceWidth(width);
+	this->EnforceWidth(width);
 }
 
 Animation::~Animation()
