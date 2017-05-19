@@ -16,14 +16,14 @@ glm::vec2 Axis[4];
 glm::mat2 rotMat1;
 glm::mat2 rotMat2;
 
-GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
+GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
 	// Utility variables
 	HitObject mycEH;
 	HitObject mymEH;
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
-	//if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
+	if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
 		for (HitObject mEH : dE->hitObjs) {
 
 			mymEH = mEH;
@@ -84,7 +84,7 @@ GLboolean CollisionDetector::doCCheck(DynE* dE, Entity* sE, GLfloat* const penDe
 				}
 			}
 		}
-	//}
+	}
 	return GL_FALSE;
 }
 

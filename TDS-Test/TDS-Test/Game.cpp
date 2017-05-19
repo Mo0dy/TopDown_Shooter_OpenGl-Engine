@@ -219,27 +219,34 @@ void Game::Update(GLfloat dt) {
 
 	// Collision detection
 	GLfloat penDepth;
- 	glm::vec2 colAxis;
+	glm::vec2 colAxis;
 	for (int i = 0; i < sPlayers.size(); i++) {
-		for (Enemy *e : sEnemies) {
-			if (colDec->doCCheck(sPlayers[i], e, &penDepth, &colAxis)) {
-				sPlayers[i]->ColWithDyn(e, penDepth, colAxis);
-				e->ColWithPlayer(sPlayers[i], penDepth, -colAxis);
+
+		for (auto& x : sPlayers[i]->subEntities) {
+			for (Enemy *e : sEnemies) {
+				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+					x.second->ColWithEnemy(e, penDepth, colAxis);
+					e->ColWithPSubE(x.second, penDepth, -colAxis);
+				}
 			}
-		}
-		for (int j = i + 1; j < sPlayers.size(); j++) {
-			if (colDec->doCCheck(sPlayers[i], sPlayers[j], &penDepth, &colAxis)) {
-				sPlayers[i]->ColWithDyn(sPlayers[j], penDepth, colAxis);
-				sPlayers[j]->ColWithDyn(sPlayers[i], penDepth, -colAxis);
+			for (int j = i + 1; j < sPlayers.size(); j++) {
+				for (auto& y : sPlayers[i]->subEntities) {
+					if (colDec->doCCheck(x.second, y.second, &penDepth, &colAxis)) {
+						sPlayers[i]->ColWithDyn(sPlayers[j], penDepth, colAxis);
+						sPlayers[j]->ColWithDyn(sPlayers[i], penDepth, -colAxis);
+						break;
+					}
+				}
+
 			}
-		}
-		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(sPlayers[i], e, &penDepth, &colAxis)) {
-				sPlayers[i]->ColWithStat(e, penDepth, colAxis);
+			for (Entity *e : level->entities) {
+				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+					sPlayers[i]->ColWithStat(e, penDepth, colAxis);
+				}
 			}
-		}
-		if (colDec->doCCheck(sPlayers[i], &level->background, &penDepth, &colAxis)) {
-			sPlayers[i]->ColWithStat(&level->background, penDepth, colAxis);
+			if (colDec->doCCheck(x.second, &level->background, &penDepth, &colAxis)) {
+				sPlayers[i]->ColWithStat(&level->background, penDepth, colAxis);
+			}
 		}
 	}
 

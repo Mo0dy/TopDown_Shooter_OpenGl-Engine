@@ -5,10 +5,11 @@ void EnergyBullet::loadEnergyBullet() {
 	ResourceManager::LoadEtex("Textures","EnergyBullet", ".png", GL_TRUE, "EnergyBall", HBOX_AUTOFIT);
 }
 
-EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist) : Bullet(position, 20, angle, whitelist)
+EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist) : Bullet(position, 20.0f, angle, whitelist)
 {
 	mass = 10;
 	tex = ResourceManager::GetEtex("EnergyBall").GetTex();
+	size = glm::vec2(0.25, 0.6);
 	hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(0.25, 0.6));
 	damage = 10;
 }

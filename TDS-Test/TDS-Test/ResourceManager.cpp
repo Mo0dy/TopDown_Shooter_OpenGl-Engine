@@ -42,7 +42,7 @@ void ResourceManager::LoadTempEtex(std::string path, std::string filename, std::
 	if (loadHbox == HBOX_LOAD_ONE) {
 		etexToFill->SetRHObjs(loadrHitboxFromFile((path + "\\H" + filename + ".txt").c_str()));
 	}
-	else if (loadHbox == ANI_HBOX_AUTOFIT) {
+	else if (loadHbox == HBOX_AUTOFIT) {
 		etexToFill->FitHObj();
 	}
 }

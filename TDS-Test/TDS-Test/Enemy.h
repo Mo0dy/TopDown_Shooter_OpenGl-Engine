@@ -7,7 +7,7 @@ public:
 	Enemy(glm::vec2 position);
 	~Enemy();
 
-	void ColWithPlayer(class Player* player, GLfloat colDepth, glm::vec2 colAxis);
+	void ColWithPSubE(class SubE* e, GLfloat colDepth, glm::vec2 colAxis);
 
 	GLboolean CheckForErase(glm::vec2 levelSize);
 

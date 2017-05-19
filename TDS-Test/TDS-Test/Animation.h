@@ -4,13 +4,14 @@
 #include "Texture2D.h"
 #include "ResourceManager.h"
 #include "Etex.h"
+#include "Entity.h"
 
 class Animation
 {
 public:
 	Animation();
-	Animation(std::string name, GLboolean repeat);
-	Animation(std::string name, GLfloat width, GLboolean repeat);
+	Animation(std::string name, GLboolean repeat, GLboolean updateHObj);
+	Animation(std::string name, GLfloat width, GLboolean repeat, GLboolean updateHObj);
 	~Animation();
 
 	void Start();
@@ -25,7 +26,8 @@ public:
 	void SetFPS(GLfloat fps);
 	void SetAniTime(GLfloat aniTime);
 
-	Etex& GetETex();
+	void UpdateAni(class Entity* masterE);
+
 	Etex& GetETex(GLuint pos);
 	GLint GetNumber();
 	GLboolean GetState();
@@ -35,6 +37,7 @@ public:
 protected:
 	GLfloat aniTime;
 	GLboolean repeat;
+	GLboolean updateHObj;
 	GLboolean state;
 	GLfloat startTime;
 };

@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "ResourceManager.h"
+#include "SubE.h"
 
 Entity::Entity() {}
 
@@ -31,11 +32,7 @@ GLboolean Entity::UpdateE(GLfloat dt)
 
 void Entity::UpdateAni() 
 {
-	if (animations[ani].GetState()) {
-		tex = animations[ani].GetETex().GetTex();
-		size = animations[ani].GetETex().GetTexSize();
-		hitObjs = animations[ani].GetETex().GetHitObjs();
-	}
+	animations[ani].UpdateAni(this);
 }
 
 void Entity::Collision(const Entity* e, GLfloat penDepth, glm::vec2 colAxis)
@@ -59,9 +56,25 @@ void Entity::ColWithPlayer(const class Player* p, GLfloat penDepth, glm::vec2 co
 
 }
 
+void Entity::ColWithSubE(const class SubE* sE, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(sE->masterE, penDepth, colAxis);
+}
+
+void Entity::ColWithESubE(const class SubE* e, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(e->masterE, penDepth, colAxis);
+}
+void Entity::ColWithPSubE(const class SubE* p, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(p->masterE, penDepth, colAxis);
+}
+
 void Entity::GetAttacked(GLfloat damage)
 {
 }
+
+
 
 // Getters and setters
 void Entity::SetColor(glm::vec3 color) { this->color = color; }
@@ -72,6 +85,8 @@ glm::vec2 Entity::GetSize() const { return this->size; }
 GLfloat Entity::GetAngle() const { return this->angle; }
 glm::vec3 Entity::GetColor() const { return this->color;  }
 const Texture2D* Entity::GetTex() const { return this->tex; }
+
+void Entity::SetTex(const Texture2D *tex) { this->tex = tex; }
 
 void Entity::SetSize(glm::vec2 size) { this->size = size; }
 void Entity::SetSize(GLfloat width) 

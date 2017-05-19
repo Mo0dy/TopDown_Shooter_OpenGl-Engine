@@ -19,10 +19,10 @@ GLboolean Enemy::CheckForErase(glm::vec2 levelSize) {
 	}
 }
 
-void Enemy::ColWithPlayer(Player* player, GLfloat colDepth, glm::vec2 colAxis) {
-	ColWithDyn(player, colDepth, colAxis);
+void Enemy::ColWithPSubE(SubE* e, GLfloat colDepth, glm::vec2 colAxis) {
+	ColWithDyn(e->masterE, colDepth, colAxis);
 	if (attacking) {
-		player->GetAttacked(damage);
+		e->GetAttacked(damage);
 	}
 	attacking = GL_FALSE;
 	lastAttack = 0;

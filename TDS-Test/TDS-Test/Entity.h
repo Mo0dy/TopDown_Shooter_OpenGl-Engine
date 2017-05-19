@@ -14,8 +14,8 @@ public:
 	Entity(glm::vec2 position, GLfloat angle);
 	Entity(glm::vec2 position, const Texture2D* texture);
 	Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture);
-	Entity(glm::vec2 position, Animation ani, std::string aniName);
-	Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName);
+	Entity(glm::vec2 position, class Animation ani, std::string aniName);
+	Entity(glm::vec2 position, GLfloat angle, class Animation ani, std::string aniName);
 
 	Entity(const Etex* etex, GLfloat width);
 	Entity(const Etex* etex, glm::vec2 size);
@@ -23,7 +23,7 @@ public:
 	virtual ~Entity();
 
 	std::vector<HitObject> hitObjs;
-	std::map<std::string, Animation> animations;
+	std::map<std::string, class Animation> animations;
 	std::string ani; // The name of the currently Played Animation
 
 	virtual GLboolean UpdateE(GLfloat dt); // Updating function will get called every frame
@@ -35,6 +35,10 @@ public:
 	virtual void ColWithDyn(const class DynE* dE, GLfloat penDepth, glm::vec2 colAxis);
 	virtual void ColWithEnemy(const class Enemy* e, GLfloat penDepth, glm::vec2 colAxis);
 	virtual void ColWithPlayer(const class Player* p, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithSubE(const class SubE* sE, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithESubE(const class SubE* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithPSubE(const class SubE* p, GLfloat penDepth, glm::vec2 colAxis);
+
 
 	virtual void GetAttacked(GLfloat damage);
 
@@ -45,6 +49,7 @@ public:
 	glm::vec3 GetColor() const;
 	const Texture2D* GetTex() const;
 
+	void SetTex(const Texture2D *tex);
 	void SetSize(glm::vec2 size);
 	void SetSize(GLfloat width);
 

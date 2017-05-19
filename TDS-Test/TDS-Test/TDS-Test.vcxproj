@@ -77,6 +77,10 @@
     <IncludePath>C:\Users\jonat_000\Documents\GItRepos\TDS-Test\OpenGlRecources64Bit\include;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\jonat_000\Documents\GItRepos\OpenGlRecources64Bit\lib;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -122,6 +126,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;SOIL.lib;Xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

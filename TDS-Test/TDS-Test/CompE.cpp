@@ -26,11 +26,7 @@ void CompE::UpdateSubE(GLfloat dt)
 }
 
 void CompE::UpdateAni() {
-	if (animations[ani].GetState()) {
-		tex = animations[ani].GetETex().GetTex();
-		size = animations[ani].GetETex().GetTexSize();
-		hitObjs = animations[ani].GetETex().GetHitObjs();
-	}
+	animations[ani].UpdateAni(this);
 	for (auto& x : subEntities) 
 	{
 		x.second->UpdateAni();
