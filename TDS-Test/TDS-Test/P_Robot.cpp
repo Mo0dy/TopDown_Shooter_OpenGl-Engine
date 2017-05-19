@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "Game.h"
 #include "EnergyBulletBig.h"
-
+#include "Shield.h"
 #include <glm\gtc\random.hpp>
 
 void Robot::loadRobot() {
@@ -11,6 +11,7 @@ void Robot::loadRobot() {
 	ResourceManager::LoadEtex("Textures", "U_Bot", ".png", GL_TRUE, "U_Bot", HBOX_AUTOFIT);
 
 	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", ANI_LOAD_ONE_HBOX);
+	Shield::LoadShield();
 }
 
 Robot::Robot(glm::vec2 position) : Player(position)
@@ -31,6 +32,7 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
 	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
+	subEntities["shield"] = new Shield(this);
 
 	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
 	
@@ -43,6 +45,7 @@ Robot::Robot(glm::vec2 position) : Player(position)
 	shootDelayBigB = 5;
 	SetColor(glm::vec3(1.0f));
 
+	renderOrder.push_back("shield");
 	renderOrder.push_back("tracks");
 	renderOrder.push_back("body");
 
@@ -53,6 +56,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 Robot::~Robot()
 {
 }
+
+static GLboolean sPressAFlag = GL_FALSE;
 
 GLboolean Robot::UpdateE(GLfloat dt) {
 	if (!death) {
@@ -83,6 +88,14 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 
 		if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
 			movState = AIMING;
+		}
+
+		if (gPad.wButtons & XINPUT_GAMEPAD_A) {
+			sPressAFlag = GL_TRUE;
+		}
+		else if(sPressAFlag) {
+			dynamic_cast<Shield*>(subEntities["shield"])->ToggleShield();
+			sPressAFlag = GL_FALSE;
 		}
 		if (gPad.bLeftTrigger > 0) {
 			movState = SPRINTING;

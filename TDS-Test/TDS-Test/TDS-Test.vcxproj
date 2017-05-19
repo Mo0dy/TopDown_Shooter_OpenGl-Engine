@@ -150,6 +150,7 @@
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="SE_BodyPart.h" />
+    <ClInclude Include="Shield.h" />
     <ClInclude Include="StaticEntity.h" />
     <ClInclude Include="SubE.h" />
     <ClInclude Include="Util.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SE_BodyPart.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="StaticEntity.cpp" />
