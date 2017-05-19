@@ -30,14 +30,14 @@ public:
 	virtual void SetColor(glm::vec3 color);
 	virtual void UpdateAni(); // Updates texture and hitbox from the animation
 
-	virtual void Collision(const Entity* e, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithDyn(const class DynE* dE, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithEnemy(const class Enemy* e, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithPlayer(const class Player* p, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithSubE(const class SubE* sE, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithESubE(const class SubE* e, GLfloat penDepth, glm::vec2 colAxis);
-	virtual void ColWithPSubE(const class SubE* p, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void Collision(Entity* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithStat(Entity* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithDyn(class DynE* dE, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithEnemy(class Enemy* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithPlayer(class Player* p, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithSubE(class SubE* sE, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithESubE(class SubE* e, GLfloat penDepth, glm::vec2 colAxis);
+	virtual void ColWithPSubE(class SubE* p, GLfloat penDepth, glm::vec2 colAxis);
 
 
 	virtual void GetAttacked(GLfloat damage);

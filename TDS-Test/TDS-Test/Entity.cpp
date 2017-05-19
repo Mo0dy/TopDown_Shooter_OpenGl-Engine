@@ -35,37 +35,37 @@ void Entity::UpdateAni()
 	animations[ani].UpdateAni(this);
 }
 
-void Entity::Collision(const Entity* e, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::Collision(Entity* e, GLfloat penDepth, glm::vec2 colAxis)
 {
 
 }
-void Entity::ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithStat(Entity* e, GLfloat penDepth, glm::vec2 colAxis)
 {
 
 }
-void Entity::ColWithDyn(const class DynE* dE, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithDyn(class DynE* dE, GLfloat penDepth, glm::vec2 colAxis)
 {
 
 }
-void Entity::ColWithEnemy(const class Enemy* e, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithEnemy(class Enemy* e, GLfloat penDepth, glm::vec2 colAxis)
 {
 
 }
-void Entity::ColWithPlayer(const class Player* p, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithPlayer(class Player* p, GLfloat penDepth, glm::vec2 colAxis)
 {
 
 }
 
-void Entity::ColWithSubE(const class SubE* sE, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithSubE(class SubE* sE, GLfloat penDepth, glm::vec2 colAxis)
 {
 	ColWithDyn(sE->masterE, penDepth, colAxis);
 }
 
-void Entity::ColWithESubE(const class SubE* e, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithESubE(class SubE* e, GLfloat penDepth, glm::vec2 colAxis)
 {
 	ColWithDyn(e->masterE, penDepth, colAxis);
 }
-void Entity::ColWithPSubE(const class SubE* p, GLfloat penDepth, glm::vec2 colAxis)
+void Entity::ColWithPSubE(class SubE* p, GLfloat penDepth, glm::vec2 colAxis)
 {
 	ColWithDyn(p->masterE, penDepth, colAxis);
 }

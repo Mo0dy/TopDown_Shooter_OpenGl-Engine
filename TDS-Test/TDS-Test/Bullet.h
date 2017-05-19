@@ -6,19 +6,19 @@
 class Bullet : public DynE
 {
 public:
-	Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const LivingE*> whitelist);
+	Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const Entity*> whitelist);
 	virtual ~Bullet();
 
 	GLboolean UpdateE(GLfloat dt);
 	void ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis);
 	virtual void ColWithLivingE(LivingE* lE);
+	void ColWithSubE(class SubE* sE, GLfloat penDepth, glm::vec2 colAxis);
 
 protected:
-	std::vector<const LivingE*> whitelist; // Stores all entities that don't get damaged;
+	std::vector<const Entity*> whitelist; // Stores all entities that don't get damaged;
 	GLfloat damage;
-	GLfloat vel;
 
 	// Utility functions
-	GLboolean checkWL(const LivingE* cLE);
+	GLboolean checkWL(const Entity* cLE) const;
 };
 

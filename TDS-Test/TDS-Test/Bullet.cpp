@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const LivingE*> whitelist) : DynE(position, angle, vel), whitelist(whitelist)
+Bullet::Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const Entity*> whitelist) : DynE(position, angle, vel), whitelist(whitelist)
 {
 	this->state = NO_DYN_FRIC;
 }
@@ -34,8 +34,18 @@ void Bullet::ColWithLivingE(LivingE* lE)
 	}
 }
 
-GLboolean Bullet::checkWL(const LivingE* cLE) {
-	for (const LivingE *lE : whitelist) {
+void Bullet::ColWithSubE(class SubE* sE, GLfloat penDepth, glm::vec2 colAxis)
+{
+	collision = GL_TRUE;
+	if (!checkWL(sE->masterE)) {
+		sE->GetAttacked(this->damage);
+		this->whitelist.push_back(sE->masterE);
+	}
+}
+
+GLboolean Bullet::checkWL(const Entity* cLE) const 
+{
+	for (const Entity *lE : whitelist) {
 		if (lE == cLE) {
 			return GL_TRUE;
 		}

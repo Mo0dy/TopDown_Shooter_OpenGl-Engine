@@ -15,7 +15,7 @@ DynE::DynE(glm::vec2 position, GLfloat angle, glm::vec2 vel) : Entity(position, 
 {
 }
 
-DynE::DynE(glm::vec2 position, GLfloat angle, GLfloat vel) : Entity(position, angle), mass(1), force(0), vel(glm::vec2(glm::cos(angle), glm::sin(angle)) * vel), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
+DynE::DynE(glm::vec2 position, GLfloat angle, GLfloat vel) : Entity(position, angle), mass(1), force(0), vel(glm::vec2(-glm::sin(angle), glm::cos(angle)) * vel), dynFricCoeff(0), statFricCoeff(0), airFricCoeff(0), state(DYN_FRIC), collision(GL_FALSE)
 {
 }
 

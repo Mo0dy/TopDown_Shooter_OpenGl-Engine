@@ -57,7 +57,7 @@ public:
 // Debug
 #define DEBUG
 #ifdef DEBUG
-#define LOG_FPS
+//#define LOG_FPS
 #define DEBUG_HITBOXES
 #define DEBUG_FORCES
 #define LOG(x) std::cout << x << std::endl

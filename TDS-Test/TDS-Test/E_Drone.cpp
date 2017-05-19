@@ -81,5 +81,6 @@ GLboolean E_Drone::UpdateE(GLfloat dt) {
 
 		return glm::length(vel) > 0;
 	}
+	erase = GL_TRUE;
 	return GL_FALSE;
 }

@@ -268,7 +268,7 @@ void Game::Update(GLfloat dt) {
 	for (Bullet *b : sBullets) {
 		for (Enemy *e : sEnemies) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithEnemy(e, penDepth, colAxis);
+				b->ColWithLivingE(e);
 				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}

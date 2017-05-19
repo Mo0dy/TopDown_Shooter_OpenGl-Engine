@@ -124,18 +124,11 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 			shootBigB();
 		}
 
-		LOG("BodyDir = " << bodyDir.x << ", " << bodyDir.y);
-
 		SetTrackAngle(dt);
 		SetBodyAngle(dt);
 
-		LOG("tracks = " << subEntities["tracks"]->GetRAngle());
-		LOG("body = " << subEntities["body"]->GetRAngle());
-
 		UpdatePos(dt);
 		UpdateSubE(dt);
-
-		LOG("Robot = " << this->angle);
 
 		movDir = glm::vec2(0);
 		bodyDir = glm::vec2(0);
@@ -152,7 +145,7 @@ void Robot::shoot() {
 		lastShot = 0;
 
 		// This is probably not the best option to whitelist all players
-		std::vector<const LivingE*> whitelist;
+		std::vector<const Entity*> whitelist;
 		for (Player *p : Game::sPlayers) {
 			whitelist.push_back(p);
 		}
@@ -163,7 +156,7 @@ void Robot::shoot() {
 void Robot::shootBigB() {
 
 	// This is probably not the best option to whitelist all players
-	std::vector<const LivingE*> whitelist;
+	std::vector<const Entity*> whitelist;
 	for (Player *p : Game::sPlayers) {
 		whitelist.push_back(p);
 	}

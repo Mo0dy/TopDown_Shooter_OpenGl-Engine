@@ -12,14 +12,14 @@ GLboolean EnergyBulletBig::UpdateE(GLfloat dt) {
 }
 
 
-EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const LivingE*> whitelist) : EnergyBullet(position, angle, whitelist)
+EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const Entity*> whitelist) : EnergyBullet(position, angle, whitelist)
 {
 	this->mass = 200000;
 	this->tex = ResourceManager::GetEtex("EnergyBall").GetTex();
 	this->hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(1.7, 3.5));
 	this->size = glm::vec2(1.7, 3.5);
 	this->damage = 90;
-	this->vel = glm::normalize(vel) * 15; // This should be done differently
+	this->vel = glm::normalize(this->vel) * 15.0f; // This should be done differently
 }
 
 EnergyBulletBig::~EnergyBulletBig()
