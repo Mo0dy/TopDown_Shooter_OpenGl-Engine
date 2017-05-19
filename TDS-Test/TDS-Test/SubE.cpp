@@ -52,3 +52,9 @@ void SubE::SetRAngle(GLfloat rAngle)
 {
 	this->rAngle = rAngle;
 }
+
+void SubE::UpdatePos()
+{
+	this->angle = masterE->GetAngle() + rAngle;
+	this->pos = Util::RotationMat2(masterE->GetAngle()) * rPos + masterE->GetPos();
+}

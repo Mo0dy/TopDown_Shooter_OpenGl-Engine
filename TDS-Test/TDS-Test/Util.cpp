@@ -40,7 +40,7 @@ GLfloat Util::CONTROLLER_TRIGGER_MAX = 255.0f;
 GLfloat Util::CONTROLLER_DEADZONE = 6500.0f;
 
 // utility funciton
-glm::mat2 Util::rotationMat2(GLfloat angle) {
+glm::mat2 Util::RotationMat2(GLfloat angle) {
 	glm::mat2 rotMat;
 	rotMat[0][0] = cos(angle);
 	rotMat[1][0] = -sin(angle);
@@ -49,6 +49,6 @@ glm::mat2 Util::rotationMat2(GLfloat angle) {
 	return rotMat;
 }
 
-void Util::printVec2(glm::vec2 v) {
+void Util::PrintVec2(glm::vec2 v) {
 	std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
 }

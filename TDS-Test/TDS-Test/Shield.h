@@ -21,6 +21,9 @@ public:
 	void ToggleShield();
 
 protected:
+
+	void UpdatePos();
+
 	glm::vec2 shieldSize;
 	std::vector<HitObject> shieldHObjs;
 	GLboolean active;

@@ -48,14 +48,14 @@ public:
 	static GLfloat CONTROLLER_DEADZONE; // The deadzone is an interval of values that the controller could return even if the analog sticks are not used
 
 	// Functions
-	static glm::mat2 rotationMat2(GLfloat angle); // Creates a matrix that rotates a 2D vector counter clockwise by a given angle in radians
+	static glm::mat2 RotationMat2(GLfloat angle); // Creates a matrix that rotates a 2D vector counter clockwise by a given angle in radians
 
-	static void printVec2(glm::vec2 v);
+	static void PrintVec2(glm::vec2 v);
 };
 
 
 // Debug
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 //#define LOG_FPS
 #define DEBUG_HITBOXES

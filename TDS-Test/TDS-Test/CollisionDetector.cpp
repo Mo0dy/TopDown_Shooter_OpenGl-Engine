@@ -27,11 +27,11 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 		for (HitObject mEH : dE->hitObjs) {
 
 			mymEH = mEH;
-			mymEH.SetPos(Util::rotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos());
+			mymEH.SetPos(Util::RotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos());
 			mymEH.SetAngle(mymEH.GetAngle() + dE->GetAngle());
 
 			// This should probably only be done if the hitboxes have the potential to collide?
-			glm::mat2 rotMat = Util::rotationMat2(mymEH.GetAngle());
+			glm::mat2 rotMat = Util::RotationMat2(mymEH.GetAngle());
 			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.GetSize().x, 0) * 0.5f;
 			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.GetSize().y) * 0.5f;
 			E1corners[0] = mymEH.GetPos() + rotVec1 + rotVec2;
@@ -48,16 +48,16 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 			Renderer::drawLineBuffer.push_back(myVertex(E1corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
 #endif // DEBUG_HITBOXES
 
-			Axis[0] = Util::rotationMat2(mymEH.GetAngle()) * glm::vec2(1, 0);
-			Axis[1] = Util::rotationMat2(mymEH.GetAngle()) * glm::vec2(0, 1);
+			Axis[0] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(1, 0);
+			Axis[1] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(0, 1);
 
 			for (HitObject cEH : sE->hitObjs) {
 				// Calculation WCS position of the Hitbox
 				mycEH = cEH;
-				mycEH.SetPos(Util::rotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos());
+				mycEH.SetPos(Util::RotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos());
 				mycEH.SetAngle(mycEH.GetAngle() + sE->GetAngle());
 
-				rotMat = Util::rotationMat2(mycEH.GetAngle());
+				rotMat = Util::RotationMat2(mycEH.GetAngle());
 				rotVec1 = rotMat * glm::vec2(mycEH.GetSize().x, 0) * 0.5f;
 				rotVec2 = rotMat * glm::vec2(0, mycEH.GetSize().y) * 0.5f;
 				E2corners[0] = mycEH.GetPos() + rotVec1 + rotVec2;
@@ -75,8 +75,8 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 #endif // DEBUG_HITBOXES
 
 
-				Axis[2] = Util::rotationMat2(mycEH.GetAngle()) * glm::vec2(1, 0);
-				Axis[3] = Util::rotationMat2(mycEH.GetAngle()) * glm::vec2(0, 1);
+				Axis[2] = Util::RotationMat2(mycEH.GetAngle()) * glm::vec2(1, 0);
+				Axis[3] = Util::RotationMat2(mycEH.GetAngle()) * glm::vec2(0, 1);
 
 				*penDepth = doSingleCheck(mymEH, mycEH, minColAxis);
 				if (*penDepth > 0) {

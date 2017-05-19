@@ -27,6 +27,7 @@ private:
 	glm::vec2 movDir;
 	glm::vec2 bodyDir;
 
+	GLboolean artilMode;
 	glm::vec2 bulletSpawn; // in %
 	GLfloat lastShot;
 	GLfloat lastShotBigB;
@@ -42,5 +43,8 @@ private:
 
 	void SetBodyAngle(GLfloat dt);
 	void SetTrackAngle(GLfloat dt);
+
+	void SwitchToArtil();
+	void SwitchToNormal();
 };
 

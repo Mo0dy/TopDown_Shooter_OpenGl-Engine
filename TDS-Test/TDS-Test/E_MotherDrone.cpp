@@ -44,7 +44,7 @@ GLboolean E_MotherDrone::UpdateE(GLfloat dt) {
 
 		glm::vec2 movDir = glm::vec2(0);
 
-		glm::mat2 rot90DegreesM = Util::rotationMat2(90);
+		glm::mat2 rot90DegreesM = Util::RotationMat2(90);
 
 		//Please replace this comment for this for loop, I'm just not sure what happens here.
 		for (Player *p : Game::sPlayers) {

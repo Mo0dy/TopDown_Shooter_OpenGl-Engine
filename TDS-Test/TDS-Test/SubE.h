@@ -22,6 +22,7 @@ public:
 	void SetRAngle(GLfloat rAngle);
 
 protected:
+	virtual void UpdatePos();
 	glm::vec2 rPos;
 	GLfloat rAngle;
 };
