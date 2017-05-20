@@ -34,6 +34,12 @@
     <Filter Include="Source Files\Levels\StaticEntities">
       <UniqueIdentifier>{37a93833-5b28-4fae-9c87-82ef4146ae15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\SubEntities">
+      <UniqueIdentifier>{d45851b8-76b8-4484-be08-8b0ccd98aa79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Players\Robot">
+      <UniqueIdentifier>{59f404f7-7b56-49fb-839d-59b8ff6a41d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -52,9 +58,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DynE.h">
@@ -76,9 +79,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="P_Robot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Test_Area.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnergyBullet.h">
@@ -111,6 +111,33 @@
     <ClInclude Include="E_MotherDrone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StaticEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Etex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E_Jelly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelBanana.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E_Medic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HitObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LivingE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SE_BodyPart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -131,17 +158,11 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="P_Robot.cpp">
-      <Filter>Source Files\Entities\Players</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Source Files\Levels</Filter>
@@ -158,9 +179,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Area.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnergyBullet.cpp">
       <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
@@ -170,13 +188,7 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Entities\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files\Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="CompE.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="SubE.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="EnergyBulletBig.cpp">
@@ -187,6 +199,45 @@
     </ClCompile>
     <ClCompile Include="E_MotherDrone.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Etex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticEntity.cpp">
+      <Filter>Source Files\Levels\StaticEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E_Jelly.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelBanana.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="E_Medic.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="HitObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LivingE.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SubE.cpp">
+      <Filter>Source Files\Entities\SubEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="SE_BodyPart.cpp">
+      <Filter>Source Files\Entities\SubEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="P_Robot.cpp">
+      <Filter>Source Files\Entities\Players\Robot</Filter>
+    </ClCompile>
+    <ClCompile Include="Shield.cpp">
+      <Filter>Source Files\Entities\Players\Robot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

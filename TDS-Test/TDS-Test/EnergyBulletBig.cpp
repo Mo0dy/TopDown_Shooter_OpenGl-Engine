@@ -1,7 +1,7 @@
 #include "EnergyBulletBig.h"
 #include "Game.h"
 
-GLboolean EnergyBulletBig::updateE(GLfloat dt) {
+GLboolean EnergyBulletBig::UpdateE(GLfloat dt) {
 	//for (Enemy *e : Game::Enemies) {
 	//	if (glm::distance(e->pos, pos) < 3) {
 	//		e->addForce(glm::normalize(e->pos - pos) * 1000.0f);
@@ -11,22 +11,22 @@ GLboolean EnergyBulletBig::updateE(GLfloat dt) {
 	return GL_TRUE;
 }
 
-EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat newAngle): EnergyBullet(position, newAngle)
-{
-	velocity = 15;
-	vel = Util::create2DrotMatrix(glm::degrees(newAngle)) * glm::vec2(0, 1) * velocity;
-	mass = 200000;
-	size = glm::vec2(1.7, 3.5);
-	damage = 90;
 
-	color = glm::vec3(1.0f, 0.0f, 0.0f);
+EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const Entity*> whitelist) : EnergyBullet(position, angle, whitelist)
+{
+	this->mass = 200000;
+	this->tex = ResourceManager::GetEtex("EnergyBall").GetTex();
+	this->hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(1.7, 3.5));
+	this->size = glm::vec2(1.7, 3.5);
+	this->damage = 90;
+	this->vel = glm::normalize(this->vel) * 15.0f; // This should be done differently
 }
 
 EnergyBulletBig::~EnergyBulletBig()
 {
 }
 
-GLboolean EnergyBulletBig::checkForErase(glm::vec2 levelSize) {
+GLboolean EnergyBulletBig::CheckForErase(glm::vec2 levelSize) {
 	if (pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
 		return GL_TRUE;
 	}

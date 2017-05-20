@@ -12,16 +12,8 @@ public:
 	E_Drone(glm::vec2 position);
 	virtual ~E_Drone();
 
-	GLboolean updateE(GLfloat dt);
-
-	void setBodyAngle(GLfloat dt);
-	GLfloat movForce;
-	GLfloat turnSpeed;
-
-	Animation* ani;
+	GLboolean UpdateE(GLfloat dt);
 
 	GLfloat swarmFactor;
 	GLfloat swarmPot;
-
-	GLfloat maxHealth;
 };

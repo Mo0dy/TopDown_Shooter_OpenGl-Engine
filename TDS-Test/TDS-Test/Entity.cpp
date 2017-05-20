@@ -1,59 +1,95 @@
 #include "Entity.h"
 #include "ResourceManager.h"
+#include "SubE.h"
 
-Entity::Entity() : tex("Util"), pos(glm::vec2(0)), angle(0), size(1, 1), color(1.0f, 1.0f, 1.0f) {
-}
+Entity::Entity() {}
 
-Entity::Entity(glm::vec2 position) : tex("Util"), pos(position), angle(0), size(1, 1), color(1.0f, 1.0f, 1.0f)
+Entity::Entity(glm::vec2 position) : pos(position), angle(0), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, GLfloat angle) : pos(position), angle(angle), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, const Texture2D* texture) : pos(position), tex(texture), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, GLfloat angle, const Texture2D* texture) : pos(position), angle(angle), tex(texture), color(glm::vec3(1)) {}
+Entity::Entity(glm::vec2 position, Animation ani, std::string aniName) : pos(position), color(glm::vec3(1))
 {
+	animations[aniName] = ani;
 }
-
-Entity::Entity(glm::vec2 position, glm::vec2 size) : tex("Util"), pos(position), angle(0), size(size), color(1.0f, 1.0f, 1.0f)
+Entity::Entity(glm::vec2 position, GLfloat angle, Animation ani, std::string aniName) : pos(position), angle(angle), color(glm::vec3(1))
 {
+	animations[aniName] = ani;
 }
 
-Entity::Entity(glm::vec2 position, glm::vec2 size, GLfloat angle) : tex("Util"), pos(position), angle(angle), size(size), color(1.0f, 1.0f, 1.0f) {
-}
+Entity::Entity(const Etex *etex, GLfloat width) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(width)), size(etex->GetTexSize(width)), color(glm::vec3(1)) {}
+Entity::Entity(const Etex* etex, glm::vec2 size) : pos(0), angle(0), tex(etex->GetTex()), hitObjs(etex->GetHitObjs(size)), size(size), color(glm::vec3(1)) {}
 
-Entity::Entity(glm::vec2 position, glm::vec2 size, std::string texture) : tex(texture), pos(position), angle(0), size(size), color(1.0f, 1.0f, 1.0f) {
-}
+Entity::~Entity() {}
 
-Entity::Entity(glm::vec2 position, GLfloat width, std::string texture) : tex(texture), pos(position), angle(0), size(glm::vec2(width, width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width)), color(1.0f, 1.0f, 1.0f) {
-}
-
-Entity::Entity(glm::vec2 position, GLfloat width, GLfloat angle, std::string texture) : tex(texture), pos(position), angle(angle), size(glm::vec2(width, width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width)), color(1.0f, 1.0f, 1.0f) {
-}
-
-Entity::Entity(glm::vec2 position, glm::vec2 size, GLfloat angle, std::string texture) : tex(texture), pos(position), angle(angle), size(size), color(1.0f, 1.0f, 1.0f) {
-}
-
-Entity::~Entity()
+GLboolean Entity::UpdateE(GLfloat dt) 
 {
-	for (Hitbox* h : Hitboxes) {
-		delete h;
+	if (animations[ani].GetNumber() > 0) {
+		UpdateAni();
 	}
-	for (const auto& a : Animations) {
-		delete a.second;
-	}
-}
-
-GLboolean Entity::updateE(GLfloat dt) {
 	return GL_FALSE; // static entities never move
 }
 
-GLboolean Entity::checkForErase(glm::vec2 levelSize) {
-	if (pos.x > levelSize.x * 0.5f || pos.x < -levelSize.x * 0.5f || pos.y > levelSize.y * 0.5f || pos.y < -levelSize.y * 0.5f) {
-		return GL_TRUE;
-	}
-	else {
-		return GL_FALSE;
-	}
+void Entity::UpdateAni() 
+{
+	animations[ani].UpdateAni(this);
 }
 
-void Entity::setColor(glm::vec3 color) {
-	this->color = color;
+void Entity::Collision(Entity* e, GLfloat penDepth, glm::vec2 colAxis)
+{
+
+}
+void Entity::ColWithStat(Entity* e, GLfloat penDepth, glm::vec2 colAxis)
+{
+
+}
+void Entity::ColWithDyn(class DynE* dE, GLfloat penDepth, glm::vec2 colAxis)
+{
+
+}
+void Entity::ColWithEnemy(class Enemy* e, GLfloat penDepth, glm::vec2 colAxis)
+{
+
+}
+void Entity::ColWithPlayer(class Player* p, GLfloat penDepth, glm::vec2 colAxis)
+{
+
 }
 
-void Entity::autofitHitbox() {
-	Hitboxes.push_back(new Hitbox(glm::vec2(0), size, 0));
+void Entity::ColWithSubE(class SubE* sE, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(sE->masterE, penDepth, colAxis);
+}
+
+void Entity::ColWithESubE(class SubE* e, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(e->masterE, penDepth, colAxis);
+}
+void Entity::ColWithPSubE(class SubE* p, GLfloat penDepth, glm::vec2 colAxis)
+{
+	ColWithDyn(p->masterE, penDepth, colAxis);
+}
+
+void Entity::GetAttacked(GLfloat damage)
+{
+}
+
+
+
+// Getters and setters
+void Entity::SetColor(glm::vec3 color) { this->color = color; }
+
+GLboolean Entity::GetErase() const { return this->erase; }
+glm::vec2 Entity::GetPos() const { return this->pos; }
+glm::vec2 Entity::GetSize() const { return this->size; }
+GLfloat Entity::GetAngle() const { return this->angle; }
+glm::vec3 Entity::GetColor() const { return this->color;  }
+const Texture2D* Entity::GetTex() const { return this->tex; }
+
+void Entity::SetTex(const Texture2D *tex) { this->tex = tex; }
+
+void Entity::SetSize(glm::vec2 size) { this->size = size; }
+void Entity::SetSize(GLfloat width) 
+{
+	this->size = glm::vec2(width, (GLfloat) this->tex->Height / this->tex->Width * width);
 }

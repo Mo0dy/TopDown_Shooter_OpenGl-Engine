@@ -6,34 +6,57 @@ CompE::CompE(glm::vec2 position) : DynE(position)
 
 CompE::~CompE()
 {
-	// This is buggy for some reason
-	//for (const auto& x : subEntities) {
-	//	delete x.second;
-	//}
-}
-
-void CompE::updateSupE() {
-	for (const auto& x : subEntities) {
-		x.second->pos = this->pos + x.second->rPos;
-		x.second->angle = this->angle + x.second->rAngle;
+	for (auto& x : subEntities) {
+		delete x.second;
 	}
 }
 
-void CompE::combineHitboxes() {
-	// Maybe this should only be done if changes happen?
-	Hitboxes.clear();
-	for (auto const& x : subEntities) {
-		for (Hitbox *h : x.second->Hitboxes) {
-			this->Hitboxes.push_back(h);
-			this->Hitboxes.back()->pos = x.second->rPos;
-			this->Hitboxes.back()->angle = x.second->rAngle; // <- problem is here !!!!
-		}
+GLboolean CompE::UpdateE(GLfloat dt)
+{
+	UpdatePos(dt);
+	UpdateSubE(dt);
+	return glm::length(vel) > 0;
+}
+
+void CompE::UpdateSubE(GLfloat dt) 
+{
+	for (auto& x : subEntities) {
+		x.second->UpdateE(dt);
 	}
 }
 
-void CompE::setColor(glm::vec3 color) {
-	for (auto const& x : subEntities) {
-		x.second->color = color;
+void CompE::UpdateAni() {
+	animations[ani].UpdateAni(this);
+	for (auto& x : subEntities) 
+	{
+		x.second->UpdateAni();
 	}
 }
-std::map <std::string, SubE*> CompE::getSubE() { return subEntities; }
+
+void CompE::SetSubESize(glm::vec2 size, std::string name) 
+{
+	subEntities[name]->SetSize(size);
+	// This will increase the point when we do hitbox collision checking to the biggest size. If you decrease the size it won't decrease with it! <-- Bug.
+	if (glm::length(subEntities[name]->GetSize()) > glm::length(this->size))
+	{
+		this->size = subEntities[name]->GetSize();
+	}
+}
+
+void CompE::SetSubESize(GLfloat width, std::string name) 
+{
+	subEntities[name]->SetSize(width);
+	// This will increase the point when we do hitbox collision checking to the biggest size. If you decrease the size it won't decrease with it! <-- Bug.
+	if (glm::length(subEntities[name]->GetSize()) > glm::length(this->size))
+	{
+		this->size = subEntities[name]->GetSize();
+	}
+}
+
+void CompE::SetColor(glm::vec3 color)
+{
+	for (auto& x : subEntities)
+	{
+		x.second->SetColor(color);
+	}
+}

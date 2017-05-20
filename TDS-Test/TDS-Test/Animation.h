@@ -3,38 +3,41 @@
 #include "Util.h"
 #include "Texture2D.h"
 #include "ResourceManager.h"
-
-struct Etex {
-public:
-	Etex(std::string texture, GLfloat width);
-	std::string tex;
-	glm::vec2 texSize;
-	std::vector<Hitbox*> hitboxes;
-};
+#include "Etex.h"
+#include "Entity.h"
 
 class Animation
 {
 public:
-
-	static std::map<std::string, std::vector<Etex*> > Animations;
-
-	Animation(std::string name, GLboolean repeat);
+	Animation();
+	Animation(std::string name, GLboolean repeat, GLboolean updateHObj);
+	Animation(std::string name, GLfloat width, GLboolean repeat, GLboolean updateHObj);
 	~Animation();
 
-	static void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name);
+	void Start();
+	void Stop();
 
-	void startAnimation();
-	void stopAnimation();
+	void LoadFromRM(std::string name);
+	void LoadFromRM(std::string name, GLfloat width);
 
-	void setFPS(GLfloat fps);
+	void EnforceWidth(GLfloat width);
 
-	Etex* getETex();
-	GLint getSize();
-	GLboolean getState();
-	GLfloat animationTime;
-	std::string name;
+	// Getters and setters
+	void SetFPS(GLfloat fps);
+	void SetAniTime(GLfloat aniTime);
+
+	void UpdateAni(class Entity* masterE);
+
+	Etex& GetETex(GLuint pos);
+	GLint GetNumber();
+	GLboolean GetState();
+	
+	std::vector<Etex> Etextures;
+
 protected:
+	GLfloat aniTime;
 	GLboolean repeat;
+	GLboolean updateHObj;
 	GLboolean state;
 	GLfloat startTime;
 };

@@ -1,15 +1,29 @@
 #pragma once
 
-#include "Entity.h"
+#include "CompE.h"
 
 class SubE : public Entity
 {
 public:
-	SubE(glm::vec2 relativePos);
+	SubE(class CompE* masterE);
+	SubE(class CompE* masterE, glm::vec2 rPos);
+	SubE(class CompE* masterE, glm::vec2 rPos, const Etex* etex, GLfloat width);
+	SubE(class CompE* masterE, glm::vec2 rPos, const Etex* etex, glm::vec2 size);
+	SubE(class CompE* masterE, glm::vec2 rPos, GLfloat rAngle);
 	virtual ~SubE();
 
-	// Relative to master object
-	glm::vec2 rPos; 
+	class CompE* const masterE;
+	GLboolean UpdateE(GLfloat dt);
+
+	glm::vec2 GetRPos() const;
+	GLfloat GetRAngle() const;
+	
+	void SetRPos(glm::vec2 rPos);
+	void SetRAngle(GLfloat rAngle);
+
+protected:
+	virtual void UpdatePos();
+	glm::vec2 rPos;
 	GLfloat rAngle;
 };
 

@@ -14,22 +14,22 @@ void Camera::updatePos(GLfloat width, GLfloat height, std::vector<Player*> playe
 	
 	GLfloat WHratio = width / height;
 
-	glm::vec2 maxPPos = players[0]->pos;
+	glm::vec2 maxPPos = players[0]->GetPos();
 	glm::vec2 minPPos = maxPPos;
 
 	// finds the min and maximal x and y values
 	for (int i = 1; i < players.size(); i++) {
-		if (players[i]->pos.x < minPPos.x) {
-			minPPos.x = players[i]->pos.x;
+		if (players[i]->GetPos().x < minPPos.x) {
+			minPPos.x = players[i]->GetPos().x;
 		}
-		else if (players[i]->pos.x > maxPPos.x) {
-			maxPPos.x = players[i]->pos.x;
+		else if (players[i]->GetPos().x > maxPPos.x) {
+			maxPPos.x = players[i]->GetPos().x;
 		}
-		if (players[i]->pos.y < minPPos.y) {
-			minPPos.y = players[i]->pos.y;
+		if (players[i]->GetPos().y < minPPos.y) {
+			minPPos.y = players[i]->GetPos().y;
 		}
-		else if (players[i]->pos.y > maxPPos.y) {
-			maxPPos.y = players[i]->pos.y;
+		else if (players[i]->GetPos().y > maxPPos.y) {
+			maxPPos.y = players[i]->GetPos().y;
 		}
 	}
 	

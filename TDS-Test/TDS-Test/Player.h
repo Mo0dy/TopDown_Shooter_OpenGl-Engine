@@ -1,26 +1,22 @@
 #pragma once
 
-#include "CompE.h"
+#include "LivingE.h"
 #include "Bullet.h"
 #include <Windows.h>
 #include <Xinput.h>
 
-class Player : public CompE
+class Player : public LivingE
 {
 public:
-	XINPUT_GAMEPAD gPad;
 
 	Player(glm::vec2 position);
 	virtual ~Player();
 
-	// Getters and setters:
-	GLfloat getInherentF();
-
-	GLfloat health;
-
-	GLboolean death;
+	void SetGamepad(const XINPUT_GAMEPAD gPad);
+	void SetKeys(GLboolean *keys);
 
 protected:
-	GLfloat inherentForce;
+	XINPUT_GAMEPAD gPad;
+	GLboolean* keys;
 };
 

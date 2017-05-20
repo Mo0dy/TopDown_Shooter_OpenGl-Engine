@@ -1,0 +1,19 @@
+Brute:
+
+Attack:
+> Primary
+	Sword
+> Secondary
+	Pistol
+
+Abilities:
+> Ability 1:
+
+> Ability 2: AOE Shockwave
+	> Stage1 Shockwave with very little damage
+	> Stage2 Shockwave with changse to stun
+
+> MovAbility
+	> Stage1 = Combat Blink
+	> Stage2 += Combat Blink will damage targets that are blinked through and if there is a wall behind the blink location it will smash them against it.
+	> Stage3 += longer "free" teleport if ability button is held

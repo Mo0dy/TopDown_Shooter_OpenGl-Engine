@@ -5,11 +5,11 @@
 class EnergyBulletBig : public EnergyBullet
 {
 public:
-	EnergyBulletBig(glm::vec2 position, GLfloat newAngle);
+	EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<const Entity*> whitelist);
 	~EnergyBulletBig();
 
-	GLboolean updateE(GLfloat dt);
+	GLboolean UpdateE(GLfloat dt);
 
-	GLboolean checkForErase(glm::vec2 levelSize);
+	GLboolean CheckForErase(glm::vec2 levelSize);
 };
 

@@ -7,15 +7,14 @@ Level::Level()
 
 Level::~Level()
 {
-	delete background;
 	for (Entity* e : entities) {
 		delete e;
 	}
 }
 
-void Level::updateL(GLfloat dt) {
+void Level::UpdateL(GLfloat dt) {
 }
 
-void Level::reset() {
+void Level::Reset() {
 }
 

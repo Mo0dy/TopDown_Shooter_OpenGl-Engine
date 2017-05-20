@@ -8,10 +8,10 @@ class EnergyBullet : public Bullet
 public:
 	static void loadEnergyBullet();
 
-	EnergyBullet(glm::vec2 position, GLfloat newAngle);
+	EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const Entity*> whitelist);
 	virtual ~EnergyBullet();
 
-	GLboolean checkForErase(glm::vec2 levelSize);
+	GLboolean CheckForErase(glm::vec2 levelSize);
 
 protected:
 	

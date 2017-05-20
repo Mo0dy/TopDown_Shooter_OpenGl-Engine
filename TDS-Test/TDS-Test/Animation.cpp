@@ -1,57 +1,95 @@
 #include "Animation.h"
 
-std::map<std::string, std::vector<Etex*> > Animation::Animations;
-
-Etex::Etex(std::string texture, GLfloat width) : tex(texture) {
-	texSize.x = width;
-	texSize.y = width * ResourceManager::GetTexture(texture).Height / ResourceManager::GetTexture(texture).Width;
+Animation::Animation() {
 }
 
-Animation::Animation(std::string name, GLboolean repeat): name(name), repeat(repeat)
+Animation::Animation(std::string name, GLboolean repeat, GLboolean updateHObj) : repeat(repeat), updateHObj(updateHObj), Etextures(ResourceManager::GetAnimation(name))
 {
+}
+
+Animation::Animation(std::string name, GLfloat width, GLboolean repeat, GLboolean updateHObj) : Animation(name, repeat, updateHObj) {
+	this->EnforceWidth(width);
 }
 
 Animation::~Animation()
 {
 }
 
-void Animation::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name) {
-	std::string texName;
-	for (int i = 0; i < amount; i++) {
-		texName = name + "_T_" + std::to_string(i);
-		ResourceManager::LoadTexture((path + "\\T" + std::to_string(i) + filetype).c_str(), alpha, texName);
-		Animations[name].push_back(new Etex(texName, width));
+void Animation::LoadFromRM(std::string name)
+{
+	Etextures = ResourceManager::Animations[name];
+}
+
+void Animation::LoadFromRM(std::string name, GLfloat width)
+{
+	LoadFromRM(name);
+	EnforceWidth(width);
+}
+
+void Animation::EnforceWidth(GLfloat width)
+{
+	for (Etex &e : Etextures) {
+		e.SetTexSize(width);
 	}
 }
 
-void Animation::startAnimation() {
+void Animation::Start()
+{
 	startTime = glfwGetTime();
 	state = GL_TRUE;
 }
 
-void Animation::stopAnimation() {
+void Animation::Stop()
+{
 	state = GL_FALSE;
 }
 
-Etex* Animation::getETex() {
-	if (startTime + animationTime < glfwGetTime() && !repeat) {	
-		state = GL_FALSE;
-		return Animations[name].back();
+void Animation::UpdateAni(Entity* masterE)
+{
+	if (state) {
+		if (startTime + aniTime < glfwGetTime() && !repeat) {
+			state = GL_FALSE;
+			masterE->SetTex(Etextures.back().GetTex());
+			masterE->SetSize(Etextures.back().GetTexSize());
+
+			if (updateHObj) {
+				masterE->hitObjs = Etextures.back().GetHitObjs(masterE->GetSize());
+			}
+		}
+		else {
+			GLfloat dt = glm::mod<GLfloat>((startTime - glfwGetTime()), aniTime);
+			GLuint etexIndex = (GLuint)(dt / aniTime * Etextures.size());
+
+			masterE->SetTex(Etextures[etexIndex].GetTex());
+			masterE->SetSize(Etextures.back().GetTexSize());
+			if (updateHObj) {
+				masterE->hitObjs = Etextures[etexIndex].GetHitObjs(masterE->GetSize());
+			}
+		}
 	}
-	else {
-		GLfloat dt = glm::mod<GLfloat>((startTime - glfwGetTime()), animationTime);
-		return Animations[name][(GLint)(dt / animationTime * Animations[name].size())];
-	}
 }
 
-void Animation::setFPS(GLfloat fps) {
-	animationTime = getSize() / fps;
+void Animation::SetFPS(GLfloat fps)
+{
+	aniTime = GetNumber() / fps;
 }
 
-GLint Animation::getSize() {
-	return Animations[name].size();
+void Animation::SetAniTime(GLfloat aniTime)
+{
+	this->aniTime = aniTime;
 }
 
-GLboolean Animation::getState() {
-	return state && Animations[name].size() > 0;
+Etex& Animation::GetETex(GLuint index)
+{
+	return Etextures[index];
+}
+
+GLint Animation::GetNumber()
+{
+	return Etextures.size();
+}
+
+GLboolean Animation::GetState()
+{
+	return state && Etextures.size() > 0;
 }

@@ -2,7 +2,6 @@
 
 #include "Util.h"
 
-#include "Background.h"
 #include "Entity.h"
 #include "ResourceManager.h"
 
@@ -12,10 +11,10 @@ public:
 	Level();
 	~Level();
 	glm::vec2 size;
-	Background* background;
+	Entity background;
 	std::vector<Entity*> entities;
 
-	virtual void updateL(GLfloat dt);
-	virtual void reset();
+	virtual void UpdateL(GLfloat dt);
+	virtual void Reset();
 };
 

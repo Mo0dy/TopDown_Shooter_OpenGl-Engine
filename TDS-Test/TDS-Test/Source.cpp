@@ -11,8 +11,8 @@
 #include <ctime>
 
 // Settings
-GLuint screenWidth = SCREEN_WIDTH;
-GLuint screenHeight = SCREEN_HEIGHT;
+GLuint screenWidth = Util::SCREEN_WIDTH;
+GLuint screenHeight = Util::SCREEN_HEIGHT;
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 
 	GLFWwindow* window;
 
-	if (FULLSCREEN) {
+	if (Util::FULLSCREEN) {
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		screenWidth = glfwGetVideoMode(primary)->width;
 		screenHeight = glfwGetVideoMode(primary)->height;

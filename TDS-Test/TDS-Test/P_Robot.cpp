@@ -3,132 +3,126 @@
 #include "Renderer.h"
 #include "Game.h"
 #include "EnergyBulletBig.h"
-
+#include "Shield.h"
 #include <glm\gtc\random.hpp>
 
 void Robot::loadRobot() {
-	ResourceManager::LoadTexture("Textures\\D_Bot.png", GL_TRUE, "D_Bot");
-	ResourceManager::LoadTexture("Textures\\U_Bot.png", GL_TRUE, "U_Bot");
+	ResourceManager::LoadEtex("Textures", "D_Bot", ".png", GL_TRUE, "D_Bot", HBOX_AUTOFIT);
+	ResourceManager::LoadEtex("Textures", "U_Bot", ".png", GL_TRUE, "U_Bot", HBOX_AUTOFIT);
 
-	Animation::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot");
+	ResourceManager::LoadAnimation("Textures\\A_Robot_Shoot", ".png", 2, 1.5, GL_TRUE, "Robot_Shoot", ANI_LOAD_ONE_HBOX);
+	Shield::LoadShield();
 }
 
 Robot::Robot(glm::vec2 position) : Player(position)
 {
 	// Settings
 	inherentForce = 2500;
-	bodyTurnSpeed = 10;
-	trackTurnSpeed = 5;
 	mass = 80;
 	airFricCoeff = -100; // substitues for other resistances
 	dynFricCoeff = -3;
 	statFricCoeff = -5;
 	accuracy = 0.1;
-	health = MAX_HEALTH;
+	maxHealth = 2000;
+	health = maxHealth;
 
 	death = GL_FALSE;
 
-	bulletSpawn = glm::vec2(100, 100);
+	bulletSpawn = glm::vec2(1, 1);
 
-	subEntities["tracks"] = new SubE(glm::vec2(0));
-	subEntities["body"] = new SubE(glm::vec2(0));
+	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
+	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
+	subEntities["shield"] = new Shield(this);
 
-	subEntities["tracks"]->tex = "D_Bot";
-	subEntities["tracks"]->size = glm::vec2(1.05);
+	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
+	
+	bodyTurnSpeed = 10;
+	trackTurnSpeed = 5;
 
-	subEntities["body"]->tex = "U_Bot";
-	subEntities["body"]->size = glm::vec2(1.5, 0.85);
-
-	subEntities["tracks"]->autofitHitbox();
-	subEntities["body"]->autofitHitbox();
-
-	state = STOPPING;
+	state = DYN_FRIC;
 
 	shootDelay = 0.1;
 	shootDelayBigB = 5;
-	setColor(glm::vec3(1.0f));
+	SetColor(glm::vec3(1.0f));
 
-	renderList.push_back("tracks");
-	renderList.push_back("body");
+	renderOrder.push_back("shield");
+	renderOrder.push_back("tracks");
+	renderOrder.push_back("body");
 
 	lastShot = 100;
 	lastShotBigB = 100;
 
-	Animations["Robot_Shoot"] = new Animation("Robot_Shoot", GL_FALSE);
+	artilMode = GL_FALSE;
 }
 
 Robot::~Robot()
 {
 }
 
-GLboolean Robot::updateE(GLfloat dt) {
+static GLboolean sPressAFlag = GL_FALSE;
+static GLboolean sPressXFlag = GL_FALSE;
+
+GLboolean Robot::UpdateE(GLfloat dt) {
 	if (!death) {
-		if (Animations["Robot_Shoot"]->getState()) {
-			subEntities["body"]->tex = Animations["Robot_Shoot"]->getETex()->tex;
-			subEntities["body"]->size = Animations["Robot_Shoot"]->getETex()->texSize;
+		if (health <= 0) {
+			death = GL_TRUE;
+			return GL_FALSE;
 		}
-
-		if (health < 0) {
-			death = true;
-		}
-
-		setColor(glm::vec3(1 - health / MAX_HEALTH, color.y * health / MAX_HEALTH, color.z * health / MAX_HEALTH));
-
-		movState = NORMAL;
-		accuracy = 0.1;
 		lastShot += dt;
 		lastShotBigB += dt;
-		// updating values according to collision
-		if (collision) {
-#ifdef DEBUG_FORCES
-			Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-			Renderer::drawLineBuffer.push_back(myVertex((pos + (colVel - vel) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
-#endif // DEBUG_FORCES
-			vel = colVel;
-			collision = GL_FALSE;
-			state = MOVING;
-		}
-		else {
-			state = STOPPING;
-		}
+		SetColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
+		movState = NORMAL;
+		state = DYN_FRIC;
 
-		force += airRes();
-
-		if (abs(gPad.sThumbLX) > CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > CONTROLLER_DEADZONE) {
-			movDir += glm::vec2(gPad.sThumbLX, 0);
-			movDir += glm::vec2(0, gPad.sThumbLY);
-			state = MOVING;
-		}
-
-		if (abs(gPad.sThumbRX) > CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > CONTROLLER_DEADZONE) {
+		// Updating body direction
+		if (abs(gPad.sThumbRX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbRY) > Util::CONTROLLER_DEADZONE) {
 			bodyDir += glm::vec2(gPad.sThumbRX, 0);
 			bodyDir += glm::vec2(0, gPad.sThumbRY);
 		}
 
-		if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-			movState = AIMING;
+		// toggeling shield
+		if (gPad.wButtons & XINPUT_GAMEPAD_A) {
+			sPressAFlag = GL_TRUE;
 		}
-		if (gPad.bLeftTrigger > 0) {
-			movState = SPRINTING;
-		}
-
-		// adding movement direction
-		if (glm::length(movDir) > 0) {
-			movDir = glm::normalize(movDir);
+		else if(sPressAFlag) {
+			dynamic_cast<Shield*>(subEntities["shield"])->ToggleShield();
+			sPressAFlag = GL_FALSE;
 		}
 
-		if (movState == AIMING) {
-			accuracy = 0.01;
-			shootDelay = 0.025;
+		// Switching between artil and normal mode
+		if (gPad.wButtons & XINPUT_GAMEPAD_X) {
+			sPressXFlag = GL_TRUE;
 		}
-		else {
-			shootDelay = 0.1;
+		else if (sPressXFlag) {
+			if (artilMode) {
+				SwitchToNormal();
+			}
+			else {
+				SwitchToArtil();
+			}
+			sPressXFlag = GL_FALSE;
 		}
 
-		switch (state) {
-		case STOPPING: force += fricRes();
-			break;
-		case MOVING:
+		if (artilMode) { // Artilelry Mode
+			if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+				shoot();
+			}
+		}
+		else { // Normal Mode
+			if (abs(gPad.sThumbLX) > Util::CONTROLLER_DEADZONE || abs(gPad.sThumbLY) > Util::CONTROLLER_DEADZONE) {
+				movDir += glm::vec2(gPad.sThumbLX, 0);
+				movDir += glm::vec2(0, gPad.sThumbLY);
+				state = NO_DYN_FRIC;
+			}
+			if (gPad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+				movState = AIMING;
+			}
+			if (gPad.bLeftTrigger > 0) {
+				movState = SPRINTING;
+			}
+			if (glm::length(movDir) > 0) {
+				movDir = glm::normalize(movDir);
+			}
 			switch (movState) {
 			case AIMING:
 				force += movDir * inherentForce * 0.1f;
@@ -136,49 +130,25 @@ GLboolean Robot::updateE(GLfloat dt) {
 				break;
 			case NORMAL:
 				force += movDir * inherentForce;
+				accuracy = 0.1;
 				break;
 			case SPRINTING:
-				force += movDir * inherentForce * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
-				accuracy = 0.1 * (1.0f + 3.0f / CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+				force += movDir * inherentForce * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+				accuracy = 0.1 * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
 				break;
 			}
-			break;
+			if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+				shoot();
+			}
+			if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+				shootBigB();
+			}
+			SetTrackAngle(dt);
 		}
 
-		if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-			shoot();
-		}
-
-		if (gPad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
-			shootBigB();
-		}
-
-		glm::vec2 dV = dt * force / mass;
-
-		// safeguard for wiggeling close to 0v
-		if (glm::length(vel) > 0 && vel.x * (vel.x + dV.x) <= 0 && vel.y * (vel.y + dV.y) <= 0) {
-			vel = glm::vec2(0, 0);
-		}
-		else {
-			vel += dV; // acceleration is in m/s^2 so we need to divide my dt to get a velocity
-		}
-
-		pos += dt * vel; // vel ist in m/s so if multiplied by a time in second we will get the change in distance during that time;
-
-		setTrackAngle(dt);
-		setBodyAngle(dt);
-
-		std::cout << "TRACKS = " << angle << " || BODY = " << subEntities["body"]->rAngle << std::endl;
-
-		updateSupE();
-		combineHitboxes();
-
-#ifdef DEBUG_FORCES
-		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex((pos + force * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
-#endif // DEBUG_FORCES
-
-		force = glm::vec2(0);
+		SetBodyAngle(dt);
+		UpdatePos(dt);
+		UpdateSubE(dt);
 		movDir = glm::vec2(0);
 		bodyDir = glm::vec2(0);
 		return glm::length(vel) > 0;
@@ -188,39 +158,54 @@ GLboolean Robot::updateE(GLfloat dt) {
 
 void Robot::shoot() {
 	if (lastShot > shootDelay) {
-		Animations["Robot_Shoot"]->animationTime = shootDelay;
-		Animations["Robot_Shoot"]->startAnimation();
+		//subEntities["body"]->animations["ShootSmallB"].aniTime = shootDelay;
+		//subEntities["body"]->animations["ShootSmallB"].Start();
+		//subEntities["body"]->ani = "ShootSmallB";
 		lastShot = 0;
-		Game::Bullets.push_back(new EnergyBullet(pos + Util::create2DrotMatrix(subEntities["body"]->angle) * (bulletSpawn * 0.005f), subEntities["body"]->angle + accuracy * (rand() % 2000 / 1000.0f - 1)));
-		Game::Bullets.back()->whitelist.push_back(this);
+
+		// This is probably not the best option to whitelist all players
+		std::vector<const Entity*> whitelist;
+		for (Player *p : Game::sPlayers) {
+			whitelist.push_back(p);
+		}
+		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 
 void Robot::shootBigB() {
+
+	// This is probably not the best option to whitelist all players
+	std::vector<const Entity*> whitelist;
+	for (Player *p : Game::sPlayers) {
+		whitelist.push_back(p);
+	}
+
 	if (lastShotBigB > shootDelayBigB) {
 		lastShotBigB = 0;
-		Game::Bullets.push_back(new EnergyBulletBig(pos, subEntities["body"]->angle));
-		Game::Bullets.back()->whitelist.push_back(this);
+		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 
-void Robot::setBodyAngle(GLfloat dt) {
+void Robot::SetBodyAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	subEntities["body"]->rAngle = glm::mod<GLfloat>(subEntities["body"]->rAngle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(subEntities["body"]->rAngle + angle, bodyDir);
+
+	subEntities["body"]->SetRAngle(glm::mod<GLfloat>(subEntities["body"]->GetRAngle(), 2 * glm::pi<GLfloat>()));
+	GLfloat dA = CalcMovAngle(subEntities["body"]->GetRAngle() + angle, bodyDir);
 	if (abs(dA) > 0) {
 		if (bodyTurnSpeed * dt > abs(dA)) {
-			subEntities["body"]->rAngle += dA;
+			subEntities["body"]->SetRAngle(subEntities["body"]->GetRAngle() + dA);
+			subEntities["shield"]->SetRAngle(subEntities["body"]->GetRAngle());
 		}
 		else {
-			subEntities["body"]->rAngle += dA / abs(dA) * bodyTurnSpeed * dt;
+			subEntities["body"]->SetRAngle(subEntities["body"]->GetRAngle() + dA / abs(dA) * bodyTurnSpeed * dt);
+			subEntities["shield"]->SetRAngle(subEntities["body"]->GetRAngle());
 		}
 	}
 }
 
-void Robot::setTrackAngle(GLfloat dt) {
+void Robot::SetTrackAngle(GLfloat dt) {
 	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = Util::calcMovAngle(angle, vel);
+	GLfloat dA = CalcMovAngle(angle, vel);
 
 	if (abs(dA) > 0.5 * glm::pi<GLfloat>()) {
 		if (dA > 0) {
@@ -240,4 +225,19 @@ void Robot::setTrackAngle(GLfloat dt) {
 		}
 	}
 
+}
+
+void Robot::SwitchToArtil()
+{
+	artilMode = GL_TRUE;
+	dynFricCoeff = -50;
+	accuracy = 0.01;
+	shootDelay = 0.01;
+}
+
+void Robot::SwitchToNormal()
+{
+	artilMode = GL_FALSE;
+	dynFricCoeff = -3;
+	shootDelay = 0.1;
 }

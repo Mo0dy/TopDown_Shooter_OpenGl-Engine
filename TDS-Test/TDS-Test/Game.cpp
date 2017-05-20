@@ -6,13 +6,18 @@
 #include <Xinput.h>
 #include "LevelTest.h"
 #include "E_Drone.h"
+#include "E_Jelly.h"
+#include "LevelBanana.h"
+#include "E_Medic.h"
 
-std::vector<Entity*> Game::statEntities; // a vector that includes all static entities
-std::vector<DynE*> Game::dynEntities; // a vector that includes all neutral
-std::vector<Enemy*> Game::Enemies;
-std::vector<Player*> Game::Players;
-std::vector<Bullet*> Game::Bullets;
-std::vector<DynE*> Game::movedE;
+std::vector<Entity*> Game::sStatEntities; // a vector that includes all static entities
+std::vector<DynE*> Game::sDynEntities; // a vector that includes all neutral
+std::vector<Enemy*> Game::sEnemies;
+std::vector<Player*> Game::sPlayers;
+std::vector<Bullet*> Game::sBullets;
+std::vector<DynE*> Game::sMovedE;
+
+std::vector<Entity*> Game::sSpawnE;
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
 {
@@ -37,13 +42,16 @@ void Game::Init() {
 	Robot::loadRobot();
 	EnergyBullet::loadEnergyBullet();
 	LevelTest::loadLevelTest();
+	LevelBanana::loadLevelBanana();
+	E_Jelly::Load_E_Jelly();
+	E_Medic::Load_E_Medic();
 
 	renderer = new Renderer("basicShader");
 	camera = new Camera;
 	colDec = new CollisionDetector;
 	level = new LevelTest;
 
-	reset();
+	Reset();
 }
 
 #ifdef KEYBOARD_SUPPORT
@@ -64,25 +72,25 @@ void Game::ProcessInput(GLfloat dt) {
 	}
 	if (!Keys[GLFW_KEY_R] && Press_R_Flag) {
 		Press_R_Flag = false;
-		reset();
+		Reset();
 	}
 	if (Keys[GLFW_KEY_M]) {
 		Press_M_Flag = true;
 	}
 	if (!Keys[GLFW_KEY_M] && Press_M_Flag) {
 		Press_M_Flag = false;
-		camera->minSizeHeight = CAM_STANDARD_SIZE;
+		camera->minSizeHeight = Util::CAM_STANDARD_MIN_ZOOM;
 	}
 	if (Keys[GLFW_KEY_U]) {
-		camera->minSizeHeight -= CAM_ZOOM_SPEED;
+		camera->minSizeHeight -= Util::CAM_ZOOM_SPEED;
 	}
 	if (Keys[GLFW_KEY_J]) {
-		camera->minSizeHeight += CAM_ZOOM_SPEED;
+		camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
 	}
 
 #endif // DEBUG
 
-	if (CONTROLLER_SUPPORT) {
+	if (Util::CONTROLLER_SUPPORT) {
 		XINPUT_STATE* cState[4];
 
 		for (int i = 0; i < 4; i++) {
@@ -96,30 +104,30 @@ void Game::ProcessInput(GLfloat dt) {
 			controlledPlayers++;
 		}
 
-		if (controlledPlayers > Players.size()) {
-			controlledPlayers = Players.size();
+		if (controlledPlayers > sPlayers.size()) {
+			controlledPlayers = sPlayers.size();
 		}
 
 		for (int i = 0; i < controlledPlayers; i++) {
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-				camera->minSizeHeight -= CAM_ZOOM_SPEED;
+				camera->minSizeHeight -= Util::CAM_ZOOM_SPEED;
 				if (camera->minSizeHeight < 6) {
 					camera->minSizeHeight = 6;
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-				camera->minSizeHeight += CAM_ZOOM_SPEED;
-				if (camera->minSizeHeight > CAM_MAX_ZOOM) {
-					camera->minSizeHeight = CAM_MAX_ZOOM;
+				camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
+				if (camera->minSizeHeight > Util::CAM_MAX_ZOOM) {
+					camera->minSizeHeight = Util::CAM_MAX_ZOOM;
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_START) {
-				reset();
+				Reset();
 			}
 		}
 
 		for (GLuint i = 0; i < controlledPlayers; i++) {
-			Players[i]->gPad = cState[i]->Gamepad;
+			sPlayers[i]->SetGamepad(cState[i]->Gamepad);
 		}
 	}
 
@@ -191,98 +199,107 @@ void Game::Update(GLfloat dt) {
 	LOG("FPS = " << 1 / dt);
 #endif //LOG_FPS
 
-	camera->updatePos(Width, Height, Players);
+	camera->updatePos(Width, Height, sPlayers);
 
-	for (Player *e : Players) {
-		e->updateE(dt);
+	for (Player *e : sPlayers) {
+		e->UpdateE(dt);
 	}
-	for (Bullet *e : Bullets) {
-		e->updateE(dt);
+	for (Bullet *e : sBullets) {
+		e->UpdateE(dt);
 	}
-	for (Enemy *e : Enemies) {
-		e->updateE(dt);
+	for (Enemy *e : sEnemies) {
+		e->UpdateE(dt);
 	}
-	for (DynE *e : dynEntities) {
-		if (e->updateE(dt)) {
-			movedE.push_back(e);
+	for (DynE *e : sDynEntities) {
+		if (e->UpdateE(dt)) {
+			sMovedE.push_back(e);
 		}
 	}
-	level->updateL(dt);
+	level->UpdateL(dt);
 
 	// Collision detection
 	GLfloat penDepth;
 	glm::vec2 colAxis;
-	for (int i = 0; i < Players.size(); i++) {
-		for (Enemy *e : Enemies) {
-			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
-				Players[i]->ColWithDyn(e, penDepth, colAxis);
-				e->ColWithPlayer(Players[i], penDepth, -colAxis);
+	for (int i = 0; i < sPlayers.size(); i++) {
+
+		for (auto& x : sPlayers[i]->subEntities) {
+			for (Enemy *e : sEnemies) {
+				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+					x.second->ColWithEnemy(e, penDepth, colAxis);
+					e->ColWithPSubE(x.second, penDepth, -colAxis);
+				}
 			}
-		}
-		for (int j = i + 1; j < Players.size(); j++) {
-			if (colDec->doCCheck(Players[i], Players[j], &penDepth, &colAxis)) {
-				Players[i]->ColWithDyn(Players[j], penDepth, colAxis);
-				Players[j]->ColWithDyn(Players[i], penDepth, -colAxis);
+			for (int j = i + 1; j < sPlayers.size(); j++) {
+				for (auto& y : sPlayers[i]->subEntities) {
+					if (colDec->doCCheck(x.second, y.second, &penDepth, &colAxis)) {
+						sPlayers[i]->ColWithDyn(sPlayers[j], penDepth, colAxis);
+						sPlayers[j]->ColWithDyn(sPlayers[i], penDepth, -colAxis);
+						break;
+					}
+				}
+
 			}
-		}
-		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(Players[i], e, &penDepth, &colAxis)) {
-				Players[i]->ColWithStat(e, penDepth, colAxis);
+			for (Entity *e : level->entities) {
+				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+					sPlayers[i]->ColWithStat(e, penDepth, colAxis);
+				}
+			}
+			if (colDec->doCCheck(x.second, &level->background, &penDepth, &colAxis)) {
+				sPlayers[i]->ColWithStat(&level->background, penDepth, colAxis);
 			}
 		}
 	}
 
 	// We should probably only check for all Enemies that moved but for now this is fine
-	for (int i = 0; i < Enemies.size(); i++) {
-		for (int j = i + 1; j < Enemies.size(); j++) {
-			if (colDec->doCCheck(Enemies[i], Enemies[j], &penDepth, &colAxis)) {
-				Enemies[i]->ColWithDyn(Enemies[j], penDepth, colAxis);
-				Enemies[j]->ColWithDyn(Enemies[i], penDepth, -colAxis);
+	for (int i = 0; i < sEnemies.size(); i++) {
+		for (int j = i + 1; j < sEnemies.size(); j++) {
+			if (colDec->doCCheck(sEnemies[i], sEnemies[j], &penDepth, &colAxis)) {
+				sEnemies[i]->ColWithDyn(sEnemies[j], penDepth, colAxis);
+				sEnemies[j]->ColWithDyn(sEnemies[i], penDepth, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(Enemies[i], e, &penDepth, &colAxis)) {
-				Enemies[i]->ColWithStat(e, penDepth, colAxis);
+			if (colDec->doCCheck(sEnemies[i], e, &penDepth, &colAxis)) {
+				sEnemies[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
 
-	for (Bullet *b : Bullets) {
-		for (Enemy *e : Enemies) {
+	for (Bullet *b : sBullets) {
+		for (Enemy *e : sEnemies) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithEnemy(e);
-				e->ColWithDyn(b, penDepth, -colAxis);
+				b->ColWithLivingE(e);
+				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
 			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
-				b->ColWithStat(e, penDepth);
+				b->ColWithStat(e, penDepth, colAxis);
 			}
 		}
 	}
 
-	movedE.clear();
-
-	checkForErase();
+	sMovedE.clear();
+	CheckForErase();
 }
 
 void Game::Render() {
 	// combine this in one function (by combining all vectors)
-	renderer->RenderSprite(*level->background, *camera);
-	for (Entity* e : statEntities) {
+	renderer->RenderSprite(level->background, *camera);
+	for (Entity* e : sStatEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : Bullets) {
+	for (Entity* e : sBullets) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : dynEntities) {
+	for (Entity* e : sDynEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : Enemies) {
+	for (Entity* e : sEnemies) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Player* p : Players) {
-		for (std::string s : p->renderList) {
+	for (Player* p : sPlayers) {
+		for (std::string s : p->renderOrder) {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
 	}
@@ -298,63 +315,61 @@ DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 	return XInputGetState(index, state);
 }
 
-void Game::reset() {
-	level->reset();
+void Game::Reset() {
+	level->Reset();
 }
 
-void Game::checkForErase() {
-	for (int i = 0; i < Bullets.size(); i++) {
-		if (Bullets[i]->checkForErase(level->size)) {
-			delete Bullets[i];
-			Bullets.erase(Bullets.begin() + i);
+void Game::CheckForErase() {
+	for (int i = 0; i < sBullets.size(); i++) {
+		if (sBullets[i]->GetErase()) {
+			delete sBullets[i];
+			sBullets.erase(sBullets.begin() + i);
 		}
 	}
-	for (int i = 0; i < Players.size(); i++) {
-		if (Players[i]->checkForErase(level->size)) {
-			Players[i]->pos = glm::vec2(0);
-			Players[i]->death = GL_TRUE;
-		}
-		if (Players[i]->death && Players.size() > 1) {
-			delete Players[i];
-			Players.erase(Players.begin() + i);
+	for (int i = 0; i < sPlayers.size(); i++) {
+		if (sPlayers[i]->GetErase()) {
+			delete sPlayers[i];
+			sPlayers.erase(sPlayers.begin() + i);
 		}
 	}
-	for (int i = 0; i < dynEntities.size(); i++) {
-		if (dynEntities[i]->checkForErase(level->size)) {
-			delete dynEntities[i];
-			dynEntities.erase(dynEntities.begin() + i);
+	for (int i = 0; i < sDynEntities.size(); i++) {
+		if (sDynEntities[i]->GetErase()) {
+			delete sDynEntities[i];
+			sDynEntities.erase(sDynEntities.begin() + i);
 		}
 	}
-	for (int i = 0; i < Enemies.size(); i++) {
-		if (Enemies[i]->checkForErase(level->size)) {
-			delete Enemies[i];
-			Enemies.erase(Enemies.begin() + i);
+	for (int i = 0; i < sEnemies.size(); i++) {
+		if (sEnemies[i]->GetErase()) {
+			delete sEnemies[i];
+			sEnemies.erase(sEnemies.begin() + i);
 		}
 	}
 }
 
 void Game::deleteEntities() {
-	for (Entity *e : statEntities) {
+	for (Entity *e : sStatEntities) {
 		delete e;
 	}
-	for (Entity *e : dynEntities) {
+	for (Entity *e : sDynEntities) {
 		delete e;
 	}
-	for (Entity *e : Players) {
+	for (Entity *e : sPlayers) {
 		delete e;
 	}
-	for (Entity *e : Bullets) {
+	for (Entity *e : sBullets) {
 		delete e;
 	}
-	for (Entity *e : Enemies) {
+	for (Entity *e : sEnemies) {
 		delete e;
 	}
 }
 
 void Game::clearEntities() {
-	Players.clear();
-	statEntities.clear();
-	dynEntities.clear();
-	Bullets.clear();
-	Enemies.clear();
+	sPlayers.clear();
+	sStatEntities.clear();
+	sDynEntities.clear();
+	sBullets.clear();
+	sEnemies.clear();
+	sMovedE.clear();
+	sSpawnE.clear();
 }

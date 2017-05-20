@@ -1,21 +1,23 @@
 #pragma once
-#include "Player.h"
+#include "LivingE.h"
 
-class Enemy: public DynE
+class Enemy: public LivingE
 {
 public:
 	Enemy(glm::vec2 position);
 	~Enemy();
-	
-	GLfloat health;
 
-	void ColWithPlayer(class Player* player, GLfloat colDepth, glm::vec2 colAxis);
+	void ColWithPSubE(class SubE* e, GLfloat colDepth, glm::vec2 colAxis);
 
-	GLboolean checkForErase(glm::vec2 levelSize);
+	GLboolean CheckForErase(glm::vec2 levelSize);
 
 	GLfloat lastAttack;
 	GLfloat attackSpeed;
 	GLboolean attacking;
 	GLfloat damage;
+
+	void SetBodyAngle(GLfloat dt);
+	GLfloat movForce;
+	GLfloat turnSpeed;
 };
 
