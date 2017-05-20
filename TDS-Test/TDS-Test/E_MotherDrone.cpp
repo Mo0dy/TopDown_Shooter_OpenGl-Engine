@@ -48,8 +48,8 @@ GLboolean E_MotherDrone::UpdateE(GLfloat dt) {
 
 		//Please replace this comment for this for loop, I'm just not sure what happens here.
 		for (Player *p : Game::sPlayers) {
-			movDir += glm::normalize(rot90DegreesM * (pos - p->GetPos()));
-			movDir += glm::normalize(p->GetPos() - pos) * glm::pow(glm::distance(p->GetPos(), pos) - 20, 3) * 0.2f;
+			movDir += glm::normalize(rot90DegreesM * (this->Get2DPos() - p->Get2DPos()));
+			movDir += glm::normalize(p->Get2DPos() - this->Get2DPos()) * glm::pow(glm::distance(p->Get2DPos(), this->Get2DPos()) - 20, 3) * 0.2f;
 		}
 
 		AddForce(glm::normalize(movDir) * movForce);

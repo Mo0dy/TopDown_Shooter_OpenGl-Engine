@@ -37,9 +37,9 @@ void LevelBanana::UpdateL(GLfloat dt) {
 		if (testMDrone != NULL) {
 			if (!testMDrone->GetDeath()) {
 				if (Game::sEnemies.size() < Game::sPlayers.size() * 12) {
-					if (glm::length(Game::sEnemies[0]->GetVel()) > 0) {
+					if (glm::length(Game::sEnemies[0]->Get2DVel()) > 0) {
 						if (testMDrone->spawning) {
-							Game::sEnemies.push_back(new E_Drone(testMDrone->GetPos() + glm::normalize(testMDrone->GetVel()) * -0.5f * testMDrone->GetSize().y));
+							Game::sEnemies.push_back(new E_Drone(testMDrone->Get2DPos() + glm::normalize(testMDrone->Get2DVel()) * -0.5f * testMDrone->Get2DSize().y));
 							testMDrone->spawning = GL_FALSE;
 							testMDrone->lastSpawn = 0;
 						}
@@ -56,8 +56,8 @@ void LevelBanana::UpdateL(GLfloat dt) {
 			if (testJelly->GetDeath()) {
 				if (testJelly->jellySize >= 0.5)
 				{
-					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
 				}
 			}
 		}

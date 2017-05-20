@@ -8,7 +8,7 @@ void EnergyBullet::loadEnergyBullet() {
 EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const Entity*> whitelist) : Bullet(position, angle, 20.0f, whitelist)
 {
 	tex = ResourceManager::GetEtex("EnergyBall").GetTex();
-	size = glm::vec2(0.25, 0.6);
+	size = glm::vec3(0.25, 0.6, 0.25);
 	hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(0.25, 0.6));
 	damage = 10;
 }

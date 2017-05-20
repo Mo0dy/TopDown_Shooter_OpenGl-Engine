@@ -50,10 +50,10 @@ void Animation::UpdateAni(Entity* masterE)
 		if (startTime + aniTime < glfwGetTime() && !repeat) {
 			state = GL_FALSE;
 			masterE->SetTex(Etextures.back().GetTex());
-			masterE->SetSize(Etextures.back().GetTexSize());
+			masterE->Set2DSize(Etextures.back().GetTexSize());
 
 			if (updateHObj) {
-				masterE->hitObjs = Etextures.back().GetHitObjs(masterE->GetSize());
+				masterE->hitObjs = Etextures.back().GetHitObjs(masterE->Get2DSize());
 			}
 		}
 		else {
@@ -61,9 +61,9 @@ void Animation::UpdateAni(Entity* masterE)
 			GLuint etexIndex = (GLuint)(dt / aniTime * Etextures.size());
 
 			masterE->SetTex(Etextures[etexIndex].GetTex());
-			masterE->SetSize(Etextures.back().GetTexSize());
+			masterE->Set2DSize(Etextures.back().GetTexSize());
 			if (updateHObj) {
-				masterE->hitObjs = Etextures[etexIndex].GetHitObjs(masterE->GetSize());
+				masterE->hitObjs = Etextures[etexIndex].GetHitObjs(masterE->Get2DSize());
 			}
 		}
 	}

@@ -14,7 +14,7 @@ GLboolean Bullet::UpdateE(GLfloat dt) {
 		this->erase = GL_TRUE;
 		return GL_FALSE;
 	}
-	else {
+	else {       
 		this->pos += this->vel * dt;
 		return GL_TRUE;
 	}

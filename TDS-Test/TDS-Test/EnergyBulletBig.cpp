@@ -17,7 +17,7 @@ EnergyBulletBig::EnergyBulletBig(glm::vec2 position, GLfloat angle, std::vector<
 	this->mass = 200000;
 	this->tex = ResourceManager::GetEtex("EnergyBall").GetTex();
 	this->hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(1.7, 3.5));
-	this->size = glm::vec2(1.7, 3.5);
+	this->size = glm::vec3(1.7, 3.5, 1.5f);
 	this->damage = 90;
 	this->vel = glm::normalize(this->vel) * 15.0f; // This should be done differently
 }

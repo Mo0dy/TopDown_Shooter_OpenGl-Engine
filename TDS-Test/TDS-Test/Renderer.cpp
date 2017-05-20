@@ -48,10 +48,10 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	model = glm::ortho(0.0f, cam.size.x, 0.0f, cam.size.y, -1.0f, 1.0f);
 	model = glm::translate(model, glm::vec3(-cam.pos, 0.0f));
 	// Transform to WCO
-	model = glm::translate(model, glm::vec3(entity.GetPos(), 0.0f));
+	model = glm::translate(model, glm::vec3(entity.Get2DPos(), 0.0f));
 	model = glm::rotate(model, entity.GetAngle(), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(-0.5f * entity.GetSize().x, -0.5f * entity.GetSize().y, 0.0f));
-	model = glm::scale(model, glm::vec3(entity.GetSize(), 1.0f));
+	model = glm::translate(model, glm::vec3(-0.5f * entity.Get2DSize().x, -0.5f * entity.Get2DSize().y, 0.0f));
+	model = glm::scale(model, glm::vec3(entity.Get2DSize() * entity.GetZPos(), 1.0f));
 
 	ResourceManager::GetShader(myShader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
 	ResourceManager::GetShader(myShader).SetVector3f("spriteColor", entity.GetColor());

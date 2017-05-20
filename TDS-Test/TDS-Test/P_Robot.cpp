@@ -30,8 +30,8 @@ Robot::Robot(glm::vec2 position) : Player(position)
 
 	bulletSpawn = glm::vec2(1, 1);
 
-	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3);
-	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2);
+	subEntities["tracks"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("D_Bot"), 1.3, 1);
+	subEntities["body"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("U_Bot"), 2, 1);
 	subEntities["shield"] = new Shield(this);
 
 	//subEntities["body"]->animations["ShootSmallB"] = Animation("Robot_Shoot", GL_FALSE);
@@ -125,15 +125,15 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 			}
 			switch (movState) {
 			case AIMING:
-				force += movDir * inherentForce * 0.1f;
+				this->AddForce(movDir * inherentForce * 0.1f);
 				accuracy = 0.01;
 				break;
 			case NORMAL:
-				force += movDir * inherentForce;
+				this->AddForce(movDir * inherentForce);
 				accuracy = 0.1;
 				break;
 			case SPRINTING:
-				force += movDir * inherentForce * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
+				this->AddForce(movDir * inherentForce * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger));
 				accuracy = 0.1 * (1.0f + 3.0f / Util::CONTROLLER_TRIGGER_MAX * (GLfloat)gPad.bLeftTrigger);
 				break;
 			}
@@ -168,7 +168,7 @@ void Robot::shoot() {
 		for (Player *p : Game::sPlayers) {
 			whitelist.push_back(p);
 		}
-		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
+		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 
@@ -182,7 +182,7 @@ void Robot::shootBigB() {
 
 	if (lastShotBigB > shootDelayBigB) {
 		lastShotBigB = 0;
-		Game::sBullets.push_back(new EnergyBullet(this->pos + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
+		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
 	}
 }
 

@@ -10,12 +10,12 @@ public:
 	~HitObject();
 
 	// Getters and setters
-	glm::vec2 GetPos();
-	glm::vec2 GetSize();
+	glm::vec2 Get2DPos();
+	glm::vec2 Get2DSize();
 	GLfloat GetAngle();
 
 	void SetPos(glm::vec2 pos);
-	void SetSize(glm::vec2 size);
+	void Set2DSize(glm::vec2 size);
 	void SetAngle(GLfloat angle);
 
 protected:

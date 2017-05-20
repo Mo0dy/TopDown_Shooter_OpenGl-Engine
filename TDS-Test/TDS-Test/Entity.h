@@ -17,8 +17,8 @@ public:
 	Entity(glm::vec2 position, class Animation ani, std::string aniName);
 	Entity(glm::vec2 position, GLfloat angle, class Animation ani, std::string aniName);
 
-	Entity(const Etex* etex, GLfloat width);
-	Entity(const Etex* etex, glm::vec2 size);
+	Entity(const Etex* etex, GLfloat width, GLfloat height);
+	Entity(const Etex* etex, glm::vec3 size);
 
 	virtual ~Entity();
 
@@ -43,21 +43,27 @@ public:
 	virtual void GetAttacked(GLfloat damage);
 
 	GLboolean GetErase() const;
-	glm::vec2 GetPos() const;
-	glm::vec2 GetSize() const;
+	glm::vec2 Get2DPos() const;
+	glm::vec2 Get2DSize() const;
+	glm::vec3 GetPos() const;
+	glm::vec3 GetSize() const;
+	GLfloat GetZPos() const; // Returns height over ground level of lowest part
+	GLfloat GetZSize() const; // Returns size in Z dir
 	GLfloat GetAngle() const;
 	glm::vec3 GetColor() const;
 	const Texture2D* GetTex() const;
 
 	void SetTex(const Texture2D *tex);
-	void SetSize(glm::vec2 size);
-	void SetSize(GLfloat width);
+	void Set2DSize(glm::vec2 size);
+	void Set2DSize(GLfloat width);
+	void SetSize(glm::vec3 size);
+	void SetZSize(GLfloat zSize);
 
 protected:
 	const Texture2D *tex;
 	GLboolean erase;
-	glm::vec2 pos; // The position in WCS coordinates
-	glm::vec2 size;
+	glm::vec3 pos; // The position in WCS coordinates
+	glm::vec3 size;
 	GLfloat angle; // The angle of the entitie in radians
 	glm::vec3 color; // The color will be overlayed on the texture
 };

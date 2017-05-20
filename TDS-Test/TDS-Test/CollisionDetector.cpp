@@ -23,21 +23,21 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
-	if (glm::distance(dE->GetPos(), sE->GetPos()) <= (glm::length(sE->GetSize()) + glm::length(dE->GetSize())) / 2.0f) {
+	if (glm::distance(dE->Get2DPos(), sE->Get2DPos()) <= (glm::length(sE->Get2DSize()) + glm::length(dE->Get2DSize())) / 2.0f) {
 		for (HitObject mEH : dE->hitObjs) {
 
 			mymEH = mEH;
-			mymEH.SetPos(Util::RotationMat2(dE->GetAngle()) * mymEH.GetPos() + dE->GetPos());
+			mymEH.SetPos(Util::RotationMat2(dE->GetAngle()) * mymEH.Get2DPos() + dE->Get2DPos());
 			mymEH.SetAngle(mymEH.GetAngle() + dE->GetAngle());
 
 			// This should probably only be done if the hitboxes have the potential to collide?
 			glm::mat2 rotMat = Util::RotationMat2(mymEH.GetAngle());
-			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.GetSize().x, 0) * 0.5f;
-			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.GetSize().y) * 0.5f;
-			E1corners[0] = mymEH.GetPos() + rotVec1 + rotVec2;
-			E1corners[1] = mymEH.GetPos() + rotVec1 - rotVec2;
-			E1corners[2] = mymEH.GetPos() - rotVec1 - rotVec2;
-			E1corners[3] = mymEH.GetPos() - rotVec1 + rotVec2;
+			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.Get2DSize().x, 0) * 0.5f;
+			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.Get2DSize().y) * 0.5f;
+			E1corners[0] = mymEH.Get2DPos() + rotVec1 + rotVec2;
+			E1corners[1] = mymEH.Get2DPos() + rotVec1 - rotVec2;
+			E1corners[2] = mymEH.Get2DPos() - rotVec1 - rotVec2;
+			E1corners[3] = mymEH.Get2DPos() - rotVec1 + rotVec2;
 
 #ifdef DEBUG_HITBOXES
 			for (int i = 0; i < 3; i++) {
@@ -54,16 +54,16 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 			for (HitObject cEH : sE->hitObjs) {
 				// Calculation WCS position of the Hitbox
 				mycEH = cEH;
-				mycEH.SetPos(Util::RotationMat2(sE->GetAngle()) * mycEH.GetPos() + sE->GetPos());
+				mycEH.SetPos(Util::RotationMat2(sE->GetAngle()) * mycEH.Get2DPos() + sE->Get2DPos());
 				mycEH.SetAngle(mycEH.GetAngle() + sE->GetAngle());
 
 				rotMat = Util::RotationMat2(mycEH.GetAngle());
-				rotVec1 = rotMat * glm::vec2(mycEH.GetSize().x, 0) * 0.5f;
-				rotVec2 = rotMat * glm::vec2(0, mycEH.GetSize().y) * 0.5f;
-				E2corners[0] = mycEH.GetPos() + rotVec1 + rotVec2;
-				E2corners[1] = mycEH.GetPos() + rotVec1 - rotVec2;
-				E2corners[2] = mycEH.GetPos() - rotVec1 - rotVec2;
-				E2corners[3] = mycEH.GetPos() - rotVec1 + rotVec2;
+				rotVec1 = rotMat * glm::vec2(mycEH.Get2DSize().x, 0) * 0.5f;
+				rotVec2 = rotMat * glm::vec2(0, mycEH.Get2DSize().y) * 0.5f;
+				E2corners[0] = mycEH.Get2DPos() + rotVec1 + rotVec2;
+				E2corners[1] = mycEH.Get2DPos() + rotVec1 - rotVec2;
+				E2corners[2] = mycEH.Get2DPos() - rotVec1 - rotVec2;
+				E2corners[3] = mycEH.Get2DPos() - rotVec1 + rotVec2;
 
 #ifdef DEBUG_HITBOXES
 				for (int i = 0; i < 3; i++) {
@@ -90,7 +90,7 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 
 GLfloat CollisionDetector::doSingleCheck(HitObject& h1, HitObject& h2, glm::vec2* const minColAxis) {
 	// This should probably be checked in the upper function?
-	if (glm::distance(h1.GetPos(), h2.GetPos()) > (glm::length(h1.GetSize()) + glm::length(h2.GetSize())) / 2.0f) { // rough check for possible collision
+	if (glm::distance(h1.Get2DPos(), h2.Get2DPos()) > (glm::length(h1.Get2DSize()) + glm::length(h2.Get2DSize())) / 2.0f) { // rough check for possible collision
 		return -1;
 	}
 

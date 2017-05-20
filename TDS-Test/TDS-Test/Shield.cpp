@@ -5,10 +5,10 @@ void Shield::LoadShield()
 	ResourceManager::LoadEtex("Textures", "ShieldCone", ".png", GL_TRUE, "Shield", HBOX_AUTOFIT);
 }
 
-Shield::Shield(class CompE* masterE) : SubE(masterE),maxShieldHP(2000), shieldHP(maxShieldHP), active(GL_FALSE), shieldSize(ResourceManager::GetEtex("Shield").GetTexSize(3))
+Shield::Shield(class CompE* masterE) : SubE(masterE),maxShieldHP(2000), shieldHP(maxShieldHP), active(GL_FALSE), shieldSize(glm::vec3(ResourceManager::GetEtex("Shield").GetTexSize(3), masterE->GetZSize()))
 {
-	this->size = glm::vec2(0);
-	this->rPos = glm::vec2(0, 1);
+	this->size = glm::vec3(0);
+	this->rPos = glm::vec3(0, 1.0f, 0);
 	tex = ResourceManager::GetEtex("Shield").GetTex();
 	shieldHObjs = ResourceManager::GetEtex("Shield").GetHitObjs(shieldSize);
 	rechargePerSec = 300;
@@ -48,7 +48,7 @@ void Shield::StartShield()
 
 void Shield::StopShield()
 {
-	this->size = glm::vec2(0);
+	this->size = glm::vec3(0);
 	hitObjs.clear();
 	active = GL_FALSE;
 }
@@ -71,5 +71,5 @@ void Shield::GetAttacked(GLfloat damage)
 void Shield::UpdatePos()
 {
 	this->angle = masterE->GetAngle() + rAngle;
-	this->pos = Util::RotationMat2(masterE->GetAngle() + rAngle) * rPos + masterE->GetPos();
+	this->pos = glm::vec3(Util::RotationMat2(masterE->GetAngle() + this->rAngle) * this->Get2DRPos() + masterE->Get2DPos(), masterE->GetZPos() + this->rPos.z);
 }

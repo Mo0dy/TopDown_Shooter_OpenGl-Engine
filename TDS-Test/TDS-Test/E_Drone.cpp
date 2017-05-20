@@ -60,17 +60,17 @@ GLboolean E_Drone::UpdateE(GLfloat dt) {
 		Player* gPlayer = Game::sPlayers[0];
 
 		for (int i = 0; i < Game::sPlayers.size(); i++) {
-			if (glm::distance(pos, gPlayer->GetPos()) > glm::distance(pos, Game::sPlayers[i]->GetPos())) {
+			if (glm::distance(this->Get2DPos(), gPlayer->Get2DPos()) > glm::distance(this->Get2DPos(), Game::sPlayers[i]->Get2DPos())) {
 				gPlayer = Game::sPlayers[i];
 			}
 		}
 
-		glm::vec2 movDir = glm::normalize(gPlayer->GetPos() - pos) * movForce;
+		glm::vec2 movDir = glm::normalize(gPlayer->Get2DPos() - this->Get2DPos()) * movForce;
 
 		//Drones all hate eachother and try to stay away from other enemies
 		for (Enemy *e : Game::sEnemies) {
-			if (glm::distance(pos, e->GetPos()) > 0.4) {
-				movDir += glm::normalize(pos - e->GetPos()) * swarmFactor / glm::pow(glm::distance(pos, e->GetPos()), 2);
+			if (glm::distance(this->Get2DPos(), e->Get2DPos()) > 0.4) {
+				movDir += glm::normalize(this->Get2DPos() - e->Get2DPos()) * swarmFactor / glm::pow(glm::distance(this->Get2DPos(), e->Get2DPos()), 2);
 			}
 		}
 

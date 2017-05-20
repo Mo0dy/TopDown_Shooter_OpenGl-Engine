@@ -18,7 +18,7 @@ void Etex::UpdateHObjs()
 {
 	hObjs.clear();
 	for (HitObject rHO : rHObjs) {
-		hObjs.push_back(HitObject(texSize * rHO.GetPos() * 0.5f, texSize * rHO.GetSize(), rHO.GetAngle()));
+		hObjs.push_back(HitObject(texSize * rHO.Get2DPos() * 0.5f, texSize * rHO.Get2DSize(), rHO.GetAngle()));
 	}
 }
 
@@ -54,7 +54,7 @@ std::vector<HitObject> Etex::GetHitObjs(glm::vec2 size) const
 {
 	std::vector<HitObject> tempHObjs;
 	for (HitObject rHO : rHObjs) {
-		tempHObjs.push_back(HitObject(size * rHO.GetPos() * 0.5f, size * rHO.GetSize(), rHO.GetAngle()));
+		tempHObjs.push_back(HitObject(size * rHO.Get2DPos() * 0.5f, size * rHO.Get2DSize(), rHO.GetAngle()));
 	}
 	return tempHObjs;
 }

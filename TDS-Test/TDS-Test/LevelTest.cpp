@@ -12,13 +12,13 @@ void LevelTest::loadLevelTest() {
 
 LevelTest::LevelTest()
 {
-	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150);
-	size = background.GetSize();
+	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150.0f, 0.0f);
+	size = background.Get2DSize();
 
 	for (housePos hP : TOWN) {
-		entities.push_back(new StaticEntity(hP.pos, hP.width, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
+		entities.push_back(new StaticEntity(hP.pos, hP.width, 5.0f, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
 	}
-	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
+	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
 }
 
 LevelTest::~LevelTest()
@@ -42,8 +42,8 @@ void LevelTest::UpdateL(GLfloat dt) {
 		if (testMDrone != NULL) {
 			if (!testMDrone->GetDeath()) {
 				if (Game::sEnemies.size() < Game::sPlayers.size() * 5) {
-					if (glm::length(Game::sEnemies[0]->GetVel()) > 0) {
-						Game::sEnemies.push_back(new E_Drone(testMDrone->GetPos() + glm::normalize(testMDrone->GetVel()) * -0.5f * testMDrone->GetSize().y));
+					if (glm::length(Game::sEnemies[0]->Get2DVel()) > 0) {
+						Game::sEnemies.push_back(new E_Drone(testMDrone->Get2DPos() + glm::normalize(testMDrone->Get2DVel()) * -0.5f * testMDrone->Get2DSize().y));
 					}
 				}
 			}
@@ -57,8 +57,8 @@ void LevelTest::UpdateL(GLfloat dt) {
 			if (testJelly->GetDeath()) {
 				if (testJelly->jellySize > 0.4)
 				{
-					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::sEnemies.push_back(new E_Jelly(testJelly->GetPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
+					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
 				}
 			}
 		}

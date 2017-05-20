@@ -8,11 +8,11 @@ HitObject::~HitObject()
 }
 
 // Getters and setters
-glm::vec2 HitObject::GetPos()
+glm::vec2 HitObject::Get2DPos()
 {
 	return pos;
 }
-glm::vec2 HitObject::GetSize()
+glm::vec2 HitObject::Get2DSize()
 {
 	return size;
 }
@@ -25,7 +25,7 @@ void HitObject::SetPos(glm::vec2 pos)
 {
 	this->pos = pos;
 }
-void HitObject::SetSize(glm::vec2 size)
+void HitObject::Set2DSize(glm::vec2 size)
 {
 	this->size = size;
 }

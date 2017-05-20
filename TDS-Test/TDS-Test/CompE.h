@@ -18,6 +18,6 @@ public:
 
 	// Getters and setter
 	void SetColor(glm::vec3 color);
-	void SetSubESize(glm::vec2 size, std::string name);
+	void SetSubESize(glm::vec3 size, std::string name);
 	void SetSubESize(GLfloat width, std::string name);
 };

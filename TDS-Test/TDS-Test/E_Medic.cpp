@@ -9,7 +9,7 @@ void E_Medic::Load_E_Medic() {
 E_Medic::E_Medic(glm::vec2 position) : Enemy(position)
 {
 	//Set texture and hitbox
-	this->size = glm::vec2(1);
+	this->size = glm::vec3(1);
 	tex = ResourceManager::GetEtex("Medic").GetTex();
 	hitObjs = ResourceManager::GetEtex("Medic").GetHitObjs(this->size);
 
@@ -64,13 +64,13 @@ GLboolean E_Medic::UpdateE(GLfloat dt)
 		//Decide which player to attack (aka who is closest)
 		Player* gPlayer = Game::sPlayers[0];
 		for (int i = 0; i < Game::sPlayers.size(); i++) {
-			if (glm::distance(pos, gPlayer->GetPos()) > glm::distance(pos, Game::sPlayers[i]->GetPos())) {
+			if (glm::distance(this->Get2DPos(), gPlayer->Get2DPos()) > glm::distance(this->Get2DPos(), Game::sPlayers[i]->Get2DPos())) {
 				gPlayer = Game::sPlayers[i];
 			}
 		}
 		
 		//Add forces towards the player
-		glm::vec2 movDir = gPlayer->GetPos() - pos;
+		glm::vec2 movDir = gPlayer->Get2DPos() - this->Get2DPos();
 
 		AddForce(glm::normalize(movDir) * movForce);
 
