@@ -18,13 +18,13 @@ glm::mat2 rotMat2;
 
 GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
 	// Utility variables
-	HitObject mycEH;
-	HitObject mymEH;
+	HitComb mycEH;
+	HitComb mymEH;
 
 
 	// This rough check only works if all hitboxes are inside the size of the texture;
 	if (glm::distance(dE->Get2DPos(), sE->Get2DPos()) <= (glm::length(sE->Get2DSize()) + glm::length(dE->Get2DSize())) / 2.0f) {
-		for (HitObject mEH : dE->hitObjs) {
+		for (HitComb mEH : dE->hitObjs) {
 
 			mymEH = mEH;
 			mymEH.SetPos(Util::RotationMat2(dE->GetAngle()) * mymEH.Get2DPos() + dE->Get2DPos());
@@ -51,7 +51,7 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 			Axis[0] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(1, 0);
 			Axis[1] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(0, 1);
 
-			for (HitObject cEH : sE->hitObjs) {
+			for (HitComb cEH : sE->hitObjs) {
 				// Calculation WCS position of the Hitbox
 				mycEH = cEH;
 				mycEH.SetPos(Util::RotationMat2(sE->GetAngle()) * mycEH.Get2DPos() + sE->Get2DPos());
@@ -88,7 +88,7 @@ GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const pen
 	return GL_FALSE;
 }
 
-GLfloat CollisionDetector::doSingleCheck(HitObject& h1, HitObject& h2, glm::vec2* const minColAxis) {
+GLfloat CollisionDetector::doSingleCheck(HitComb& h1, HitComb& h2, glm::vec2* const minColAxis) {
 	// This should probably be checked in the upper function?
 	if (glm::distance(h1.Get2DPos(), h2.Get2DPos()) > (glm::length(h1.Get2DSize()) + glm::length(h2.Get2DSize())) / 2.0f) { // rough check for possible collision
 		return -1;

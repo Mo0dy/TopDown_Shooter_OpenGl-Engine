@@ -9,7 +9,7 @@ EnergyBullet::EnergyBullet(glm::vec2 position, GLfloat angle, std::vector<const 
 {
 	tex = ResourceManager::GetEtex("EnergyBall").GetTex();
 	size = glm::vec3(0.25, 0.6, 0.25);
-	hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitObjs(glm::vec2(0.25, 0.6));
+	hitObjs = ResourceManager::GetEtex("EnergyBall").GetHitComb(glm::vec2(0.25, 0.6));
 	damage = 10;
 }
 

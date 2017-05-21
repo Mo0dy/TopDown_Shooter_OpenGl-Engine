@@ -16,16 +16,16 @@ Etex::~Etex()
 
 void Etex::UpdateHObjs() 
 {
-	hObjs.clear();
-	for (HitObject rHO : rHObjs) {
-		hObjs.push_back(HitObject(texSize * rHO.Get2DPos() * 0.5f, texSize * rHO.Get2DSize(), rHO.GetAngle()));
-	}
+	hObj.clear();
+	for (HitCircle rHC : rHComb.hitCircles) { hObj.hitCircles.push_back(HitCircle(rHC, this->texSize)); }
+	for (HitPoly rHP : rHComb.hitPolys) { hObj.hitPolys.push_back(HitPoly(rHP, this->texSize)); }
+	for (HitBox rHB : rHComb.hitBoxes) { hObj.hitPolys.push_back(HitBox(rHB, this->texSize)); }
 }
 
 void Etex::FitHObj()
 {
-	rHObjs.clear();
-	rHObjs.push_back(HitObject(glm::vec2(0), glm::vec2(1), 0));
+	rHComb.clear();
+	rHComb.hitBoxes.push_back(HitBox(glm::vec2(0), glm::vec2(1), 0));
 	UpdateHObjs();
 }
 
@@ -45,24 +45,13 @@ glm::vec2 Etex::GetTexSize(GLfloat width) const
  	return glm::vec2(width, (GLfloat) tex->Height / tex->Width * width);
 }
 
-std::vector<HitObject> Etex::GetHitObjs() const 
+HitComb Etex::GetHitComb() const 
 {
-	return hObjs;
+	return hObj;
 }
 
-std::vector<HitObject> Etex::GetHitObjs(glm::vec2 size) const
-{
-	std::vector<HitObject> tempHObjs;
-	for (HitObject rHO : rHObjs) {
-		tempHObjs.push_back(HitObject(size * rHO.Get2DPos() * 0.5f, size * rHO.Get2DSize(), rHO.GetAngle()));
-	}
-	return tempHObjs;
-}
-
-std::vector<HitObject> Etex::GetHitObjs(GLfloat width) const
-{
-	return GetHitObjs(glm::vec2(width, (GLfloat) tex->Height / tex->Width * width));
-}
+HitComb Etex::GetHitComb(glm::vec2 size) const { return HitComb(this->rHComb, size); }
+HitComb Etex::GetHitComb(GLfloat width) const { return GetHitComb(glm::vec2(width, (GLfloat) tex->Height / tex->Width * width)); }
 
 void Etex::SetTexSize(glm::vec2 textureSize)
 {
@@ -76,21 +65,6 @@ void Etex::SetTexSize(GLfloat width)
 	UpdateHObjs();
 }
 
-void Etex::AddRHitbox(HitObject rHObj)
-{
-	rHObjs.push_back(rHObj);
-}
-
-void Etex::SetRHObjs(std::vector<HitObject*> rHObjs)
-{
-	this->rHObjs.clear();
-	for (HitObject *hO : rHObjs)
-	{
-		this->rHObjs.push_back(*hO);
-	}
-}
-
-void Etex::SetTex(Texture2D* tex)
-{
-	this->tex = tex;
-}
+void Etex::AddRHitbox(HitBox rHBox) { rHComb.hitBoxes.push_back(rHBox); }
+void Etex::SetRHComb(HitComb* rHComb) { this->rHComb = *rHComb; }
+void Etex::SetTex(Texture2D* tex) { this->tex = tex; }

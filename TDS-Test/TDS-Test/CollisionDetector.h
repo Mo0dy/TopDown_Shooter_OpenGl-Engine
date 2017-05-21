@@ -22,6 +22,6 @@ public:
 
 	GLboolean doCCheck(Entity* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis);
 protected:
-	GLfloat doSingleCheck(HitObject& h1, HitObject& h2, glm::vec2* const minColAxis);
+	GLfloat doSingleCheck(HitComb& h1, HitComb& h2, glm::vec2* const minColAxis);
 };
 

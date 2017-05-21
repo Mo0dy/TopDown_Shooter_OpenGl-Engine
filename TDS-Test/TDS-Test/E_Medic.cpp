@@ -11,7 +11,7 @@ E_Medic::E_Medic(glm::vec2 position) : Enemy(position)
 	//Set texture and hitbox
 	this->size = glm::vec3(1);
 	tex = ResourceManager::GetEtex("Medic").GetTex();
-	hitObjs = ResourceManager::GetEtex("Medic").GetHitObjs(this->size);
+	hitObjs = ResourceManager::GetEtex("Medic").GetHitComb(this->size);
 
 	//Very low health, one shot will be more than enough to kill
 	maxHealth = 50;

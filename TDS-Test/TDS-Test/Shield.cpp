@@ -10,7 +10,7 @@ Shield::Shield(class CompE* masterE) : SubE(masterE),maxShieldHP(2000), shieldHP
 	this->size = glm::vec3(0);
 	this->rPos = glm::vec3(0, 1.0f, 0);
 	tex = ResourceManager::GetEtex("Shield").GetTex();
-	shieldHObjs = ResourceManager::GetEtex("Shield").GetHitObjs(shieldSize);
+	shieldHObjs = ResourceManager::GetEtex("Shield").GetHitComb(shieldSize);
 	rechargePerSec = 300;
 }
 

@@ -22,7 +22,7 @@ public:
 
 	virtual ~Entity();
 
-	std::vector<HitObject> hitObjs;
+	std::vector<HitComb> hitObjs;
 	std::map<std::string, class Animation> animations;
 	std::string ani; // The name of the currently Played Animation
 
@@ -54,8 +54,8 @@ public:
 	const Texture2D* GetTex() const;
 
 	void SetTex(const Texture2D *tex);
-	void Set2DSize(glm::vec2 size);
-	void Set2DSize(GLfloat width);
+	void SetSize(glm::vec2 size);
+	void SetSize(GLfloat width);
 	void SetSize(glm::vec3 size);
 	void SetZSize(GLfloat zSize);
 

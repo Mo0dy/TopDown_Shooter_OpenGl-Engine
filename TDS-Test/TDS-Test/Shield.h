@@ -25,7 +25,7 @@ protected:
 	void UpdatePos();
 
 	glm::vec3 shieldSize;
-	std::vector<HitObject> shieldHObjs;
+	std::vector<HitComb> shieldHObjs;
 	GLboolean active;
 	GLfloat maxShieldHP;
 	GLfloat shieldHP;

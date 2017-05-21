@@ -12,12 +12,12 @@ E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 {
 	jellySize = size;
 	height = 1;
-	this->Set2DSize(glm::vec2(jellySize));
+	this->SetSize(glm::vec2(jellySize));
 
 	//Set texture and hitbox
 
 	tex = ResourceManager::GetEtex("Pudding").GetTex();
-	hitObjs = ResourceManager::GetEtex("Pudding").GetHitObjs(this->size);
+	hitObjs = ResourceManager::GetEtex("Pudding").GetHitComb(this->size);
 
 	dynFricCoeff = -2.5;
 
@@ -106,7 +106,7 @@ GLboolean E_Jelly::UpdateE(GLfloat dt)
 		}
 
 		//Larger texture if it's higher
-		this->Set2DSize(glm::vec2(jellySize * height));
+		this->SetSize(glm::vec2(jellySize * height));
 		UpdatePos(dt);
 
 		return glm::length(vel) > 0;

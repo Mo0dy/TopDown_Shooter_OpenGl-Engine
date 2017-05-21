@@ -35,7 +35,7 @@ void CompE::UpdateAni() {
 
 void CompE::SetSubESize(glm::vec3 size, std::string name) 
 {
-	subEntities[name]->Set2DSize(size);
+	subEntities[name]->SetSize(size);
 	// This will increase the point when we do hitbox collision checking to the biggest size. If you decrease the size it won't decrease with it! <-- Bug.
 	if (glm::length(subEntities[name]->GetSize()) > glm::length(this->size))
 	{
@@ -45,11 +45,11 @@ void CompE::SetSubESize(glm::vec3 size, std::string name)
 
 void CompE::SetSubESize(GLfloat width, std::string name) 
 {
-	subEntities[name]->Set2DSize(width);
+	subEntities[name]->SetSize(width);
 	// This will increase the point when we do hitbox collision checking to the biggest size. If you decrease the size it won't decrease with it! <-- Bug.
 	if (glm::length(subEntities[name]->Get2DSize()) > glm::length(this->size))
 	{
-		this->Set2DSize(subEntities[name]->Get2DSize());
+		this->SetSize(subEntities[name]->Get2DSize());
 	}
 }
 
