@@ -17,7 +17,7 @@ E_Jelly::E_Jelly(glm::vec2 position, GLfloat size) : Enemy(position)
 	//Set texture and hitbox
 
 	tex = ResourceManager::GetEtex("Pudding").GetTex();
-	hitObjs = ResourceManager::GetEtex("Pudding").GetHitComb(this->size);
+	hitComb = ResourceManager::GetEtex("Pudding").GetHitComb(this->size);
 
 	dynFricCoeff = -2.5;
 

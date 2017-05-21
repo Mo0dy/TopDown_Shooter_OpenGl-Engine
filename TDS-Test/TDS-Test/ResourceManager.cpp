@@ -31,7 +31,7 @@ Texture2D ResourceManager::GetTexture(std::string name) {
 }
 
 Etex ResourceManager::LoadEtex(std::string path, std::string filename, std::string filetype, GLboolean alpha, std::string name, LOAD_HBOX_SWITCH loadHbox) {
-	Etex* etex = new Etex();
+	Etex* etex = new Etex;
 	LoadTempEtex(path, filename, filetype, alpha, loadHbox, etex); // Problemstelle ==================================================================
 	Etextures[name] = *etex;
 	return Etextures[name];
@@ -110,10 +110,10 @@ Texture2D* ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean al
 	return texture;
 }
 
-std::vector<HitComb*> ResourceManager::loadrHitboxFromFile(const char* path) {
+HitComb* ResourceManager::loadrHitboxFromFile(const char* path) {
 	std::string hitboxConfig;
 
-	std::vector<HitComb*> hitObjs;
+	HitComb* hitComb = new HitComb;
 
 	try
 	{
@@ -141,7 +141,7 @@ std::vector<HitComb*> ResourceManager::loadrHitboxFromFile(const char* path) {
 		}
 
 		for (int i = 0; i < numbers.size() - 4; i += 5) {
-			hitObjs.push_back(new HitComb(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
+			hitComb->hitBoxes.push_back(HitBox(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
 		}
 	}
 	catch (std::exception e)
@@ -149,14 +149,14 @@ std::vector<HitComb*> ResourceManager::loadrHitboxFromFile(const char* path) {
 		std::cout << "ERROR::HITBOX: Failed to read hitbox file" << std::endl;
 	}
 
-	return hitObjs;
+	return hitComb;
 }
 
 // The Etextures probably shouldn't be saved in the rescource manager ?
 void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLint amount, GLfloat width, GLboolean alpha, std::string name, LOAD_ANIMATION_SWITCH loadHitboxes) {
-	std::vector<HitComb*> temHbox;
+	HitComb* tHComb = new HitComb;
 	if (loadHitboxes == ANI_LOAD_ONE_HBOX) {
-		temHbox = loadrHitboxFromFile((path + "\\H.txt").c_str());
+		tHComb = loadrHitboxFromFile((path + "\\H.txt").c_str());
 	}
 
 	LOAD_HBOX_SWITCH loadHbox;
@@ -167,14 +167,14 @@ void ResourceManager::LoadAnimation(std::string path, std::string filetype, GLin
 		loadHbox = HBOX_LOAD_NONE;
 	}
 	for (int i = 0; i < amount; i++) {
-		Etex* etex = new Etex();
+		Etex* etex = new Etex;
 
 		LoadTempEtex(path, std::to_string(i), filetype, alpha, loadHbox, etex);
 		Animations[name].push_back(*etex);
 		Animations[name].back().SetTexSize(width);
 
 		if (loadHitboxes == ANI_LOAD_ONE_HBOX) {
-			Animations[name].back().SetRHComb(temHbox);
+			Animations[name].back().SetRHComb(tHComb);
 		}
 		else if (loadHitboxes == ANI_HBOX_AUTOFIT) {
 			Animations[name].back().FitHObj();

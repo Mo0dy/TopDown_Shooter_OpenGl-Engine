@@ -26,7 +26,7 @@ public:
 	void SetFPS(GLfloat fps);
 	void SetAniTime(GLfloat aniTime);
 
-	void UpdateAni(class Entity* masterE);
+	void UpdateAni(class Entity* masterE, GLboolean fitSize);
 
 	Etex& GetETex(GLuint pos);
 	GLint GetNumber();

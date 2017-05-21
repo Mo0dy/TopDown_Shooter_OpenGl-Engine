@@ -9,144 +9,108 @@ CollisionDetector::~CollisionDetector()
 {
 }
 
-glm::vec2 E1corners[4];
-glm::vec2 E2corners[4];
-glm::vec2 Axis[4];
-
-glm::mat2 rotMat1;
-glm::mat2 rotMat2;
-
-GLboolean CollisionDetector::doCCheck(Entity* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis) {
-	// Utility variables
-	HitComb mycEH;
-	HitComb mymEH;
-
-
-	// This rough check only works if all hitboxes are inside the size of the texture;
-	if (glm::distance(dE->Get2DPos(), sE->Get2DPos()) <= (glm::length(sE->Get2DSize()) + glm::length(dE->Get2DSize())) / 2.0f) {
-		for (HitComb mEH : dE->hitObjs) {
-
-			mymEH = mEH;
-			mymEH.SetPos(Util::RotationMat2(dE->GetAngle()) * mymEH.Get2DPos() + dE->Get2DPos());
-			mymEH.SetAngle(mymEH.GetAngle() + dE->GetAngle());
-
-			// This should probably only be done if the hitboxes have the potential to collide?
-			glm::mat2 rotMat = Util::RotationMat2(mymEH.GetAngle());
-			glm::vec2 rotVec1 = rotMat * glm::vec2(mymEH.Get2DSize().x, 0) * 0.5f;
-			glm::vec2 rotVec2 = rotMat * glm::vec2(0, mymEH.Get2DSize().y) * 0.5f;
-			E1corners[0] = mymEH.Get2DPos() + rotVec1 + rotVec2;
-			E1corners[1] = mymEH.Get2DPos() + rotVec1 - rotVec2;
-			E1corners[2] = mymEH.Get2DPos() - rotVec1 - rotVec2;
-			E1corners[3] = mymEH.Get2DPos() - rotVec1 + rotVec2;
-
-#ifdef DEBUG_HITBOXES
-			for (int i = 0; i < 3; i++) {
-				Renderer::drawLineBuffer.push_back(myVertex(E1corners[i], glm::vec3(1.0f, 0.0f, 0.0f)));
-				Renderer::drawLineBuffer.push_back(myVertex(E1corners[i + 1], glm::vec3(1.0f, 0.0f, 0.0f)));
-			}
-			Renderer::drawLineBuffer.push_back(myVertex(E1corners[3], glm::vec3(1.0f, 0.0f, 0.0f)));
-			Renderer::drawLineBuffer.push_back(myVertex(E1corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
-#endif // DEBUG_HITBOXES
-
-			Axis[0] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(1, 0);
-			Axis[1] = Util::RotationMat2(mymEH.GetAngle()) * glm::vec2(0, 1);
-
-			for (HitComb cEH : sE->hitObjs) {
-				// Calculation WCS position of the Hitbox
-				mycEH = cEH;
-				mycEH.SetPos(Util::RotationMat2(sE->GetAngle()) * mycEH.Get2DPos() + sE->Get2DPos());
-				mycEH.SetAngle(mycEH.GetAngle() + sE->GetAngle());
-
-				rotMat = Util::RotationMat2(mycEH.GetAngle());
-				rotVec1 = rotMat * glm::vec2(mycEH.Get2DSize().x, 0) * 0.5f;
-				rotVec2 = rotMat * glm::vec2(0, mycEH.Get2DSize().y) * 0.5f;
-				E2corners[0] = mycEH.Get2DPos() + rotVec1 + rotVec2;
-				E2corners[1] = mycEH.Get2DPos() + rotVec1 - rotVec2;
-				E2corners[2] = mycEH.Get2DPos() - rotVec1 - rotVec2;
-				E2corners[3] = mycEH.Get2DPos() - rotVec1 + rotVec2;
-
-#ifdef DEBUG_HITBOXES
-				for (int i = 0; i < 3; i++) {
-					Renderer::drawLineBuffer.push_back(myVertex(E2corners[i], glm::vec3(1.0f, 0.0f, 0.0f)));
-					Renderer::drawLineBuffer.push_back(myVertex(E2corners[i + 1], glm::vec3(1.0f, 0.0f, 0.0f)));
-				}
-				Renderer::drawLineBuffer.push_back(myVertex(E2corners[3], glm::vec3(1.0f, 0.0f, 0.0f)));
-				Renderer::drawLineBuffer.push_back(myVertex(E2corners[0], glm::vec3(1.0f, 0.0f, 0.0f)));
-#endif // DEBUG_HITBOXES
-
-
-				Axis[2] = Util::RotationMat2(mycEH.GetAngle()) * glm::vec2(1, 0);
-				Axis[3] = Util::RotationMat2(mycEH.GetAngle()) * glm::vec2(0, 1);
-
-				*penDepth = doSingleCheck(mymEH, mycEH, minColAxis);
-				if (*penDepth > 0) {
-					return GL_TRUE;
-				}
+GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const penDepth, glm::vec2* const minColAxis)
+{
+	// Rough check for possible texture size intersection
+	if (glm::distance(e1->Get2DPos(), e2->Get2DPos()) > (glm::length(e1->Get2DSize()) + glm::length(e2->Get2DSize())) * 0.5f) { return GL_FALSE; }
+	
+	// Checks all hitObjects for each other.
+	for (HitPoly hP1 : e1->GetHitComb().hitBoxes)
+	{
+		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		{
+			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		{
+			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		{
+			if (DoCPCheck(hC2, hP1, penDepth, minColAxis)) 
+			{ 
+				*minColAxis *= -1; // because hC2 is from the second entity the direction of the axes has to be reversed
+				return GL_TRUE; 
 			}
 		}
 	}
-	return GL_FALSE;
+	for (HitPoly hP1 : e1->GetHitComb().hitPolys)
+	{
+		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		{
+			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		{
+			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		{
+			if (DoCPCheck(hC2, hP1, penDepth, minColAxis))
+			{
+				*minColAxis *= -1; // because hC2 is from the second entity the direction of the axes has to be reversed
+				return GL_TRUE;
+			}
+		}
+	}
+	for (HitCircle hC1 : e1->GetHitComb().hitCircles)
+	{
+		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		{
+			if (DoCPCheck(hC1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		{
+			if (DoCPCheck(hC1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		{
+			if (DoCCCheck(hC1, hC2, penDepth, minColAxis)) { return GL_TRUE; }
+		}
+	}
+	
+	return GL_FALSE; // No Collision detected
 }
 
-GLfloat CollisionDetector::doSingleCheck(HitComb& h1, HitComb& h2, glm::vec2* const minColAxis) {
-	// This should probably be checked in the upper function?
-	if (glm::distance(h1.Get2DPos(), h2.Get2DPos()) > (glm::length(h1.Get2DSize()) + glm::length(h2.Get2DSize())) / 2.0f) { // rough check for possible collision
-		return -1;
-	}
+GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colDepth, glm::vec2* const minColAxis)
+{
+	if (glm::distance(hP1.GetPos(), hP2.GetPos()) > hP1.GetMaxDist() + hP2.GetMaxDist()) { return GL_FALSE; } // Rough check
 
-	// Check for every axis
-	// Stores min and max dist for both entities
-	GLfloat E1dist[2];
-	GLfloat E2dist[2];
+	// it doasnt matter weather I translate both or only one (relatively to the other) we should probably do that later on to optimize speed
+	HitPoly tAbsHP1 = hP1;
+	tAbsHP1.Translate(hP1.GetPos()); // every vertex is now relative to the WCO
+	HitPoly tAbsHP2 = hP2;
+	tAbsHP2.Translate(hP2.GetPos()); // every vertex is now relative to the WCO
 
-	// This holds the signed length of the projection of the vertex vectors to the edges
-	GLfloat dotProduct;
+	// collects all axes that have to be checked for
+	std::vector<glm::vec2> axes;
+	axes.reserve(tAbsHP1.GetAxes().size() + tAbsHP2.GetAxes().size());
+	axes.insert(axes.end(), tAbsHP1.GetAxes().begin(), tAbsHP1.GetAxes().end());
+	axes.insert(axes.end(), tAbsHP2.GetAxes().begin(), tAbsHP2.GetAxes().end());
+
+	// Checks for interval intersection on every axis. If only one has none there is no collision.
+	GLfloat* E1dist; // these hold the minimum [0] and maximum [1] interval borders of both Polygons
+	GLfloat* E2dist;
+
 	GLfloat iDepth;
 	GLfloat minIDepth = 100;
 
 	GLfloat axisDir; // This is either -1 or 1 making the returned axis always point from the first hitbox to the second
+	for (glm::vec2 axis : axes)
+	{
+		E1dist = tAbsHP1.GetMinMaxProj(axis);
+		E2dist = tAbsHP2.GetMinMaxProj(axis);
 
-	for (glm::vec2 axis : Axis) {
-		// Check all 4 corners of both entities;
-		E1dist[0] = glm::dot(axis, E1corners[0]);
-		E1dist[1] = E1dist[0];
-		E2dist[0] = glm::dot(axis, E2corners[0]);
-		E2dist[1] = E2dist[0];
-		for (int i = 1; i < 4; i++) {
-			dotProduct = glm::dot(axis, E1corners[i]);
-			if (dotProduct > E1dist[1]) {
-				E1dist[1] = dotProduct;
-			}
-			else if (dotProduct < E1dist[0]) {
-				E1dist[0] = dotProduct;
-			}
-			dotProduct = glm::dot(axis, E2corners[i]);
-			if (dotProduct > E2dist[1]) {
-				E2dist[1] = dotProduct;
-			}
-			else if (dotProduct < E2dist[0]) {
-				E2dist[0] = dotProduct;
-			}
-		}
-
-		// Checks for Interval overlapping
+		// Checks for interval intersection
 		if (E1dist[1] > E2dist[1]) {
-			if (E1dist[0] > E2dist[1]) {
-				return -1;
-			}
-		}
-		else {
-			if (E1dist[1] < E2dist[0]) {
-				return -1;
-			}
-		}
+			if (E1dist[0] > E2dist[1]) { return GL_FALSE; }
+		} else if (E1dist[1] < E2dist[0]) { return GL_FALSE; }
 
-		// Gets the depth of the intrusion
+		// gets the amount of interval overlapping
 		if (E1dist[0] > E2dist[0]) {
 			iDepth = E2dist[1] - E1dist[0];
 			axisDir = -1;
-		}
-		else {
+		} else {
 			iDepth = E1dist[1] - E2dist[0];
 			axisDir = 1;
 		}
@@ -155,5 +119,22 @@ GLfloat CollisionDetector::doSingleCheck(HitComb& h1, HitComb& h2, glm::vec2* co
 			minIDepth = iDepth;
 		}
 	}
-	return minIDepth;
+	return GL_TRUE;
+}
+
+// Code is missing
+GLboolean CollisionDetector::DoCPCheck(HitCircle& hC, HitPoly& hP, GLfloat* colDepth, glm::vec2* const minColAxis)
+{
+	return GL_FALSE;
+}
+
+GLboolean CollisionDetector::DoCCCheck(HitCircle& hC1, HitCircle& hC2, GLfloat* colDepth, glm::vec2* const minColAxis)
+{
+	*colDepth = hC1.GetRadius() + hC2.GetRadius() - glm::distance(hC1.GetPos(), hC2.GetPos()); // Overlap is negativ if there is no collision
+	if (*colDepth > 0)
+	{
+		*minColAxis = hC2.GetPos() - hC1.GetPos();
+		return GL_TRUE;
+	}
+	return GL_FALSE;
 }

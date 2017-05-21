@@ -10,7 +10,7 @@ Shield::Shield(class CompE* masterE) : SubE(masterE),maxShieldHP(2000), shieldHP
 	this->size = glm::vec3(0);
 	this->rPos = glm::vec3(0, 1.0f, 0);
 	tex = ResourceManager::GetEtex("Shield").GetTex();
-	shieldHObjs = ResourceManager::GetEtex("Shield").GetHitComb(shieldSize);
+	shieldHitComb = ResourceManager::GetEtex("Shield").GetHitComb(shieldSize);
 	rechargePerSec = 300;
 }
 
@@ -41,7 +41,7 @@ void Shield::StartShield()
 {
 	if (shieldHP > 200) {
 		this->size = shieldSize;
-		hitObjs = shieldHObjs;
+		hitComb = shieldHitComb;
 		active = GL_TRUE;
 	}
 }
@@ -49,7 +49,7 @@ void Shield::StartShield()
 void Shield::StopShield()
 {
 	this->size = glm::vec3(0);
-	hitObjs.clear();
+	hitComb.clear();
 	active = GL_FALSE;
 }
 

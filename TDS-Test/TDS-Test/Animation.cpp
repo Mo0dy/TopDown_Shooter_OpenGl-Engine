@@ -44,26 +44,36 @@ void Animation::Stop()
 	state = GL_FALSE;
 }
 
-void Animation::UpdateAni(Entity* masterE)
+void Animation::UpdateAni(Entity* e, GLboolean fitSize)
 {
 	if (state) {
 		if (startTime + aniTime < glfwGetTime() && !repeat) {
 			state = GL_FALSE;
-			masterE->SetTex(Etextures.back().GetTex());
-			masterE->SetSize(Etextures.back().GetTexSize());
+			e->SetTex(Etextures.back().GetTex());
+			e->SetSize(Etextures.back().GetTexSize());
 
 			if (updateHObj) {
-				masterE->hitObjs = Etextures.back().GetHitComb(masterE->Get2DSize());
+				if (fitSize) {
+					e->SetHitComb(Etextures.back().GetHitComb(e->Get2DSize()));
+				}
+				else {
+					e->SetHitComb(Etextures.back().GetHitComb());
+				}
 			}
 		}
 		else {
 			GLfloat dt = glm::mod<GLfloat>((startTime - glfwGetTime()), aniTime);
 			GLuint etexIndex = (GLuint)(dt / aniTime * Etextures.size());
 
-			masterE->SetTex(Etextures[etexIndex].GetTex());
-			masterE->SetSize(Etextures.back().GetTexSize());
+			e->SetTex(Etextures[etexIndex].GetTex());
+			e->SetSize(Etextures.back().GetTexSize());
 			if (updateHObj) {
-				masterE->hitObjs = Etextures[etexIndex].GetHitComb(masterE->Get2DSize());
+				if (fitSize) {
+					e->SetHitComb(Etextures.back().GetHitComb(e->Get2DSize()));
+				}
+				else {
+					e->SetHitComb(Etextures.back().GetHitComb());
+				}
 			}
 		}
 	}

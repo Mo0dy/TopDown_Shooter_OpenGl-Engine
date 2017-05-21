@@ -22,7 +22,6 @@ public:
 
 	virtual ~Entity();
 
-	std::vector<HitComb> hitObjs;
 	std::map<std::string, class Animation> animations;
 	std::string ani; // The name of the currently Played Animation
 
@@ -39,7 +38,6 @@ public:
 	virtual void ColWithESubE(class SubE* e, GLfloat penDepth, glm::vec2 colAxis);
 	virtual void ColWithPSubE(class SubE* p, GLfloat penDepth, glm::vec2 colAxis);
 
-
 	virtual void GetAttacked(GLfloat damage);
 
 	GLboolean GetErase() const;
@@ -52,14 +50,17 @@ public:
 	GLfloat GetAngle() const;
 	glm::vec3 GetColor() const;
 	const Texture2D* GetTex() const;
+	HitComb GetHitComb() const;
 
 	void SetTex(const Texture2D *tex);
 	void SetSize(glm::vec2 size);
 	void SetSize(GLfloat width);
 	void SetSize(glm::vec3 size);
 	void SetZSize(GLfloat zSize);
+	void SetHitComb(HitComb hitComb);
 
 protected:
+	HitComb hitComb;
 	const Texture2D *tex;
 	GLboolean erase;
 	glm::vec3 pos; // The position in WCS coordinates

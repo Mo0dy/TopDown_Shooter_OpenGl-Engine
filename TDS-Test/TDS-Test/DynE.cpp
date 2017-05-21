@@ -21,8 +21,8 @@ void DynE::UpdatePos(GLfloat dt) {
 	// Updates velocity to after collision velocity
 	if (collision) {
 #ifdef DEBUG_FORCES
-		Renderer::drawLineBuffer.push_back(myVertex(pos, glm::vec3(1.0f, 1.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex((pos + (colVel - vel) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(glm::vec2(pos.x, pos.y), glm::vec3(1.0f, 1.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex((glm::vec2(pos.x, pos.y) + (colVel - glm::vec2(vel.x, vel.z)) * mass / dt * FORCE_SCALE), glm::vec3(1.0f, 1.0f, 0.0f)));
 #endif // DEBUG_FORCES
 		vel = glm::vec3(colVel, vel.z);
 		collision = GL_FALSE;

@@ -25,7 +25,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
 	animations["Flying"].SetAniTime(1);
 	animations["Flying"].Start();
-	this->hitObjs = animations["Flying"].GetETex(0).GetHitComb();
+	this->hitComb = animations["Flying"].GetETex(0).GetHitComb();
 
 	ani = "Flying";
 

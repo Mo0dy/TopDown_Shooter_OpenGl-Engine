@@ -224,14 +224,14 @@ void Game::Update(GLfloat dt) {
 
 		for (auto& x : sPlayers[i]->subEntities) {
 			for (Enemy *e : sEnemies) {
-				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+				if (colDec->DoCCheck(x.second, e, &penDepth, &colAxis)) {
 					x.second->ColWithEnemy(e, penDepth, colAxis);
 					e->ColWithPSubE(x.second, penDepth, -colAxis);
 				}
 			}
 			for (int j = i + 1; j < sPlayers.size(); j++) {
 				for (auto& y : sPlayers[i]->subEntities) {
-					if (colDec->doCCheck(x.second, y.second, &penDepth, &colAxis)) {
+					if (colDec->DoCCheck(x.second, y.second, &penDepth, &colAxis)) {
 						sPlayers[i]->ColWithDyn(sPlayers[j], penDepth, colAxis);
 						sPlayers[j]->ColWithDyn(sPlayers[i], penDepth, -colAxis);
 						break;
@@ -240,11 +240,11 @@ void Game::Update(GLfloat dt) {
 
 			}
 			for (Entity *e : level->entities) {
-				if (colDec->doCCheck(x.second, e, &penDepth, &colAxis)) {
+				if (colDec->DoCCheck(x.second, e, &penDepth, &colAxis)) {
 					sPlayers[i]->ColWithStat(e, penDepth, colAxis);
 				}
 			}
-			if (colDec->doCCheck(x.second, &level->background, &penDepth, &colAxis)) {
+			if (colDec->DoCCheck(x.second, &level->background, &penDepth, &colAxis)) {
 				sPlayers[i]->ColWithStat(&level->background, penDepth, colAxis);
 			}
 		}
@@ -253,13 +253,13 @@ void Game::Update(GLfloat dt) {
 	// We should probably only check for all Enemies that moved but for now this is fine
 	for (int i = 0; i < sEnemies.size(); i++) {
 		for (int j = i + 1; j < sEnemies.size(); j++) {
-			if (colDec->doCCheck(sEnemies[i], sEnemies[j], &penDepth, &colAxis)) {
+			if (colDec->DoCCheck(sEnemies[i], sEnemies[j], &penDepth, &colAxis)) {
 				sEnemies[i]->ColWithDyn(sEnemies[j], penDepth, colAxis);
 				sEnemies[j]->ColWithDyn(sEnemies[i], penDepth, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(sEnemies[i], e, &penDepth, &colAxis)) {
+			if (colDec->DoCCheck(sEnemies[i], e, &penDepth, &colAxis)) {
 				sEnemies[i]->ColWithStat(e, penDepth, colAxis);
 			}
 		}
@@ -267,13 +267,13 @@ void Game::Update(GLfloat dt) {
 
 	for (Bullet *b : sBullets) {
 		for (Enemy *e : sEnemies) {
-			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
+			if (colDec->DoCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithLivingE(e);
 				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}
 		for (Entity *e : level->entities) {
-			if (colDec->doCCheck(b, e, &penDepth, &colAxis)) {
+			if (colDec->DoCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithStat(e, penDepth, colAxis);
 			}
 		}

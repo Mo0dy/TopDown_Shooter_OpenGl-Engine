@@ -20,8 +20,9 @@ public:
 	CollisionDetector();
 	~CollisionDetector();
 
-	GLboolean doCCheck(Entity* dE, Entity* sE, GLfloat* const penDepth, glm::vec2* const minColAxis);
+	GLboolean DoCCheck(Entity* e1, Entity* e2, GLfloat* const penDepth, glm::vec2* const minColAxis);
 protected:
-	GLfloat doSingleCheck(HitComb& h1, HitComb& h2, glm::vec2* const minColAxis);
+	GLboolean DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colDepth, glm::vec2* const minColAxis);
+	GLboolean DoCPCheck(HitCircle& hC, HitPoly& hP, GLfloat* colDepth, glm::vec2* const minColAxis);
+	GLboolean DoCCCheck(HitCircle& hC1, HitCircle& hC2, GLfloat* colDepth, glm::vec2* const minColAxis);
 };
-

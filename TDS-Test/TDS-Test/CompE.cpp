@@ -26,7 +26,7 @@ void CompE::UpdateSubE(GLfloat dt)
 }
 
 void CompE::UpdateAni() {
-	animations[ani].UpdateAni(this);
+	animations[ani].UpdateAni(this, GL_FALSE);
 	for (auto& x : subEntities) 
 	{
 		x.second->UpdateAni();
