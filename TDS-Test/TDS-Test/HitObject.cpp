@@ -3,7 +3,7 @@
 // Hit poly
 HitPoly::HitPoly() {}
 HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : vertices(hitPoly.GetVertices()), axes(hitPoly.GetAxes()) { this->Rotate(angle); }
-HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()) { this->Scale(size * 0.5f); }
+HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()) { this->Scale(size); }
 HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle) : HitPoly(rHitPoly, size) { this->Rotate(angle); }
 
 void HitPoly::Update() 
@@ -34,7 +34,7 @@ GLboolean HitPoly::CheckAxis(glm::vec2 axis)
 }
 GLfloat* HitPoly::GetMinMaxProj(glm::vec2 axis) const
 {
-	GLfloat minMax[2];
+	static GLfloat minMax[2];
 	minMax[0] = glm::dot(axis, vertices[0]);
 	minMax[1] = minMax[0];
 	GLfloat dotResult;
@@ -78,7 +78,7 @@ void HitPoly::SetAngle(GLfloat angle) { this->angle = angle; }
 // Hitbox
 HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; this->Update(); }
 HitBox::HitBox(const HitBox& hitBox, glm::vec2 pos, GLfloat angle) : size(hitBox.GetSize()) { this->angle = hitBox.GetAngle() + angle; this->pos = hitBox.GetPos() + pos; this->Update(); }
-HitBox::HitBox(const HitBox& rHitBox, glm::vec2 size) : HitPoly(rHitBox) { this->Scale(size * 0.5f); }
+HitBox::HitBox(const HitBox& rHitBox, glm::vec2 size) : HitPoly(rHitBox) { this->Scale(size); this->size = size; this->Translate(rHitBox.GetPos() * size * 0.5f); }
 
 void HitBox::Update()
 {

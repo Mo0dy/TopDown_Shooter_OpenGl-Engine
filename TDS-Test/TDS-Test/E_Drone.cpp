@@ -22,7 +22,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 	turnSpeed = 10;
 
 	//Set animation
-	animations["Flying"] = Animation("E_Drone_A", 1.0, GL_TRUE);
+	animations["Flying"] = Animation("E_Drone_A", 1.0f, GL_TRUE, GL_TRUE);
 	animations["Flying"].SetAniTime(1);
 	animations["Flying"].Start();
 	this->hitComb = animations["Flying"].GetETex(0).GetHitComb();

@@ -86,10 +86,11 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 	// it doasnt matter weather I translate both or only one (relatively to the other) we should probably do that later on to optimize speed
 	HitPoly tAbsHP1 = hP1;
 	HitPoly tAbsHP2 = hP2;
+
 	tAbsHP1.Rotate(tAbsHP1.GetAngle());
-	tAbsHP2.Rotate(tAbsHP1.GetAngle());
-	tAbsHP1.Translate(hP1.GetPos()); // every vertex is now relative to the WCO
-	tAbsHP2.Translate(hP2.GetPos()); // every vertex is now relative to the WCO
+	tAbsHP2.Rotate(tAbsHP2.GetAngle());
+	tAbsHP1.Translate(tAbsHP1.GetPos()); // every vertex is now relative to the WCO
+	tAbsHP2.Translate(tAbsHP2.GetPos()); // every vertex is now relative to the WCO
 
 	// collects all axes that have to be checked for
 	std::vector<glm::vec2> axes;
@@ -100,16 +101,24 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 	axes.insert(axes.end(), hP2Axes.begin(), hP2Axes.end());
 
 #ifdef DEBUG_HITBOXES
-	for (glm::vec2 v : tAbsHP1.GetVertices()) { Renderer::drawLineBuffer.push_back(myVertex(v, glm::vec3(0.0f, 0.0f, 1.0f))); }
+	for (int i = 1; i < tAbsHP1.GetVertices().size(); i++) {
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
+	}
 	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
-	for (glm::vec2 v : tAbsHP2.GetVertices()) { Renderer::drawLineBuffer.push_back(myVertex(v, glm::vec3(0.0f, 0.0f, 1.0f))); }
-	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	for (int i = 1; i < tAbsHP2.GetVertices().size(); i++) {
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
+	}
+	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
 #endif // DEBUG_HITBOXES
 
 
 	// Checks for interval intersection on every axis. If only one has none there is no collision.
-	GLfloat* E1dist; // these hold the minimum [0] and maximum [1] interval borders of both Polygons
-	GLfloat* E2dist;
+	GLfloat* tE1dist; // these hold the minimum [0] and maximum [1] interval borders of both Polygons
+	GLfloat* tE2dist;
 
 	GLfloat iDepth;
 	GLfloat minIDepth = 100;
@@ -117,20 +126,25 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 	GLfloat axisDir; // This is either -1 or 1 making the returned axis always point from the first hitbox to the second
 	for (glm::vec2 axis : axes)
 	{
-		E1dist = tAbsHP1.GetMinMaxProj(axis);
-		E2dist = tAbsHP2.GetMinMaxProj(axis);
+		tE1dist = tAbsHP1.GetMinMaxProj(axis);
+		tE2dist = tAbsHP2.GetMinMaxProj(axis);
+
+		GLfloat testFloat1 = tE1dist[0];
+		GLfloat testFloat2 = tE1dist[1];
+		GLfloat testFloat3 = tE2dist[0];
+		GLfloat testFloat4 = tE2dist[1];
 
 		// Checks for interval intersection
-		if (E1dist[1] > E2dist[1]) {
-			if (E1dist[0] > E2dist[1]) { return GL_FALSE; }
-		} else if (E1dist[1] < E2dist[0]) { return GL_FALSE; }
+		if (tE1dist[1] > tE2dist[1]) {
+			if (tE1dist[0] > tE2dist[1]) { return GL_FALSE; }
+		} else if (tE1dist[1] < tE2dist[0]) { return GL_FALSE; }
 
 		// gets the amount of interval overlapping
-		if (E1dist[0] > E2dist[0]) {
-			iDepth = E2dist[1] - E1dist[0];
+		if (tE1dist[0] > tE2dist[0]) {
+			iDepth = tE2dist[1] - tE1dist[0];
 			axisDir = -1;
 		} else {
-			iDepth = E1dist[1] - E2dist[0];
+			iDepth = tE1dist[1] - tE2dist[0];
 			axisDir = 1;
 		}
 		if (iDepth < minIDepth) {
