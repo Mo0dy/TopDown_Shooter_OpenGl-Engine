@@ -321,25 +321,25 @@ void Game::Reset() {
 
 void Game::CheckForErase() {
 	for (int i = 0; i < sBullets.size(); i++) {
-		if (sBullets[i]->GetErase()) {
+		if (sBullets[i]->GetErase() || CheckForOutOfBounds(sBullets[i])) {
 			delete sBullets[i];
 			sBullets.erase(sBullets.begin() + i);
 		}
 	}
 	for (int i = 0; i < sPlayers.size(); i++) {
-		if (sPlayers[i]->GetErase()) {
+		if (sPlayers[i]->GetErase() || CheckForOutOfBounds(sPlayers[i])) {
 			delete sPlayers[i];
 			sPlayers.erase(sPlayers.begin() + i);
 		}
 	}
 	for (int i = 0; i < sDynEntities.size(); i++) {
-		if (sDynEntities[i]->GetErase()) {
+		if (sDynEntities[i]->GetErase() || CheckForOutOfBounds(sDynEntities[i])) {
 			delete sDynEntities[i];
 			sDynEntities.erase(sDynEntities.begin() + i);
 		}
 	}
 	for (int i = 0; i < sEnemies.size(); i++) {
-		if (sEnemies[i]->GetErase()) {
+		if (sEnemies[i]->GetErase() || CheckForOutOfBounds(sEnemies[i])) {
 			delete sEnemies[i];
 			sEnemies.erase(sEnemies.begin() + i);
 		}
@@ -372,4 +372,11 @@ void Game::clearEntities() {
 	sEnemies.clear();
 	sMovedE.clear();
 	sSpawnE.clear();
+}
+
+GLboolean Game::CheckForOutOfBounds(Entity *e)
+{
+	glm::vec2 tEPos = e->Get2DPos();
+	glm::vec2 tLSize = level->size * 0.5f;
+	return tEPos.x > tLSize.x || tEPos.x < -tLSize.x || tEPos.y > tLSize.y || tEPos.y < -tLSize.y;
 }

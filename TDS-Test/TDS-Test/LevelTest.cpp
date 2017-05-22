@@ -13,7 +13,7 @@ void LevelTest::loadLevelTest() {
 
 LevelTest::LevelTest()
 {
-	background = Entity(&ResourceManager::GetEtex("Dirt"), 150.0f, 0.0f);
+	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150.0f, 0.0f);
 	size = background.Get2DSize();
 
 	for (housePos hP : TOWN) {

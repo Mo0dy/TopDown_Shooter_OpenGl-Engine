@@ -127,21 +127,42 @@ HitComb* ResourceManager::loadrHitboxFromFile(const char* path) {
 		// Convert stream into string
 		hitboxConfig = vHitboxStream.str();
 
-		std::vector<std::string> numbers(1);
+		std::vector<std::string> param(1);
 
 		for (char& c : hitboxConfig) {
-			if (c == ',' || c == ';') {
-				numbers.push_back("");
+			if (c == ',') {
+				param.push_back("");
+			}
+			else if (c == ';') {
+				param.push_back(";");
+				param.push_back("");
 			}
 			else {
-				if (c != '\n' || c != ' ') {
-					numbers.back() += c;
+				if (c != '\n' && c != ' ') {
+					param.back() += c;
 				}
 			}
 		}
 
-		for (int i = 0; i < numbers.size() - 4; i += 5) {
-			hitComb->hitBoxes.push_back(HitBox(glm::vec2(strtof(numbers[i].c_str(), 0), strtof(numbers[i + 1].c_str(), 0)), glm::vec2(strtof(numbers[i + 2].c_str(), 0), strtof(numbers[i + 3].c_str(), 0)), glm::radians(strtof(numbers[i + 4].c_str(), 0))));
+		for (int i = 0; i < param.size(); i++) {
+			if (param[i] == "HB") {
+				i++;
+				hitComb->hitBoxes.push_back(HitBox(glm::vec2(strtof(param[i].c_str(), 0), strtof(param[i + 1].c_str(), 0)), glm::vec2(strtof(param[i + 2].c_str(), 0), strtof(param[i + 3].c_str(), 0)), glm::radians(strtof(param[i + 4].c_str(), 0))));
+				i += 5;
+			}
+			else if (param[i] == "HP") {
+				i++;
+				hitComb->hitPolys.push_back(HitPoly());
+				while (i < param.size() && param[i] != ";") {
+					hitComb->hitPolys.back().AddVertex(glm::vec2(strtof(param[i].c_str(), 0), strtof(param[i + 1].c_str(), 0)));
+					i += 2;
+				};
+				hitComb->hitPolys.back().Update();
+			}
+			else if (param[i] == "HC") {
+				i++;
+				hitComb->hitCircles.push_back(HitCircle(glm::vec2(strtof(param[i].c_str(), 0), strtof(param[i + 1].c_str(), 0)), strtof(param[i + 2].c_str(), 0)));
+			}
 		}
 	}
 	catch (std::exception e)

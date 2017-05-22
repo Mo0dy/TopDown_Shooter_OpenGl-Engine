@@ -63,6 +63,7 @@ private:
 	DWORD getController(GLint index, XINPUT_STATE* state);
 	void Reset();
 	void CheckForErase();
+	GLboolean CheckForOutOfBounds(Entity *e);
 };
 
 

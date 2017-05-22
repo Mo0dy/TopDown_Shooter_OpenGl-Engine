@@ -23,6 +23,7 @@ public:
 
 	void SetPos(glm::vec2 pos);
 	void SetAngle(GLfloat angle);
+	void AddVertex(glm::vec2 v);
 
 protected:
 	glm::vec2 pos; // vertices are describes relative to this point

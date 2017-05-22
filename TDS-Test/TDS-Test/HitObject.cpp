@@ -74,6 +74,7 @@ GLfloat HitPoly::GetMaxDist() const { return this->maxDist; }
 GLfloat HitPoly::GetAngle() const { return this->angle; }
 void HitPoly::SetPos(glm::vec2 pos) { this->pos = pos; }
 void HitPoly::SetAngle(GLfloat angle) { this->angle = angle; }
+void HitPoly::AddVertex(glm::vec2 v) { this->vertices.push_back(v); }
 
 // Hitbox
 HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; }
