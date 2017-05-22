@@ -34,7 +34,7 @@ GLboolean HitPoly::CheckAxis(glm::vec2 axis)
 }
 GLfloat* HitPoly::GetMinMaxProj(glm::vec2 axis) const
 {
-	static GLfloat minMax[2];
+	GLfloat *minMax = new GLfloat[2];
 	minMax[0] = glm::dot(axis, vertices[0]);
 	minMax[1] = minMax[0];
 	GLfloat dotResult;
