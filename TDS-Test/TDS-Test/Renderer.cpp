@@ -2,12 +2,8 @@
 #include "ResourceManager.h"
 #include "Game.h"
 
-myVertex::myVertex(glm::vec2 position) : pos(position), color(glm::vec3(0.0f, 0.0f, 0.0f))
-{
-}
-myVertex::myVertex(glm::vec2 position, glm::vec3 inColor) : pos(position), color(inColor)
-{
-}
+myVertex::myVertex(glm::vec2 position) : pos(position), color(glm::vec3(0.0f, 0.0f, 0.0f)) {}
+myVertex::myVertex(glm::vec2 position, glm::vec3 inColor) : pos(position), color(inColor) {}
 
 std::vector<myVertex> Renderer::drawLineBuffer;
 
@@ -47,7 +43,7 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 	// Transform to Camera
 	model = glm::ortho(0.0f, cam.size.x, 0.0f, cam.size.y, -1.0f, 1.0f);
 	model = glm::translate(model, glm::vec3(-cam.pos, 0.0f));
-	// Transform to WCO
+	// Transform to WCS
 	model = glm::translate(model, glm::vec3(entity.Get2DPos(), 0.0f));
 	model = glm::rotate(model, entity.GetAngle(), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5f * entity.Get2DSize().x, -0.5f * entity.Get2DSize().y, 0.0f));
@@ -96,7 +92,7 @@ void Renderer::RenderBuffer(Camera &cam) {
 		model = glm::translate(model, glm::vec3(-cam.pos, 0.0f));
 		ResourceManager::GetShader("quadShader").SetMatrix4("model", model);
 		ResourceManager::GetShader("quadShader").Use();
-		glLineWidth(5);
+		glLineWidth(3);
 		glDrawArrays(GL_LINES, 0, drawLineBuffer.size());
 		glBindVertexArray(0);
 		drawLineBuffer.clear();

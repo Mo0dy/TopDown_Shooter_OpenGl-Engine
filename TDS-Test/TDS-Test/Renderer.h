@@ -8,6 +8,7 @@ struct myVertex {
 	myVertex(glm::vec2 position, glm::vec3 inColor);
 	glm::vec2 pos;
 	glm::vec3 color;
+	GLfloat size;
 };
 
 class Renderer

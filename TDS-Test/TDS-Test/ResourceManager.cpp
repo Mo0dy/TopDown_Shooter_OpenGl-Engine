@@ -157,7 +157,6 @@ HitComb* ResourceManager::loadrHitboxFromFile(const char* path) {
 					hitComb->hitPolys.back().AddVertex(glm::vec2(strtof(param[i].c_str(), 0), strtof(param[i + 1].c_str(), 0)));
 					i += 2;
 				};
-				hitComb->hitPolys.back().Update();
 			}
 			else if (param[i] == "HC") {
 				i++;

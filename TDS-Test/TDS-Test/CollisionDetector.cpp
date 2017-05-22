@@ -113,6 +113,14 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 	}
 	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
 	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	for (glm::vec2 a : tAbsHP1.GetAxes()) {
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
+	}
+	for (glm::vec2 a : tAbsHP2.GetAxes()) {
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
+	}
 #endif // DEBUG_HITBOXES
 
 

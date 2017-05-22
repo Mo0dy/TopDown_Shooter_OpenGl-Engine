@@ -3,12 +3,13 @@
 // Hit poly
 HitPoly::HitPoly() {}
 HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : vertices(hitPoly.GetVertices()), axes(hitPoly.GetAxes()) { this->Rotate(angle); }
-HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()) { this->Scale(size); }
+HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()), maxDist(rHitPoly.GetMaxDist()) { this->Scale(size); this->Update(); }
 HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle) : HitPoly(rHitPoly, size) { this->Rotate(angle); }
 
 void HitPoly::Update() 
 {
 	glm::vec2 vCon;
+	axes.clear();
 	for (int i = 1; i < vertices.size(); i++) {
 		vCon = vertices[i] - vertices[i - 1];
 		AddAxis(glm::vec2(-vCon.y, vCon.x));
@@ -29,8 +30,8 @@ void HitPoly::AddAxis(glm::vec2 axis)
 }
 GLboolean HitPoly::CheckAxis(glm::vec2 axis)
 {
-	for (glm::vec2 a : axes) { if (a.x / a.y == axis.x / axis.y) { return GL_TRUE; } }
-	return GL_FALSE;
+	for (glm::vec2 a : axes) { if (a.x / a.y == axis.x / axis.y) { return GL_FALSE; } }
+	return GL_TRUE;
 }
 GLfloat* HitPoly::GetMinMaxProj(glm::vec2 axis) const
 {
@@ -59,8 +60,8 @@ void HitPoly::Rotate(GLfloat angle)
 }
 void HitPoly::Scale(glm::vec2 scaleV)
 {
-	for (glm::vec2& v : this->vertices) { v *= scaleV; }
-	for (glm::vec2& a : this->axes) { a *= scaleV; }
+	for (glm::vec2& v : this->vertices) { v *= scaleV * 0.5f; }
+	for (glm::vec2& a : this->axes) { a *= scaleV * 0.5f; }
 	maxDist *= glm::length(scaleV);
 }
 void HitPoly::Translate(glm::vec2 sV) {
