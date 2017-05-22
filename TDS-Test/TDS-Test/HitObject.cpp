@@ -76,9 +76,9 @@ void HitPoly::SetPos(glm::vec2 pos) { this->pos = pos; }
 void HitPoly::SetAngle(GLfloat angle) { this->angle = angle; }
 
 // Hitbox
-HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; this->Update(); }
+HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; }
 HitBox::HitBox(const HitBox& hitBox, glm::vec2 pos, GLfloat angle) : size(hitBox.GetSize()) { this->angle = hitBox.GetAngle() + angle; this->pos = hitBox.GetPos() + pos; this->Update(); }
-HitBox::HitBox(const HitBox& rHitBox, glm::vec2 size) : HitPoly(rHitBox) { this->Scale(size); this->size = size; this->Translate(rHitBox.GetPos() * size * 0.5f); }
+HitBox::HitBox(const HitBox& rHitBox, glm::vec2 size) { this->angle = rHitBox.GetAngle(); this->size = rHitBox.GetSize() * size; this->pos = rHitBox.GetPos() * 0.5f * size; this->Update(); }
 
 void HitBox::Update()
 {

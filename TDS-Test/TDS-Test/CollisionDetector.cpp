@@ -121,18 +121,13 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 	GLfloat* tE2dist;
 
 	GLfloat iDepth;
-	GLfloat minIDepth = 100;
+	*colDepth = 100;
 
 	GLfloat axisDir; // This is either -1 or 1 making the returned axis always point from the first hitbox to the second
 	for (glm::vec2 axis : axes)
 	{
 		tE1dist = tAbsHP1.GetMinMaxProj(axis);
 		tE2dist = tAbsHP2.GetMinMaxProj(axis);
-
-		GLfloat testFloat1 = tE1dist[0];
-		GLfloat testFloat2 = tE1dist[1];
-		GLfloat testFloat3 = tE2dist[0];
-		GLfloat testFloat4 = tE2dist[1];
 
 		// Checks for interval intersection
 		if (tE1dist[1] > tE2dist[1]) {
@@ -147,9 +142,9 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 			iDepth = tE1dist[1] - tE2dist[0];
 			axisDir = 1;
 		}
-		if (iDepth < minIDepth) {
+		if (iDepth < *colDepth) {
 			*minColAxis = axis *  axisDir;
-			minIDepth = iDepth;
+			*colDepth = iDepth;
 		}
 	}
 	return GL_TRUE;
