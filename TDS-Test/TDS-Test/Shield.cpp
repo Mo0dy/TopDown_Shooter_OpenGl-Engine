@@ -49,7 +49,7 @@ void Shield::StartShield()
 void Shield::StopShield()
 {
 	this->size = glm::vec3(0);
-	hitComb.clear();
+	hitComb.Clear();
 	active = GL_FALSE;
 }
 

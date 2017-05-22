@@ -19,9 +19,14 @@ public:
 	GLfloat* GetMinMaxProj(glm::vec2 axis) const;
 	glm::vec2 GetPos() const;
 	GLfloat GetMaxDist() const;
+	GLfloat GetAngle() const;
+
+	void SetPos(glm::vec2 pos);
+	void SetAngle(GLfloat angle);
 
 protected:
 	glm::vec2 pos; // vertices are describes relative to this point
+	GLfloat angle; // angle relative to the corresponding texture
 	std::vector<glm::vec2> axes;
 	std::vector<glm::vec2> vertices;
 
@@ -41,26 +46,28 @@ public:
 	void Rotate(GLfloat angle);
 
 	glm::vec2 GetSize() const;
-	GLfloat GetAngle() const;
 
 protected:
 	glm::vec2 size; // Size of the rectangle from lower left corner as proportion to the width and height;
-	GLfloat angle; // angle relative to the corresponding texture
 };
 
 class HitCircle 
 {
 public:
 	HitCircle();
-	HitCircle(glm::vec2 pos, GLfloat radius);
+	HitCircle(glm::vec2 vertex, GLfloat radius);
 	HitCircle(const HitCircle& rHitCircle, glm::vec2 size); // builds a hitcirle from a relative hitcirlce -> the radius is relative to the width of the master entitiy
 	GLfloat* GetMinMaxProj(glm::vec2 axis) const;
 
 	glm::vec2 GetPos() const;
+	glm::vec2 GetVertex() const;
 	GLfloat GetRadius() const;
 
+	void SetPos(glm::vec2 pos);
+
 protected:
-	glm::vec2 pos;
+	glm::vec2 pos; // the of the masterE
+	glm::vec2 vertex; // the relative position to the masterE
 	GLfloat radius;
 };
 
@@ -73,6 +80,8 @@ struct HitComb
 	std::vector<HitBox> hitBoxes;
 	std::vector<HitPoly> hitPolys;
 
-	void clear();
+	void Clear();
+	void SetPos(glm::vec2 pos);
+	void SetAngle(GLfloat angle);
 };
 

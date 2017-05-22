@@ -14,18 +14,25 @@ GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const pen
 	// Rough check for possible texture size intersection
 	if (glm::distance(e1->Get2DPos(), e2->Get2DPos()) > (glm::length(e1->Get2DSize()) + glm::length(e2->Get2DSize())) * 0.5f) { return GL_FALSE; }
 	
+	HitComb e1HitComb = e1->GetHitComb();
+	HitComb e2HitComb = e2->GetHitComb();
+	e1HitComb.SetPos(e1->Get2DPos());
+	e2HitComb.SetPos(e2->Get2DPos());
+	e1HitComb.SetAngle(e1->GetAngle());
+	e2HitComb.SetAngle(e2->GetAngle());
+
 	// Checks all hitObjects for each other.
-	for (HitPoly hP1 : e1->GetHitComb().hitBoxes)
+	for (HitPoly hP1 : e1HitComb.hitBoxes)
 	{
-		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		for (HitPoly hP2 : e2HitComb.hitBoxes)
 		{
 			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		for (HitPoly hP2 : e2HitComb.hitPolys)
 		{
 			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		for (HitCircle hC2 : e2HitComb.hitCircles)
 		{
 			if (DoCPCheck(hC2, hP1, penDepth, minColAxis)) 
 			{ 
@@ -34,17 +41,17 @@ GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const pen
 			}
 		}
 	}
-	for (HitPoly hP1 : e1->GetHitComb().hitPolys)
+	for (HitPoly hP1 : e1HitComb.hitPolys)
 	{
-		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		for (HitPoly hP2 : e2HitComb.hitBoxes)
 		{
 			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		for (HitPoly hP2 : e2HitComb.hitPolys)
 		{
 			if (DoPPCheck(hP1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		for (HitCircle hC2 : e2HitComb.hitCircles)
 		{
 			if (DoCPCheck(hC2, hP1, penDepth, minColAxis))
 			{
@@ -53,17 +60,17 @@ GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const pen
 			}
 		}
 	}
-	for (HitCircle hC1 : e1->GetHitComb().hitCircles)
+	for (HitCircle hC1 : e1HitComb.hitCircles)
 	{
-		for (HitPoly hP2 : e2->GetHitComb().hitBoxes)
+		for (HitPoly hP2 : e2HitComb.hitBoxes)
 		{
 			if (DoCPCheck(hC1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitPoly hP2 : e2->GetHitComb().hitPolys)
+		for (HitPoly hP2 : e2HitComb.hitPolys)
 		{
 			if (DoCPCheck(hC1, hP2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
-		for (HitCircle hC2 : e2->GetHitComb().hitCircles)
+		for (HitCircle hC2 : e2HitComb.hitCircles)
 		{
 			if (DoCCCheck(hC1, hC2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
@@ -78,15 +85,27 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 
 	// it doasnt matter weather I translate both or only one (relatively to the other) we should probably do that later on to optimize speed
 	HitPoly tAbsHP1 = hP1;
-	tAbsHP1.Translate(hP1.GetPos()); // every vertex is now relative to the WCO
 	HitPoly tAbsHP2 = hP2;
+	tAbsHP1.Rotate(tAbsHP1.GetAngle());
+	tAbsHP2.Rotate(tAbsHP1.GetAngle());
+	tAbsHP1.Translate(hP1.GetPos()); // every vertex is now relative to the WCO
 	tAbsHP2.Translate(hP2.GetPos()); // every vertex is now relative to the WCO
 
 	// collects all axes that have to be checked for
 	std::vector<glm::vec2> axes;
+	std::vector<glm::vec2> hP1Axes = tAbsHP1.GetAxes();
+	std::vector<glm::vec2> hP2Axes = tAbsHP2.GetAxes();
 	axes.reserve(tAbsHP1.GetAxes().size() + tAbsHP2.GetAxes().size());
-	axes.insert(axes.end(), tAbsHP1.GetAxes().begin(), tAbsHP1.GetAxes().end());
-	axes.insert(axes.end(), tAbsHP2.GetAxes().begin(), tAbsHP2.GetAxes().end());
+	axes.insert(axes.end(), hP1Axes.begin(), hP1Axes.end());
+	axes.insert(axes.end(), hP2Axes.begin(), hP2Axes.end());
+
+#ifdef DEBUG_HITBOXES
+	for (glm::vec2 v : tAbsHP1.GetVertices()) { Renderer::drawLineBuffer.push_back(myVertex(v, glm::vec3(0.0f, 0.0f, 1.0f))); }
+	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	for (glm::vec2 v : tAbsHP2.GetVertices()) { Renderer::drawLineBuffer.push_back(myVertex(v, glm::vec3(0.0f, 0.0f, 1.0f))); }
+	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+#endif // DEBUG_HITBOXES
+
 
 	// Checks for interval intersection on every axis. If only one has none there is no collision.
 	GLfloat* E1dist; // these hold the minimum [0] and maximum [1] interval borders of both Polygons

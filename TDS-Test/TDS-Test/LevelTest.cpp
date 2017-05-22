@@ -6,13 +6,14 @@
 
 void LevelTest::loadLevelTest() {
 	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", HBOX_LOAD_ONE);
+	ResourceManager::LoadEtex("Textures", "Grass", ".png", GL_TRUE, "Dirt", HBOX_LOAD_NONE);
 	ResourceManager::LoadEtex("Textures\\Houses\\House1", "", ".png", GL_TRUE, "House1", HBOX_LOAD_ONE);
 	ResourceManager::LoadEtex("Textures", "Well", ".png", GL_TRUE, "Well", HBOX_AUTOFIT);
 }
 
 LevelTest::LevelTest()
 {
-	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150.0f, 0.0f);
+	background = Entity(&ResourceManager::GetEtex("Dirt"), 150.0f, 0.0f);
 	size = background.Get2DSize();
 
 	for (housePos hP : TOWN) {

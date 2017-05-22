@@ -31,7 +31,7 @@ public:
 protected:
 	Texture2D* tex;
 	HitComb rHComb; // relative hitObjects
-	HitComb hObj;
+	HitComb hComb;
 	glm::vec2 texSize;
 };
 

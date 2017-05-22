@@ -8,10 +8,13 @@ HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle) : HitPo
 
 void HitPoly::Update() 
 {
+	glm::vec2 vCon;
 	for (int i = 1; i < vertices.size(); i++) {
-		AddAxis(vertices[i] - vertices[i - 1]);
+		vCon = vertices[i] - vertices[i - 1];
+		AddAxis(glm::vec2(-vCon.y, vCon.x));
 	}
-	AddAxis(vertices.front() - vertices.back());
+	vCon = vertices.front() - vertices.back();
+	AddAxis(glm::vec2(-vCon.y, vCon.x));
 	maxDist = 0;
 	GLfloat tVDist;
 	for (glm::vec2 v : vertices)
@@ -68,10 +71,13 @@ std::vector<glm::vec2> HitPoly::GetAxes() const { return axes; }
 std::vector<glm::vec2> HitPoly::GetVertices() const { return vertices; }
 glm::vec2 HitPoly::GetPos() const { return this->pos; }
 GLfloat HitPoly::GetMaxDist() const { return this->maxDist; }
+GLfloat HitPoly::GetAngle() const { return this->angle; }
+void HitPoly::SetPos(glm::vec2 pos) { this->pos = pos; }
+void HitPoly::SetAngle(GLfloat angle) { this->angle = angle; }
 
 // Hitbox
-HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size), angle(angle) { this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; this->Update(); }
-HitBox::HitBox(const HitBox& hitBox, glm::vec2 pos, GLfloat angle) : angle(hitBox.GetAngle() + angle), size(hitBox.GetSize()) { this->pos = hitBox.GetPos() + pos; this->Update(); }
+HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; this->Update(); }
+HitBox::HitBox(const HitBox& hitBox, glm::vec2 pos, GLfloat angle) : size(hitBox.GetSize()) { this->angle = hitBox.GetAngle() + angle; this->pos = hitBox.GetPos() + pos; this->Update(); }
 HitBox::HitBox(const HitBox& rHitBox, glm::vec2 size) : HitPoly(rHitBox) { this->Scale(size * 0.5f); }
 
 void HitBox::Update()
@@ -88,6 +94,8 @@ void HitBox::Update()
 	this->axes.clear();
 	this->axes.push_back(rotMat * glm::vec2(1, 0));
 	this->axes.push_back(rotMat * glm::vec2(0, 1));
+
+	maxDist = glm::length(this->pos + this->size * 0.5f);
 }
 void HitBox::Rotate(GLfloat angle)
 {
@@ -99,16 +107,17 @@ void HitBox::Rotate(GLfloat angle)
 
 // Getters and Setters
 glm::vec2 HitBox::GetSize() const { return this->size; }
-GLfloat HitBox::GetAngle() const { return this->angle; }
 
 // Hit circle
 HitCircle::HitCircle() {}
-HitCircle::HitCircle(glm::vec2 pos, GLfloat radius) : pos(pos), radius(radius) {}
-HitCircle::HitCircle(const HitCircle& rHitCircle, glm::vec2 size) : pos(rHitCircle.GetPos() * 0.5f * size), radius(size.x * rHitCircle.GetRadius()) {}
+HitCircle::HitCircle(glm::vec2 vertex, GLfloat radius) : vertex(vertex), radius(radius) {}
+HitCircle::HitCircle(const HitCircle& rHitCircle, glm::vec2 size) : vertex(rHitCircle.GetVertex() * 0.5f * size), radius(size.x * rHitCircle.GetRadius()) {}
 
 // Getters and Setters
 glm::vec2 HitCircle::GetPos() const { return this->pos; }
+glm::vec2 HitCircle::GetVertex() const { return this->vertex; }
 GLfloat HitCircle::GetRadius() const { return this->radius; }
+void HitCircle::SetPos(glm::vec2 pos) { this->pos = pos; }
 
 // Hit comb
 HitComb::HitComb() {}
@@ -119,8 +128,19 @@ HitComb::HitComb(const HitComb& hitComb, glm::vec2 size)
 	for (const HitBox hB : hitComb.hitBoxes) { this->hitBoxes.push_back(HitBox(hB, size)); }
 }
 
-void HitComb::clear() {
+void HitComb::Clear()
+{
 	hitCircles.clear();
 	hitPolys.clear();
 	hitBoxes.clear();
+}
+void HitComb::SetPos(glm::vec2 transVec)
+{
+	for (HitPoly& hP : this->hitPolys) { hP.SetPos(transVec); }
+	for (HitBox& hP : this->hitBoxes) { hP.SetPos(transVec); }
+	for (HitCircle& hP : this->hitCircles) { hP.SetPos(transVec); }
+}
+void HitComb::SetAngle(GLfloat angle) {
+	for (HitPoly& hP : this->hitPolys) { hP.SetAngle(angle); }
+	for (HitBox& hP : this->hitBoxes) { hP.SetAngle(angle); }
 }

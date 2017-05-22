@@ -16,15 +16,15 @@ Etex::~Etex()
 
 void Etex::UpdateHObjs() 
 {
-	hObj.clear();
-	for (HitCircle rHC : rHComb.hitCircles) { hObj.hitCircles.push_back(HitCircle(rHC, this->texSize)); }
-	for (HitPoly rHP : rHComb.hitPolys) { hObj.hitPolys.push_back(HitPoly(rHP, this->texSize)); }
-	for (HitBox rHB : rHComb.hitBoxes) { hObj.hitPolys.push_back(HitBox(rHB, this->texSize)); }
+	hComb.Clear();
+	for (HitCircle rHC : rHComb.hitCircles) { hComb.hitCircles.push_back(HitCircle(rHC, this->texSize)); }
+	for (HitPoly rHP : rHComb.hitPolys) { hComb.hitPolys.push_back(HitPoly(rHP, this->texSize)); }
+	for (HitBox rHB : rHComb.hitBoxes) { hComb.hitBoxes.push_back(HitBox(rHB, this->texSize)); }
 }
 
 void Etex::FitHObj()
 {
-	rHComb.clear();
+	rHComb.Clear();
 	rHComb.hitBoxes.push_back(HitBox(glm::vec2(0), glm::vec2(1), 0));
 	UpdateHObjs();
 }
@@ -47,7 +47,7 @@ glm::vec2 Etex::GetTexSize(GLfloat width) const
 
 HitComb Etex::GetHitComb() const 
 {
-	return hObj;
+	return hComb;
 }
 
 HitComb Etex::GetHitComb(glm::vec2 size) const { return HitComb(this->rHComb, size); }
