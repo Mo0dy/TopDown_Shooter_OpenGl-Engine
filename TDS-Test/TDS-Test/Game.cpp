@@ -239,7 +239,7 @@ void Game::Update(GLfloat dt) {
 				}
 
 			}
-			for (Entity *e : level->entities) {
+			for (Entity *e : sStatEntities) {
 				if (colDec->DoCCheck(x.second, e, &penDepth, &colAxis)) {
 					sPlayers[i]->ColWithStat(e, penDepth, colAxis);
 				}
@@ -258,7 +258,7 @@ void Game::Update(GLfloat dt) {
 				sEnemies[j]->ColWithDyn(sEnemies[i], penDepth, -colAxis);
 			}
 		}
-		for (Entity *e : level->entities) {
+		for (Entity *e : sStatEntities) {
 			if (colDec->DoCCheck(sEnemies[i], e, &penDepth, &colAxis)) {
 				sEnemies[i]->ColWithStat(e, penDepth, colAxis);
 			}
@@ -272,7 +272,7 @@ void Game::Update(GLfloat dt) {
 				e->ColWithDyn(b, 0, -colAxis);
 			}
 		}
-		for (Entity *e : level->entities) {
+		for (Entity *e : sStatEntities) {
 			if (colDec->DoCCheck(b, e, &penDepth, &colAxis)) {
 				b->ColWithStat(e, penDepth, colAxis);
 			}
@@ -302,9 +302,6 @@ void Game::Render() {
 		for (std::string s : p->renderOrder) {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
-	}
-	for (Entity* e : level->entities) {
-		renderer->RenderSprite(*e, *camera);
 	}
 	renderer->RenderBuffer(*camera);
 }

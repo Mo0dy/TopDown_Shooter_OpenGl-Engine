@@ -15,16 +15,9 @@ LevelTest::LevelTest()
 {
 	background = Entity(&ResourceManager::GetEtex("LevelTest_T_Island"), 150.0f, 0.0f);
 	size = background.Get2DSize();
-
-	for (housePos hP : TOWN) {
-		entities.push_back(new StaticEntity(hP.pos, hP.width, 5.0f, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
-	}
-	entities.push_back(new StaticEntity(glm::vec2(8,27), 3, 0, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
 }
 
-LevelTest::~LevelTest()
-{
-}
+LevelTest::~LevelTest() {}
 
 GLfloat time;
 
@@ -97,6 +90,11 @@ void LevelTest::Reset() {
 	Game::deleteEntities();
 	Game::clearEntities();
 	wavecounter = 0;
+
+	for (housePos hP : TOWN) {
+		Game::sStatEntities.push_back(new StaticEntity(hP.pos, hP.width, 5.0f, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
+	}
+	Game::sStatEntities.push_back(new StaticEntity(glm::vec2(8, 27), 3, 0, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
 
 	spawnNextWave();
 

@@ -12,7 +12,6 @@ public:
 	~Level();
 	glm::vec2 size;
 	Entity background;
-	std::vector<Entity*> entities;
 
 	virtual void UpdateL(GLfloat dt);
 	virtual void Reset();

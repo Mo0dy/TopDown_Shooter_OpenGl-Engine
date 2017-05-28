@@ -7,9 +7,6 @@ Level::Level()
 
 Level::~Level()
 {
-	for (Entity* e : entities) {
-		delete e;
-	}
 }
 
 void Level::UpdateL(GLfloat dt) {

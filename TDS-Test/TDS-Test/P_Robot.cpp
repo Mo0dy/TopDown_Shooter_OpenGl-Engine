@@ -127,6 +127,7 @@ GLboolean Robot::UpdateE(GLfloat dt) {
 			case AIMING:
 				this->AddForce(movDir * inherentForce * 0.1f);
 				accuracy = 0.01;
+				LaserPointer();
 				break;
 			case NORMAL:
 				this->AddForce(movDir * inherentForce);
@@ -240,4 +241,25 @@ void Robot::SwitchToNormal()
 	artilMode = GL_FALSE;
 	dynFricCoeff = -3;
 	shootDelay = 0.1;
+}
+
+void Robot::LaserPointer() {
+	GLfloat laserRange;
+
+	std::vector<Entity*> testEntitites;
+	testEntitites.reserve(Game::sEnemies.size() + Game::sPlayers.size() + Game::sStatEntities.size());
+	for (Enemy* e : Game::sEnemies) {
+		testEntitites.push_back(e);
+	}
+	for (Player* e : Game::sPlayers) {
+		testEntitites.push_back(e);
+	}
+	for (Entity* e : Game::sStatEntities) {
+		testEntitites.push_back(e);
+	}
+
+	if (CollisionDetector::DoHitscan(this->Get2DPos(), this->bodyDir, testEntitites, &laserRange)) {
+		Renderer::drawLineBuffer.push_back(myVertex(this->Get2DPos(), glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::drawLineBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * laserRange, glm::vec3(1.0f, 0.0f, 0.0f)));
+	}
 }

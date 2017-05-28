@@ -1,19 +1,15 @@
 #include "CollisionDetector.h"
 #include "Renderer.h"
 
-CollisionDetector::CollisionDetector()
-{
-}
+CollisionDetector::CollisionDetector() {}
 
-CollisionDetector::~CollisionDetector()
-{
-}
+CollisionDetector::~CollisionDetector() {}
 
 GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const penDepth, glm::vec2* const minColAxis)
 {
 	// Rough check for possible texture size intersection
 	if (glm::distance(e1->Get2DPos(), e2->Get2DPos()) > (glm::length(e1->Get2DSize()) + glm::length(e2->Get2DSize())) * 0.5f) { return GL_FALSE; }
-	
+
 	HitComb e1HitComb = e1->GetHitComb();
 	HitComb e2HitComb = e2->GetHitComb();
 	e1HitComb.SetPos(e1->Get2DPos());
@@ -34,10 +30,10 @@ GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const pen
 		}
 		for (HitCircle hC2 : e2HitComb.hitCircles)
 		{
-			if (DoCPCheck(hC2, hP1, penDepth, minColAxis)) 
-			{ 
+			if (DoCPCheck(hC2, hP1, penDepth, minColAxis))
+			{
 				*minColAxis *= -1; // because hC2 is from the second entity the direction of the axes has to be reversed
-				return GL_TRUE; 
+				return GL_TRUE;
 			}
 		}
 	}
@@ -75,7 +71,7 @@ GLboolean CollisionDetector::DoCCheck(Entity* e1, Entity* e2, GLfloat* const pen
 			if (DoCCCheck(hC1, hC2, penDepth, minColAxis)) { return GL_TRUE; }
 		}
 	}
-	
+
 	return GL_FALSE; // No Collision detected
 }
 
@@ -140,13 +136,15 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 		// Checks for interval intersection
 		if (tE1dist[1] > tE2dist[1]) {
 			if (tE1dist[0] > tE2dist[1]) { return GL_FALSE; }
-		} else if (tE1dist[1] < tE2dist[0]) { return GL_FALSE; }
+		}
+		else if (tE1dist[1] < tE2dist[0]) { return GL_FALSE; }
 
 		// gets the amount of interval overlapping
 		if (tE1dist[0] > tE2dist[0]) {
 			iDepth = tE2dist[1] - tE1dist[0];
 			axisDir = -1;
-		} else {
+		}
+		else {
 			iDepth = tE1dist[1] - tE2dist[0];
 			axisDir = 1;
 		}
@@ -173,4 +171,67 @@ GLboolean CollisionDetector::DoCCCheck(HitCircle& hC1, HitCircle& hC2, GLfloat* 
 		return GL_TRUE;
 	}
 	return GL_FALSE;
+}
+
+GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector <Entity*> entities, GLfloat *resDist)
+{
+	GLfloat dist = -1;
+	GLfloat result;
+
+	HitPoly tHitPoly;
+
+	for (Entity* e : entities) {
+		for (HitPoly hP : e->GetHitComb().hitBoxes) {
+			tHitPoly = hP;
+			hP.Rotate(e->GetAngle());
+			hP.Translate(e->Get2DPos());
+			for (GLint i = 1; i < hP.GetVertices().size(); i++) {
+				result = DoSingleHitscan(pos, dir, hP.GetVertices()[i - 1], hP.GetVertices()[i]);
+				if ((dist > 0 && result < dist && result > 0)  || (dist < 0 && result > 0)) {
+					dist = result;
+				}
+			}
+			result = DoSingleHitscan(pos, dir, hP.GetVertices().back(), hP.GetVertices().front());
+			if ((dist > 0 && result < dist && result > 0) || (dist < 0 && result > 0)) {
+				dist = result;
+			}
+		}
+		for (HitPoly hP : e->GetHitComb().hitPolys) {
+			tHitPoly = hP;
+			hP.Rotate(e->GetAngle());
+			hP.Translate(e->Get2DPos());
+			for (GLint i = 1; i < hP.GetVertices().size(); i++) {
+				result = DoSingleHitscan(pos, dir, hP.GetVertices()[i - 1], hP.GetVertices()[i]);
+				if ((dist > 0 && result < dist && result > 0) || (dist < 0 && result > 0)) {
+					dist = result;
+				}
+			}
+			result = DoSingleHitscan(pos, dir, hP.GetVertices().back(), hP.GetVertices().front());
+			if ((dist > 0 && result < dist && result > 0) || (dist < 0 && result > 0)) {
+				dist = result;
+			}
+		}
+	}
+	if (dist > 0) {
+		*resDist = dist;
+		return GL_TRUE;
+	}
+	else {
+		return GL_FALSE;
+	}
+}
+
+GLfloat CollisionDetector::DoSingleHitscan(glm::vec2 pos, glm::vec2 dir, glm::vec2 v1, glm::vec2 v2)
+{
+	glm::vec2 c = v2 - v1;
+	GLfloat colParam1; // the scalar that c is multiplied by to reach the collision position relative to v1
+
+	colParam1 = (dir.x * (v1.y - pos.y) + dir.y * (pos.x - v1.x)) / (c.x * dir.y - c.y * dir.x);
+
+	if (colParam1 >= 0 && colParam1 <= 1) { // collision between v1 and v2
+		return (v1.x + colParam1 * c.x - pos.x) / dir.x;
+	}
+	else {
+		return -1;
+	}
 }

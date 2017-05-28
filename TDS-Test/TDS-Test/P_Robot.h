@@ -46,5 +46,7 @@ private:
 
 	void SwitchToArtil();
 	void SwitchToNormal();
+
+	void LaserPointer();
 };
 
