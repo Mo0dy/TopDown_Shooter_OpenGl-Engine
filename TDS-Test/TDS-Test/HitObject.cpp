@@ -1,9 +1,10 @@
 #include "HitObject.h"
+#include "Entity.h"
 
 // Hit poly
-HitPoly::HitPoly() {}
-HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : vertices(hitPoly.GetVertices()), axes(hitPoly.GetAxes()) { this->Rotate(angle); }
-HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()), maxDist(rHitPoly.GetMaxDist()) { this->Scale(size); this->Update(); }
+HitPoly::HitPoly(): angle(0), pos(glm::vec2(0)) {}
+HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : angle(0), pos(glm::vec2(0)), vertices(hitPoly.GetVertices()), axes(hitPoly.GetAxes()) { this->Rotate(angle); }
+HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : angle(0), pos(glm::vec2(0)), vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()), maxDist(rHitPoly.GetMaxDist()) { this->Scale(size); this->Update(); }
 HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle) : HitPoly(rHitPoly, size) { this->Rotate(angle); }
 
 void HitPoly::Update() 
@@ -76,6 +77,24 @@ GLfloat HitPoly::GetAngle() const { return this->angle; }
 void HitPoly::SetPos(glm::vec2 pos) { this->pos = pos; }
 void HitPoly::SetAngle(GLfloat angle) { this->angle = angle; }
 void HitPoly::AddVertex(glm::vec2 v) { this->vertices.push_back(v); }
+
+HitPoly HitPoly::GetAbsPoly(Entity* e) const
+{
+	HitPoly* myHitP = new HitPoly();
+	myHitP->vertices = this->vertices;
+	myHitP->Rotate(this->angle + e->GetAngle());
+	myHitP->Translate(this->pos + e->Get2DPos());
+	return *myHitP;
+}
+
+HitPoly HitPoly::GetAbsPoly() const
+{
+	HitPoly* myHitP = new HitPoly();
+	myHitP->vertices = this->vertices;
+	myHitP->Rotate(this->angle);
+	myHitP->Translate(this->pos);
+	return *myHitP;
+}
 
 // Hitbox
 HitBox::HitBox(glm::vec2 pos, glm::vec2 size, GLfloat angle) : size(size) { this->angle = angle;  this->axes.reserve(2); this->vertices.reserve(4); this->pos = pos; }

@@ -5,7 +5,9 @@
 myVertex::myVertex(glm::vec2 position) : pos(position), color(glm::vec3(0.0f, 0.0f, 0.0f)) {}
 myVertex::myVertex(glm::vec2 position, glm::vec3 inColor) : pos(position), color(inColor) {}
 
-std::vector<myVertex> Renderer::drawLineBuffer;
+std::vector<myVertex> Renderer::sDrawLineBuffer;
+std::vector<myVertex> Renderer::sDrawPointBuffer;
+std::vector<myVertex> Renderer::sDrawTriangleBuffer;
 
 Renderer::Renderer(std::string shader) :myShader(shader)
 {
@@ -62,11 +64,25 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 }
 
 void Renderer::RenderBuffer(Camera &cam) {
-	if (drawLineBuffer.size() > 0) {
+	if (sDrawLineBuffer.size() > 0) {
 		GLuint VBO, VAO;
 
 		std::vector<GLfloat> vertices;
-		for (myVertex v : drawLineBuffer) {
+		for (myVertex v : sDrawLineBuffer) {
+			vertices.push_back(v.pos.x);
+			vertices.push_back(v.pos.y);
+			vertices.push_back(v.color.x);
+			vertices.push_back(v.color.y);
+			vertices.push_back(v.color.z);
+		}
+		for (myVertex v : sDrawPointBuffer) {
+			vertices.push_back(v.pos.x);
+			vertices.push_back(v.pos.y);
+			vertices.push_back(v.color.x);
+			vertices.push_back(v.color.y);
+			vertices.push_back(v.color.z);
+		}
+		for (myVertex v : sDrawTriangleBuffer) {
 			vertices.push_back(v.pos.x);
 			vertices.push_back(v.pos.y);
 			vertices.push_back(v.color.x);
@@ -93,8 +109,15 @@ void Renderer::RenderBuffer(Camera &cam) {
 		ResourceManager::GetShader("quadShader").SetMatrix4("model", model);
 		ResourceManager::GetShader("quadShader").Use();
 		glLineWidth(3);
-		glDrawArrays(GL_LINES, 0, drawLineBuffer.size());
+		glDrawArrays(GL_LINES, 0, sDrawLineBuffer.size());
+
+
+		glPointSize(7);
+		glDrawArrays(GL_POINTS, sDrawLineBuffer.size(), sDrawPointBuffer.size());
+		glDrawArrays(GL_TRIANGLES, sDrawLineBuffer.size() + sDrawPointBuffer.size(), sDrawTriangleBuffer.size());
 		glBindVertexArray(0);
-		drawLineBuffer.clear();
+		sDrawLineBuffer.clear();
+		sDrawPointBuffer.clear();
+		sDrawTriangleBuffer.clear();
 	}
 }

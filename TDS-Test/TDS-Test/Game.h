@@ -20,6 +20,7 @@
 #include <Xinput.h>
 #include "Level.h"
 #include "Enemy.h"
+#include "SightCalc.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -58,6 +59,8 @@ private:
 	Renderer *renderer;
 	CollisionDetector *colDec;
 	Level* level;
+	SightCalc* sightCalc;
+	
 
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);

@@ -259,7 +259,7 @@ void Robot::LaserPointer() {
 	}
 
 	if (CollisionDetector::DoHitscan(this->Get2DPos(), this->bodyDir, testEntitites, &laserRange)) {
-		Renderer::drawLineBuffer.push_back(myVertex(this->Get2DPos(), glm::vec3(1.0f, 0.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * laserRange, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos(), glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * laserRange, glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
 }

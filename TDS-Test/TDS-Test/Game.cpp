@@ -50,6 +50,7 @@ void Game::Init() {
 	camera = new Camera;
 	colDec = new CollisionDetector;
 	level = new LevelTest;
+	sightCalc = new SightCalc;
 
 	Reset();
 }
@@ -216,6 +217,11 @@ void Game::Update(GLfloat dt) {
 		}
 	}
 	level->UpdateL(dt);
+
+	std::vector<Entity*> tPlayers;
+
+	for (Entity* e : sPlayers) { tPlayers.push_back(e); }
+	sightCalc->CalcObs(tPlayers, sStatEntities, camera);
 
 	// Collision detection
 	GLfloat penDepth;

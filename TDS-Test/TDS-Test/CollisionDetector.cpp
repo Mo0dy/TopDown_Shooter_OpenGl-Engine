@@ -98,24 +98,24 @@ GLboolean CollisionDetector::DoPPCheck(HitPoly& hP1, HitPoly& hP2, GLfloat* colD
 
 #ifdef DEBUG_HITBOXES
 	for (int i = 1; i < tAbsHP1.GetVertices().size(); i++) {
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
 	}
-	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
-	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
 	for (int i = 1; i < tAbsHP2.GetVertices().size(); i++) {
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i], glm::vec3(0.0f, 0.0f, 1.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices()[i - 1], glm::vec3(0.0f, 0.0f, 1.0f)));
 	}
-	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
-	Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().front(), glm::vec3(0.0f, 0.0f, 1.0f)));
+	Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetVertices().back(), glm::vec3(0.0f, 0.0f, 1.0f)));
 	for (glm::vec2 a : tAbsHP1.GetAxes()) {
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP1.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
 	for (glm::vec2 a : tAbsHP2.GetAxes()) {
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
-		Renderer::drawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() - a, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(tAbsHP2.GetPos() + a, glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
 #endif // DEBUG_HITBOXES
 

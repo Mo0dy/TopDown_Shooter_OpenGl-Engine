@@ -138,6 +138,9 @@
     <ClInclude Include="Shield.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SightCalc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="Shield.cpp">
       <Filter>Source Files\Entities\Players\Robot</Filter>
+    </ClCompile>
+    <ClCompile Include="SightCalc.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -25,6 +25,9 @@ public:
 	void SetAngle(GLfloat angle);
 	void AddVertex(glm::vec2 v);
 
+	HitPoly GetAbsPoly(class Entity* e) const;
+	HitPoly GetAbsPoly() const;
+
 protected:
 	glm::vec2 pos; // vertices are describes relative to this point
 	GLfloat angle; // angle relative to the corresponding texture

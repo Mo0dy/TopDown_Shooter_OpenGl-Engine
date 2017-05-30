@@ -14,7 +14,9 @@ struct myVertex {
 class Renderer
 {
 public:
-	static std::vector<myVertex> drawLineBuffer;
+	static std::vector<myVertex> sDrawLineBuffer;
+	static std::vector<myVertex> sDrawPointBuffer;
+	static std::vector<myVertex> sDrawTriangleBuffer;
 
 	Renderer(std::string shader);
 	void initRenderData();

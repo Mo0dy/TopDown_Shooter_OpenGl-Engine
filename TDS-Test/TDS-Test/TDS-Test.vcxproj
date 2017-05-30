@@ -162,6 +162,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="SightCalc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="StaticEntity.cpp" />
     <ClCompile Include="SubE.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="SightCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="myShader.frag" />

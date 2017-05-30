@@ -52,3 +52,9 @@ glm::mat2 Util::RotationMat2(GLfloat angle) {
 void Util::PrintVec2(glm::vec2 v) {
 	std::cout << "[" << v.x << ", " << v.y << "]" << std::endl;
 }
+
+GLfloat Util::CalcAbsAngle(glm::vec2 v) 
+{
+	v = glm::normalize(v);
+	return glm::mod<GLfloat>((glm::pi<GLfloat>() * 2 + glm::acos(v.y) * v.x / glm::abs(v.x)), glm::pi<GLfloat>() * 2);
+}

@@ -51,16 +51,19 @@ public:
 	static glm::mat2 RotationMat2(GLfloat angle); // Creates a matrix that rotates a 2D vector counter clockwise by a given angle in radians
 
 	static void PrintVec2(glm::vec2 v);
+
+	static GLfloat CalcAbsAngle(glm::vec2 v); // Calculates the absolute Angle (0 - 2Pi) of v1 wco coordiates
 };
 
 
 // Debug
-// #define DEBUG
+#define DEBUG
 #ifdef DEBUG
 //#define LOG_FPS
 #define DEBUG_HITBOXES
-#define DEBUG_HITSCAN
-#define DEBUG_FORCES
+//#define DEBUG_HITSCAN
+//#define DEBUG_FORCES
+#define DEBUG_SIGHT
 #define LOG(x) std::cout << x << std::endl
 #endif
 
