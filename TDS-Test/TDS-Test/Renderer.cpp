@@ -108,13 +108,13 @@ void Renderer::RenderBuffer(Camera &cam) {
 		model = glm::translate(model, glm::vec3(-cam.pos, 0.0f));
 		ResourceManager::GetShader("quadShader").SetMatrix4("model", model);
 		ResourceManager::GetShader("quadShader").Use();
+		glDrawArrays(GL_TRIANGLES, sDrawLineBuffer.size() + sDrawPointBuffer.size(), sDrawTriangleBuffer.size());
 		glLineWidth(3);
 		glDrawArrays(GL_LINES, 0, sDrawLineBuffer.size());
 
 
 		glPointSize(7);
 		glDrawArrays(GL_POINTS, sDrawLineBuffer.size(), sDrawPointBuffer.size());
-		glDrawArrays(GL_TRIANGLES, sDrawLineBuffer.size() + sDrawPointBuffer.size(), sDrawTriangleBuffer.size());
 		glBindVertexArray(0);
 		sDrawLineBuffer.clear();
 		sDrawPointBuffer.clear();
