@@ -71,14 +71,7 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 	if (sightVertices.size() > 2) {
 		sightVertices = SortForAngle(sightVertices);
 
-//#ifdef DEBUG_SIGHT
-//		for (int i = 0; i < sightVertices.size(); i++) {
-//			Renderer::sDrawLineBuffer.push_back(myVertex(tPos, glm::vec3(0.0f, 1.0f, (GLfloat)i / sightVertices.size())));
-//			Renderer::sDrawLineBuffer.push_back(myVertex(tPos + sightVertices[i], glm::vec3(0.0f, 1.0f, (GLfloat)i / sightVertices.size())));
-//			Renderer::sDrawPointBuffer.push_back(myVertex(tPos + sightVertices[i], glm::vec3(1.0f, 0.0f, 0.0f)));
-//		}
-//		LOG(sightVertices.size());
-//#endif // DEBUG_SIGHT
+
 
 		for (glm::vec2 &v : sightVertices) {
 			v += tPos;
@@ -93,6 +86,15 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 		Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices.back(), glm::vec3(0.0f, 1.0f, 1.0f)));
 		Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices.front(), glm::vec3(0.0f, 1.0f, 1.0f)));
 		Renderer::sDrawTriangleBuffer.push_back(myVertex(tPos, glm::vec3(0.0f, 1.0f, 1.0f)));
+		LOG(sightVertices.size());
+#endif // DEBUG_SIGHT
+
+#ifdef DEBUG_SIGHT
+		for (int i = 0; i < sightVertices.size(); i++) {
+			Renderer::sDrawLineBuffer.push_back(myVertex(tPos, glm::vec3(0.0f, 1.0f, (GLfloat)i / sightVertices.size())));
+			Renderer::sDrawLineBuffer.push_back(myVertex(sightVertices[i], glm::vec3(0.0f, 1.0f, (GLfloat)i / sightVertices.size())));
+			Renderer::sDrawPointBuffer.push_back(myVertex(sightVertices[i], glm::vec3(1.0f, 0.0f, 0.0f)));
+		}
 		LOG(sightVertices.size());
 #endif // DEBUG_SIGHT
 
