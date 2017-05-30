@@ -44,10 +44,9 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 		for (Entity* obsE : obstuctors) {
 			for (HitPoly hP : obsE->GetHitComb().hitPolys) {
 				// this should probably be a function
-
 				HitPoly myHp = hP.GetAbsPoly(obsE);
 				for (glm::vec2 vertex : myHp.GetVertices()) {
-					if (vertex.x < cam->pos.x + cam->size.x && vertex.x > cam->pos.x && vertex.y < cam->pos.y + cam->size.y && vertex.y > cam->pos.y) {
+					if (vertex.x <= cam->pos.x + cam->size.x && vertex.x >= cam->pos.x && vertex.y <= cam->pos.y + cam->size.y && vertex.y >= cam->pos.y) {
 						tScanVec = vertex - tPos;
 						CollisionDetector::DoHitscan(tPos, tScanVec, obstuctors, &tHitscanRes);
 						sightVertices.push_back(tScanVec * tHitscanRes);
@@ -65,8 +64,32 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 					}
 				}
 				}
+			for (HitPoly hP : obsE->GetHitComb().hitBoxes) {
+				// this should probably be a function
+				HitPoly myHp = hP.GetAbsPoly(obsE);
+				for (glm::vec2 vertex : myHp.GetVertices()) {
+					if (vertex.x < cam->pos.x + cam->size.x && vertex.x > cam->pos.x && vertex.y < cam->pos.y + cam->size.y && vertex.y > cam->pos.y) {
+						tScanVec = vertex - tPos;
+						CollisionDetector::DoHitscan(tPos, tScanVec, obstuctors, &tHitscanRes);
+						sightVertices.push_back(tScanVec * tHitscanRes);
+
+
+						tScanVec = tRotLeft * tScanVec;
+						CollisionDetector::DoHitscan(tPos, tScanVec, obstuctors, &tHitscanRes);
+						sightVertices.push_back(tScanVec * tHitscanRes);
+
+
+						tScanVec = tRotRight * tScanVec;
+						CollisionDetector::DoHitscan(tPos, tScanVec, obstuctors, &tHitscanRes);
+						sightVertices.push_back(tScanVec * tHitscanRes);
+
+					}
+				}
+			}
 				// end of the function
 			}
+
+			
 		}
 	if (sightVertices.size() > 2) {
 		sightVertices = SortForAngle(sightVertices);
