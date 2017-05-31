@@ -57,9 +57,9 @@ public:
 
 
 // Debug
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
-//#define LOG_FPS
+#define LOG_FPS
 #define DEBUG_HITBOXES
 //#define DEBUG_HITSCAN
 //#define DEBUG_FORCES

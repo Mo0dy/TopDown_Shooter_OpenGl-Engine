@@ -219,7 +219,6 @@ void Game::Update(GLfloat dt) {
 	level->UpdateL(dt);
 
 	std::vector<Entity*> tPlayers;
-
 	for (Entity* e : sPlayers) { tPlayers.push_back(e); }
 	sightCalc->CalcObs(tPlayers, sStatEntities, camera);
 
@@ -309,6 +308,8 @@ void Game::Render() {
 			renderer->RenderSprite(*p->subEntities[s], *camera);
 		}
 	}
+	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(0), glm::vec3(0)));
+	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(1), glm::vec3(0)));
 	renderer->RenderBuffer(*camera);
 }
 

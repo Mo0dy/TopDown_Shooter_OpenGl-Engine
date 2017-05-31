@@ -223,6 +223,10 @@ GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector
 
 GLfloat CollisionDetector::DoSingleHitscan(glm::vec2 pos, glm::vec2 dir, glm::vec2 v1, glm::vec2 v2)
 {
+	//GLfloat tAngleV1 = Util::CalcAbsAngle(v1);
+	//GLfloat tAngleV2 = Util::CalcAbsAngle(v2);
+	//GLfloat tAngleDir = Util::CalcAbsAngle(dir);
+	//if ((tAngleDir > tAngleV1 && tAngleDir < tAngleV2) || (tAngleDir < tAngleV1 && tAngleDir > tAngleV2)) { return GL_TRUE; }
 	glm::vec2 c = v2 - v1;
 	GLfloat colParam1; // the scalar that c is multiplied by to reach the collision position relative to v1
 

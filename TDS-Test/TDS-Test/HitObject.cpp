@@ -80,7 +80,7 @@ void HitPoly::AddVertex(glm::vec2 v) { this->vertices.push_back(v); }
 
 HitPoly HitPoly::GetAbsPoly(Entity* e) const
 {
-	HitPoly* myHitP = new HitPoly();
+	HitPoly* myHitP = new HitPoly;
 	myHitP->vertices = this->vertices;
 	myHitP->Rotate(this->angle + e->GetAngle());
 	myHitP->Translate(this->pos + e->Get2DPos());
@@ -89,7 +89,7 @@ HitPoly HitPoly::GetAbsPoly(Entity* e) const
 
 HitPoly HitPoly::GetAbsPoly() const
 {
-	HitPoly* myHitP = new HitPoly();
+	HitPoly* myHitP = new HitPoly;
 	myHitP->vertices = this->vertices;
 	myHitP->Rotate(this->angle);
 	myHitP->Translate(this->pos);
