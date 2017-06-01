@@ -2,8 +2,8 @@
 #include "Game.h"
 
 void E_ArtilBot::Load_E_ArtilBot() {
-	ResourceManager::LoadEtex("Textures", "Square", ".png", GL_TRUE, "Square", HBOX_AUTOFIT);
-	ResourceManager::LoadEtex("Textures", "Rect", ".png", GL_TRUE, "Rect", HBOX_AUTOFIT);
+	ResourceManager::LoadEtex("Textures", "ArtilBot", ".png", GL_TRUE, "ArtilBot", HBOX_AUTOFIT);
+	ResourceManager::LoadEtex("Textures", "ArtilGun", ".png", GL_TRUE, "ArtilGun", HBOX_LOAD_NONE);
 }
 
 E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position) 
@@ -25,10 +25,10 @@ E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position)
 
 	size = glm::vec3(1.0f);
 
-	tex = ResourceManager::GetEtex("Square").GetTex();
-	hitComb = ResourceManager::GetEtex("Square").GetHitComb(this->size);
+	tex = ResourceManager::GetEtex("ArtilBot").GetTex();
+	hitComb = ResourceManager::GetEtex("ArtilBot").GetHitComb(this->size);
 
-	subEntities["gun"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("Rect"), 0.2f, 0.5f);
+	subEntities["gun"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
 
 	renderOrder.push_back("gun");
 }
@@ -72,6 +72,7 @@ GLboolean E_ArtilBot::UpdateE(GLfloat dt)
 		Shoot();
 		return glm::length(vel) > 0;
 	}
+	return GL_FALSE;
 }
 
 void E_ArtilBot::SetGunAngle(GLfloat dt) {

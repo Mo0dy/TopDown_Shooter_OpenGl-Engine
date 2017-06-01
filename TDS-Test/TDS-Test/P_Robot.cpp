@@ -166,10 +166,15 @@ void Robot::shoot() {
 
 		// This is probably not the best option to whitelist all players
 		std::vector<const Entity*> damageWhitelist;
+		std::vector<const Entity*> colWhitelist;
+		colWhitelist.push_back(this);
+		for (auto &x : this->subEntities) {
+			colWhitelist.push_back(x.second);
+		}
 		for (Player *p : Game::sPlayers) {
 			damageWhitelist.push_back(p);
 		}
-		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), damageWhitelist));
+		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), damageWhitelist, colWhitelist));
 	}
 }
 
@@ -261,5 +266,10 @@ void Robot::LaserPointer() {
 	if (CollisionDetector::DoHitscan(this->Get2DPos(), this->bodyDir, testEntitites, &laserRange)) {
 		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos(), glm::vec3(1.0f, 0.0f, 0.0f)));
 		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * laserRange, glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawPointBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * laserRange, glm::vec3(1.0f, 0.0f, 0.0f)));
+	}
+	else {
+		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos(), glm::vec3(1.0f, 0.0f, 0.0f)));
+		Renderer::sDrawLineBuffer.push_back(myVertex(this->Get2DPos() + this->bodyDir * 1000.0f, glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
 }

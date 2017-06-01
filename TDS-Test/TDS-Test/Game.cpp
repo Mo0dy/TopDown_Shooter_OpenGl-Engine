@@ -38,6 +38,8 @@ void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
 	ResourceManager::LoadShader("sightShader.vs", "sightShader.frag", "sightShader");
+	ResourceManager::LoadShader("myShader.vs", "hideSightShader.frag", "hideSightShader");
+	ResourceManager::LoadShader("myShader.vs", "ignoreSightShader.frag", "ignoreSightShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
 
 	E_Drone::load_E_Drone();
@@ -49,7 +51,7 @@ void Game::Init() {
 	E_Medic::Load_E_Medic();
 	E_ArtilBot::Load_E_ArtilBot();
 
-	renderer = new Renderer("basicShader", this->Width, this->Height);
+	renderer = new Renderer("basicShader", "hideSightShader", "ignoreSightShader", this->Width, this->Height);
 	camera = new Camera;
 	colDec = new CollisionDetector;
 	level = new LevelTest;
@@ -304,26 +306,26 @@ void Game::Render() {
 	const std::vector<glm::vec2> &tVertices = this->sightCalc->GetSightTriangles();
 	//for (glm::vec2 v : tVertices) { Renderer::sDrawTriangleBuffer.push_back(myVertex(v, glm::vec3(0.5f, 1.0f, 1.0f))); }
 	renderer->RenderSightMap(*camera, tVertices);
-	renderer->RenderSprite(level->background, *camera);
+	renderer->RenderSprite(level->background, *camera, NORMAL);
 
 	for (Entity* e : sStatEntities) {
-		renderer->RenderSprite(*e, *camera);
+		renderer->RenderSprite(*e, *camera, IGNORE_SIGHT);
 	}
 	for (Entity* e : sBullets) {
-		renderer->RenderSprite(*e, *camera);
+		renderer->RenderSprite(*e, *camera, HIDE);
 	}
 	for (Entity* e : sDynEntities) {
-		renderer->RenderSprite(*e, *camera);
+		renderer->RenderSprite(*e, *camera, NORMAL);
 	}
 	for (Enemy* e : sEnemies) {
-		renderer->RenderSprite(*e, *camera);
+		renderer->RenderSprite(*e, *camera, HIDE);
 		for (std::string s : e->renderOrder) {
-			renderer->RenderSprite(*e->subEntities[s], *camera);
+			renderer->RenderSprite(*e->subEntities[s], *camera, HIDE);
 		}
 	}
 	for (Player* p : sPlayers) {
 		for (std::string s : p->renderOrder) {
-			renderer->RenderSprite(*p->subEntities[s], *camera);
+			renderer->RenderSprite(*p->subEntities[s], *camera, NORMAL);
 		}
 	}
 	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(0), glm::vec3(0)));

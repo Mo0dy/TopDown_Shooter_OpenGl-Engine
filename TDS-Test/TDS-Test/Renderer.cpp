@@ -9,7 +9,7 @@ std::vector<myVertex> Renderer::sDrawLineBuffer;
 std::vector<myVertex> Renderer::sDrawPointBuffer;
 std::vector<myVertex> Renderer::sDrawTriangleBuffer;
 
-Renderer::Renderer(std::string shader, GLuint widht, GLuint height) :myShader(shader)
+Renderer::Renderer(std::string shader, std::string hideSightShader, std::string ignoreSightShader, GLuint widht, GLuint height) : myShader(shader), hideSightShader(hideSightShader), ignoreSightShader(ignoreSightShader)
 {
 	initRenderData(widht, height);
 }
@@ -54,8 +54,20 @@ void Renderer::initRenderData(GLuint width, GLuint height) {
 	sight = glm::scale(sight, glm::vec3(0.5f));
 }
 
-void Renderer::RenderSprite(Entity &entity, Camera &cam) {
+void Renderer::RenderSprite(Entity &entity, Camera &cam, RENDER_TYPE renderType) {
 	// Calculating transformation matrix
+
+	std::string shader;
+
+	switch (renderType) {
+	case NORMAL: shader = this->myShader;
+		break;
+	case HIDE: shader = this->hideSightShader;
+		break;
+	case IGNORE_SIGHT: shader = this->ignoreSightShader;
+		break;
+	}
+
 	glm::mat4 model;
 	// Transform to Camera
 	model = glm::ortho(0.0f, cam.size.x, 0.0f, cam.size.y, -1.0f, 1.0f);
@@ -68,15 +80,19 @@ void Renderer::RenderSprite(Entity &entity, Camera &cam) {
 
 	// Calculating sight transformation matrix from 0 - 1 to -1 - 1
 
-	ResourceManager::GetShader(myShader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
-	ResourceManager::GetShader(myShader).SetMatrix4("sight", sight); 
-	ResourceManager::GetShader(myShader).SetVector3f("spriteColor", entity.GetColor());
+	ResourceManager::GetShader(shader).SetMatrix4("model", model); // Maybe we should store the shader in the render object?
+
+	if (renderType != IGNORE_SIGHT) {
+		ResourceManager::GetShader(shader).SetMatrix4("sight", sight);
+		ResourceManager::GetShader(shader).SetInt("sightMap", 1);
+	}
+	
+	ResourceManager::GetShader(shader).SetVector3f("spriteColor", entity.GetColor());
 
 	// Rendering
-	ResourceManager::GetShader(myShader).SetInt("image", 0);
-	ResourceManager::GetShader(myShader).SetInt("sightMap", 1);
+	ResourceManager::GetShader(shader).SetInt("image", 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	ResourceManager::GetShader(myShader).Use();
+	ResourceManager::GetShader(shader).Use();
 	glActiveTexture(GL_TEXTURE0);
 	entity.GetTex()->Bind();
 	glActiveTexture(GL_TEXTURE1);

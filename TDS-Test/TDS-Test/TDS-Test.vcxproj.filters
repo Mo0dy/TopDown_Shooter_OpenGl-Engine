@@ -271,5 +271,11 @@
     <None Include="sightShader.vs">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="hideSightShader.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="ignoreSightShader.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

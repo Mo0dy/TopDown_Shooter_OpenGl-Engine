@@ -203,6 +203,8 @@
     <ClCompile Include="SightCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="hideSightShader.frag" />
+    <None Include="ignoreSightShader.frag" />
     <None Include="myShader.frag" />
     <None Include="myShader.vs" />
     <None Include="quadShader.frag" />
