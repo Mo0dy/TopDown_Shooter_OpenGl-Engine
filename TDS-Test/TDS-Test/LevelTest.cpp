@@ -3,6 +3,7 @@
 #include "E_MotherDrone.h"
 #include "StaticEntity.h"
 #include "E_Jelly.h"
+#include "E_ArtilBot.h"
 
 void LevelTest::loadLevelTest() {
 	ResourceManager::LoadEtex("Textures", "Island", ".jpg", GL_TRUE, "LevelTest_T_Island", HBOX_LOAD_ONE);
@@ -103,27 +104,29 @@ void LevelTest::Reset() {
 		Game::sPlayers.back()->SetColor(Util::PLAYER_COLORS[i]);
 	}
 		
-	//glm::vec2 motherDrone_SpawnPos;
+	Game::sEnemies.push_back(new E_ArtilBot(glm::vec2(2)));
 
-	//	switch (rand() % 4) {
-	//	case 0: motherDrone_SpawnPos = glm::vec2(0, -50);
-	//		break;
-	//	case 1: motherDrone_SpawnPos = glm::vec2(0, 50);
-	//		break;
-	//	case 2: motherDrone_SpawnPos = glm::vec2(-50, 0);
-	//		break;
-	//	case 3: motherDrone_SpawnPos = glm::vec2(50, 0);
-	//		break;
-	//	}
+	////glm::vec2 motherDrone_SpawnPos;
 
-	//Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
-	//Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
+	////	switch (rand() % 4) {
+	////	case 0: motherDrone_SpawnPos = glm::vec2(0, -50);
+	////		break;
+	////	case 1: motherDrone_SpawnPos = glm::vec2(0, 50);
+	////		break;
+	////	case 2: motherDrone_SpawnPos = glm::vec2(-50, 0);
+	////		break;
+	////	case 3: motherDrone_SpawnPos = glm::vec2(50, 0);
+	////		break;
+	////	}
 
-	//for (int i = 0; i < 1; i++) {
-	//	for (int j = 0; j < 1; j++) {
-	//		Game::Enemies.push_back(new E_Drone(glm::vec2(3 + i * 3, 3 + j * 3)));
-	//	}
-	//}
+	////Game::Enemies.push_back(new E_MotherDrone(motherDrone_SpawnPos));
+	////Game::Enemies.push_back(new E_Jelly(glm::vec2(5), JELLY_START_SIZE));
+
+	////for (int i = 0; i < 1; i++) {
+	////	for (int j = 0; j < 1; j++) {
+	////		Game::Enemies.push_back(new E_Drone(glm::vec2(3 + i * 3, 3 + j * 3)));
+	////	}
+	////}
 }
 
 void LevelTest::spawnNextWave() {
@@ -132,25 +135,25 @@ void LevelTest::spawnNextWave() {
 
 	glm::vec2 wave_SpawnPos;
 
-	//switch (rand() % 4) {
-	//case 0: wave_SpawnPos = glm::vec2(0, -50);
-	//	break;
-	//case 1: wave_SpawnPos = glm::vec2(0, 50);
-	//	break;
-	//case 2: wave_SpawnPos = glm::vec2(-50, 0);
-	//	break;
-	//case 3: wave_SpawnPos = glm::vec2(50, 0);
-	//	break;
-	//}
+	switch (rand() % 4) {
+	case 0: wave_SpawnPos = glm::vec2(0, -50);
+		break;
+	case 1: wave_SpawnPos = glm::vec2(0, 50);
+		break;
+	case 2: wave_SpawnPos = glm::vec2(-50, 0);
+		break;
+	case 3: wave_SpawnPos = glm::vec2(50, 0);
+		break;
+	}
 
-	//for (int i = 0; i < WAVES[wavecounter][DRONE]; i++) {
-	//	Game::sEnemies.push_back(new E_Drone(wave_SpawnPos));
-	//}
-	//for (int i = 0; i < WAVES[wavecounter][MOTHER_DRONE]; i++) {
-	//	Game::sEnemies.push_back(new E_MotherDrone(wave_SpawnPos));
-	//}
-	//for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
-	//	Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
-	//}
+	for (int i = 0; i < WAVES[wavecounter][DRONE]; i++) {
+		Game::sEnemies.push_back(new E_Drone(wave_SpawnPos));
+	}
+	for (int i = 0; i < WAVES[wavecounter][MOTHER_DRONE]; i++) {
+		Game::sEnemies.push_back(new E_MotherDrone(wave_SpawnPos));
+	}
+	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
+		Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
+	}
 	wavecounter++;
 }

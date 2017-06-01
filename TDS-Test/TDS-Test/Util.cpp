@@ -30,9 +30,9 @@ GLfloat Util::GRAV_ACC = 9.81f;
 GLfloat Util::COEFFFICIENT_OF_RESTITUTION = 1;
 
 // Rendering
-GLboolean Util::FULLSCREEN = GL_TRUE;
-GLuint Util::SCREEN_WIDTH = 1920;
-GLuint Util::SCREEN_HEIGHT = 1080;
+GLboolean Util::FULLSCREEN = GL_FALSE;
+GLuint Util::SCREEN_WIDTH = 1600;
+GLuint Util::SCREEN_HEIGHT = 900;
 
 // Other
 GLfloat Util::CONTROLLER_STICK_MAX = 32767.0f;

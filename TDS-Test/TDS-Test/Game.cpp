@@ -9,6 +9,7 @@
 #include "E_Jelly.h"
 #include "LevelBanana.h"
 #include "E_Medic.h"
+#include "E_ArtilBot.h"
 
 std::vector<Entity*> Game::sStatEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::sDynEntities; // a vector that includes all neutral
@@ -46,6 +47,7 @@ void Game::Init() {
 	LevelBanana::loadLevelBanana();
 	E_Jelly::Load_E_Jelly();
 	E_Medic::Load_E_Medic();
+	E_ArtilBot::Load_E_ArtilBot();
 
 	renderer = new Renderer("basicShader", this->Width, this->Height);
 	camera = new Camera;
@@ -283,6 +285,14 @@ void Game::Update(GLfloat dt) {
 				b->ColWithStat(e, penDepth, colAxis);
 			}
 		}
+		for (Player *p : sPlayers) {
+			for (auto& x : p->subEntities) {
+				if (colDec->DoCCheck(b, x.second, &penDepth, &colAxis)) {
+					b->ColWithSubE(x.second, 0, glm::vec2(0));
+					x.second->ColWithDyn(b, 0, -colAxis);
+				}
+			}
+		}
 	}
 
 	sMovedE.clear();
@@ -305,8 +315,11 @@ void Game::Render() {
 	for (Entity* e : sDynEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : sEnemies) {
+	for (Enemy* e : sEnemies) {
 		renderer->RenderSprite(*e, *camera);
+		for (std::string s : e->renderOrder) {
+			renderer->RenderSprite(*e->subEntities[s], *camera);
+		}
 	}
 	for (Player* p : sPlayers) {
 		for (std::string s : p->renderOrder) {
