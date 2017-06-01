@@ -99,7 +99,7 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 			AddHitPoly(hP, e, tPos, tLines, tRays, tCamHb);
 		}
 	}
-	
+
 	// Sorting Lines and Rays by angle
 	Line::SortForMinAngle(tLines);
 	Ray::SortForAngle(tRays);
@@ -122,16 +122,16 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 		tShortestDist = -1;
 		for (int i = 0; i < tLines.size(); i++) {
 			// if (tLines[i].minAngle > r.angle) { break; } // All remaining Angles will be bigger
-			if (tLines[i].maxAngle < r.angle && tLines[i].minAngle < r.angle) { // this Line will never be intersected again because all remaining Rays have a bigger angle
+			if (tLines[i].maxAngle - tLines[i].minAngle < glm::pi<GLfloat>() && tLines[i].maxAngle < r.angle && tLines[i].minAngle < r.angle) { // this Line will never be intersected again because all remaining Rays have a bigger angle
 				tLines.erase(tLines.begin() + i);
 				i--;
 			}
-			else if(tLines[i].maxAngle >= r.angle && tLines[i].minAngle <= r.angle){ // actual Hitscan
+			else { //if((tLines[i].maxAngle - tLines[i].minAngle < glm::pi<GLfloat>() && tLines[i].maxAngle >= r.angle && tLines[i].minAngle <= r.angle) || (tLines[i].maxAngle - tLines[i].minAngle > glm::pi<GLfloat>() && r.angle < tLines[i].minAngle)){ // actual Hitscan
 				tHitscanRes = CollisionDetector::DoSingleHitscan(glm::vec2(0), r.dir, tLines[i].v1, tLines[i].v2);
 				if (tHitscanRes >= 0) {
 					if (tShortestDist < 0) {
 						tShortestDist = tHitscanRes;
-					} 
+					}
 					else if (tHitscanRes < tShortestDist) {
 						tShortestDist = tHitscanRes;
 					}
@@ -147,62 +147,91 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 	for (Ray r : sightVertices) { Renderer::sDrawPointBuffer.push_back(myVertex(r.dir, glm::vec3(1.0f, 0.0f, 0.0f))); }
 #endif // DEBUG_SIGHT
 
-	if (sightVertices.size() > 3) {
+	this->sightTriangles.clear();
+
+	if (sightVertices.size() > 1) {
 		Ray::SortForAngle(sightVertices);
 		for (int i = 1; i < sightVertices.size(); i++) {
-			Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices[i].dir, glm::vec3(0.2f, 0.5f, 0.5f)));
-			Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices[i - 1].dir, glm::vec3(0.2f, 0.5f, 0.5f)));
-			Renderer::sDrawTriangleBuffer.push_back(myVertex(tPos, glm::vec3(0.2f, 0.5f, 0.5f)));
+			sightTriangles.push_back(sightVertices[i].dir);
+			sightTriangles.push_back(sightVertices[i - 1].dir);
+			sightTriangles.push_back(tPos);
 		}
-		Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices.back().dir, glm::vec3(0.2f, 0.5f, 0.5f)));
-		Renderer::sDrawTriangleBuffer.push_back(myVertex(sightVertices.front().dir, glm::vec3(0.2f, 0.5f, 0.5f)));
-		Renderer::sDrawTriangleBuffer.push_back(myVertex(tPos, glm::vec3(0.2f, 0.5f, 0.5f)));
+		sightTriangles.push_back(sightVertices.back().dir);
+		sightTriangles.push_back(sightVertices.front().dir);
+		sightTriangles.push_back(tPos);
 	}
 }
 
 void SightCalc::AddHitPoly(HitPoly &hP, Entity* e, glm::vec2 &pos, std::vector<Line> &lines, std::vector<Ray> &rays, HitBox &bounds) {
 	HitPoly tHitPoly;
+
 	// transforms the HitPoly from positions relative to an entity to a position relative to tPos
 	if (CheckForBounds(bounds, e->Get2DPos() - pos, hP.GetMaxDist())) { // Rough Check for the whole entity
 		tHitPoly = hP.GetAbsPoly(e);
 		tHitPoly.Translate(-pos);
 		// adds all lines and Rays that are needet
-		// checks all but the first and last one
-		for (int i = 1; i < tHitPoly.GetVertices().size() - 1; i++) {
-			if (CheckForBounds(bounds, tHitPoly.GetVertices()[i]) || CheckForBounds(bounds, tHitPoly.GetVertices()[i - 1])) {
+		for (int i = 1; i < tHitPoly.GetVertices().size(); i++) {
+			if (CheckForBounds(bounds, tHitPoly.GetVertices()[i])) {
 				lines.push_back(Line(tHitPoly.GetVertices()[i], tHitPoly.GetVertices()[i - 1]));
 				AddCheckVertex(tHitPoly.GetVertices()[i], rays);
+
+				// Checking for Intersections with the screen
+				if (!CheckForBounds(bounds, tHitPoly.GetVertices()[i - 1])) { // one outside one inside of the screen
+					AddScreenClip(bounds, tHitPoly.GetVertices()[i], tHitPoly.GetVertices()[i - 1], rays);
+				}
 			}
-			else if (CheckForBounds(bounds, tHitPoly.GetVertices()[i + 1])) {
-				AddCheckVertex(tHitPoly.GetVertices()[i], rays);
+			else if (CheckForBounds(bounds, tHitPoly.GetVertices()[i - 1])) {
+				lines.push_back(Line(tHitPoly.GetVertices()[i], tHitPoly.GetVertices()[i - 1]));
+				// checking for intersections with the screen
+				AddScreenClip(bounds, tHitPoly.GetVertices()[i - 1], tHitPoly.GetVertices()[i], rays);
 			}
-		}
-		// the last
-		if (CheckForBounds(bounds, tHitPoly.GetVertices()[tHitPoly.GetVertices().size() - 2]) || CheckForBounds(bounds, tHitPoly.GetVertices().back())) {
-			lines.push_back(Line(tHitPoly.GetVertices()[tHitPoly.GetVertices().size() - 2], tHitPoly.GetVertices().back()));
-			AddCheckVertex(tHitPoly.GetVertices().back(), rays);
-		}
-		else if (CheckForBounds(bounds, tHitPoly.GetVertices().front())) {
-			AddCheckVertex(tHitPoly.GetVertices().back(), rays);
 		}
 		// the first
-		if (CheckForBounds(bounds, tHitPoly.GetVertices().front()) || CheckForBounds(bounds, tHitPoly.GetVertices().back())) {
+		if (CheckForBounds(bounds, tHitPoly.GetVertices().front())) {
 			lines.push_back(Line(tHitPoly.GetVertices().front(), tHitPoly.GetVertices().back()));
 			AddCheckVertex(tHitPoly.GetVertices().front(), rays);
+
+			// checking for intersections with the screen
+			if (!CheckForBounds(bounds, tHitPoly.GetVertices().back())) { // one outside one inside of the screen
+				AddScreenClip(bounds, tHitPoly.GetVertices().front(), tHitPoly.GetVertices().back(), rays);
+			}
 		}
-		else if (CheckForBounds(bounds, tHitPoly.GetVertices()[1])) {
-			AddCheckVertex(tHitPoly.GetVertices().front(), rays);
+		else if (CheckForBounds(bounds, tHitPoly.GetVertices().back())) {
+			lines.push_back(Line(tHitPoly.GetVertices().front(), tHitPoly.GetVertices().back()));
+			// checking for intersections with the screen
+			AddScreenClip(bounds, tHitPoly.GetVertices().back(), tHitPoly.GetVertices().front(), rays);
 		}
 	}
 }
 
-void SightCalc::AddCheckVertex(glm::vec2 v, std::vector<Ray> &rays) 
+void SightCalc::AddScreenClip(const HitBox &bounds, const glm::vec2 &v1, const glm::vec2 &v2, std::vector<Ray> &rays) {
+	glm::vec2 tRay = v2 - v1;
+	GLfloat tHitscanRes;
+	GLboolean addedRay = GL_FALSE;
+
+	for (int i = 1; i < bounds.GetVertices().size(); i++) {
+		tHitscanRes = CollisionDetector::DoSingleHitscan(v1, tRay, bounds.GetVertices()[i], bounds.GetVertices()[i - 1]);
+		if (tHitscanRes >= 0) {
+			rays.push_back(v1 + tRay * tHitscanRes);
+			addedRay = GL_TRUE;
+			break;
+		}
+	}
+	if (!addedRay) {
+		tHitscanRes = CollisionDetector::DoSingleHitscan(v1, tRay, bounds.GetVertices().front(), bounds.GetVertices().back());
+		if (tHitscanRes >= 0) {
+			rays.push_back(v1 + tRay * tHitscanRes);
+		}
+	}
+}
+
+void SightCalc::AddCheckVertex(glm::vec2 v, std::vector<Ray> &rays)
 {
 	rays.push_back(sRotLeft * v);
 	rays.push_back(sRotRight * v);
 }
 
-GLboolean SightCalc::CheckForBounds(const HitBox &bounds, const glm::vec2 &v, const GLfloat &range) 
+GLboolean SightCalc::CheckForBounds(const HitBox &bounds, const glm::vec2 &v, const GLfloat &range)
 {
 	if (v.x - range > bounds.GetVertices()[0].x) { return GL_FALSE; }
 	if (v.x + range < bounds.GetVertices()[2].x) { return GL_FALSE; }
@@ -211,11 +240,17 @@ GLboolean SightCalc::CheckForBounds(const HitBox &bounds, const glm::vec2 &v, co
 	return GL_TRUE;
 }
 
-GLboolean SightCalc::CheckForBounds(const HitBox &bounds, const glm::vec2 &v) 
+GLboolean SightCalc::CheckForBounds(const HitBox &bounds, const glm::vec2 &v)
 {
 	if (v.x > bounds.GetVertices()[0].x) { return GL_FALSE; }
 	if (v.x < bounds.GetVertices()[2].x) { return GL_FALSE; }
 	if (v.y > bounds.GetVertices()[0].y) { return GL_FALSE; }
 	if (v.y < bounds.GetVertices()[2].y) { return GL_FALSE; }
 	return GL_TRUE;
+}
+
+// Getters and setters
+
+const std::vector<glm::vec2> &SightCalc::GetSightTriangles() const {
+	return sightTriangles;
 }

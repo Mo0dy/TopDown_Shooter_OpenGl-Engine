@@ -18,6 +18,7 @@ public:
 	// Utility functions add more if you need them
 	void SetVector3f(const GLchar *name, const glm::vec3 &value);
 	void SetMatrix4(const GLchar *name, const glm::mat4 &matrix); // Sets matrix4 Uniform "name" to matrix
+	void SetInt(const GLchar *name, const GLuint ID);
 
 private:
 	void checkCompileErrors(GLuint object, std::string type);

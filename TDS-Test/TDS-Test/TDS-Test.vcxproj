@@ -205,6 +205,8 @@
     <None Include="myShader.vs" />
     <None Include="quadShader.frag" />
     <None Include="quadShader.vs" />
+    <None Include="sightShader.frag" />
+    <None Include="sightShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
