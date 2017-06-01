@@ -60,10 +60,10 @@ public:
 #define DEBUG
 #ifdef DEBUG
 #define LOG_FPS
-#define DEBUG_HITBOXES
+//#define DEBUG_HITBOXES
 //#define DEBUG_HITSCAN
 //#define DEBUG_FORCES
-#define DEBUG_SIGHT
+//#define DEBUG_SIGHT
 #define LOG(x) std::cout << x << std::endl
 #endif
 

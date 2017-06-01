@@ -9,6 +9,7 @@
 #include "E_Jelly.h"
 #include "LevelBanana.h"
 #include "E_Medic.h"
+#include "E_ArtilBot.h"
 
 std::vector<Entity*> Game::sStatEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::sDynEntities; // a vector that includes all neutral
@@ -36,6 +37,7 @@ Game::~Game()
 void Game::Init() {
 	ResourceManager::LoadShader("myShader.vs", "myShader.frag", "basicShader");
 	ResourceManager::LoadShader("quadShader.vs", "quadShader.frag", "quadShader");
+	ResourceManager::LoadShader("sightShader.vs", "sightShader.frag", "sightShader");
 	ResourceManager::LoadTexture("Textures\\Util.png", GL_TRUE, "Util");
 
 	E_Drone::load_E_Drone();
@@ -45,8 +47,9 @@ void Game::Init() {
 	LevelBanana::loadLevelBanana();
 	E_Jelly::Load_E_Jelly();
 	E_Medic::Load_E_Medic();
+	E_ArtilBot::Load_E_ArtilBot();
 
-	renderer = new Renderer("basicShader");
+	renderer = new Renderer("basicShader", this->Width, this->Height);
 	camera = new Camera;
 	colDec = new CollisionDetector;
 	level = new LevelTest;
@@ -282,6 +285,14 @@ void Game::Update(GLfloat dt) {
 				b->ColWithStat(e, penDepth, colAxis);
 			}
 		}
+		for (Player *p : sPlayers) {
+			for (auto& x : p->subEntities) {
+				if (colDec->DoCCheck(b, x.second, &penDepth, &colAxis)) {
+					b->ColWithSubE(x.second, 0, glm::vec2(0));
+					x.second->ColWithDyn(b, 0, -colAxis);
+				}
+			}
+		}
 	}
 
 	sMovedE.clear();
@@ -290,7 +301,11 @@ void Game::Update(GLfloat dt) {
 
 void Game::Render() {
 	// combine this in one function (by combining all vectors)
+	const std::vector<glm::vec2> &tVertices = this->sightCalc->GetSightTriangles();
+	//for (glm::vec2 v : tVertices) { Renderer::sDrawTriangleBuffer.push_back(myVertex(v, glm::vec3(0.5f, 1.0f, 1.0f))); }
+	renderer->RenderSightMap(*camera, tVertices);
 	renderer->RenderSprite(level->background, *camera);
+
 	for (Entity* e : sStatEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
@@ -300,8 +315,11 @@ void Game::Render() {
 	for (Entity* e : sDynEntities) {
 		renderer->RenderSprite(*e, *camera);
 	}
-	for (Entity* e : sEnemies) {
+	for (Enemy* e : sEnemies) {
 		renderer->RenderSprite(*e, *camera);
+		for (std::string s : e->renderOrder) {
+			renderer->RenderSprite(*e->subEntities[s], *camera);
+		}
 	}
 	for (Player* p : sPlayers) {
 		for (std::string s : p->renderOrder) {
@@ -311,6 +329,7 @@ void Game::Render() {
 	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(0), glm::vec3(0)));
 	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(1), glm::vec3(0)));
 	renderer->RenderBuffer(*camera);
+	//renderer->RenderHud();
 }
 
 // Utility

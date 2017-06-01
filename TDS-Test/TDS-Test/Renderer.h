@@ -18,12 +18,20 @@ public:
 	static std::vector<myVertex> sDrawPointBuffer;
 	static std::vector<myVertex> sDrawTriangleBuffer;
 
-	Renderer(std::string shader);
-	void initRenderData();
+	Renderer(std::string shader, GLuint width, GLuint height);
+
+	void initRenderData(GLuint width, GLuint height);
 	void RenderSprite(Entity &entity, Camera &cam);
 	void RenderBuffer(Camera &cam);
+	void RenderSightMap(Camera &cam, const std::vector<glm::vec2> &triangles);
+	void RenderHud();
 
 private:
+	glm::mat4 sight;
+
+	GLuint sightFbo;
+	GLuint sightTex;
+
 	std::string myShader;
 	GLuint quadVAO;
 };

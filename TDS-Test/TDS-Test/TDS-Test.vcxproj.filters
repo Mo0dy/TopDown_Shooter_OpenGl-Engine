@@ -141,6 +141,9 @@
     <ClInclude Include="SightCalc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="E_ArtilBot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -245,6 +248,9 @@
     <ClCompile Include="SightCalc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E_ArtilBot.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myShader.frag">
@@ -257,6 +263,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="quadShader.vs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="sightShader.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="sightShader.vs">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

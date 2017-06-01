@@ -67,4 +67,6 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
 	}
 }
 
-
+void Shader::SetInt(const GLchar *name, const GLuint ID) {
+	glUniform1i(glGetUniformLocation(this->Program, name), ID);
+}

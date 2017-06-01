@@ -165,25 +165,25 @@ void Robot::shoot() {
 		lastShot = 0;
 
 		// This is probably not the best option to whitelist all players
-		std::vector<const Entity*> whitelist;
+		std::vector<const Entity*> damageWhitelist;
 		for (Player *p : Game::sPlayers) {
-			whitelist.push_back(p);
+			damageWhitelist.push_back(p);
 		}
-		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
+		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), damageWhitelist));
 	}
 }
 
 void Robot::shootBigB() {
 
 	// This is probably not the best option to whitelist all players
-	std::vector<const Entity*> whitelist;
+	std::vector<const Entity*> damageWhitelist;
 	for (Player *p : Game::sPlayers) {
-		whitelist.push_back(p);
+		damageWhitelist.push_back(p);
 	}
 
 	if (lastShotBigB > shootDelayBigB) {
 		lastShotBigB = 0;
-		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), whitelist));
+		Game::sBullets.push_back(new EnergyBullet(this->Get2DPos() + Util::RotationMat2(subEntities["body"]->GetAngle()) * bulletSpawn, subEntities["body"]->GetAngle() + accuracy * (rand() % 2000 / 1000.0f - 1), damageWhitelist));
 	}
 }
 
