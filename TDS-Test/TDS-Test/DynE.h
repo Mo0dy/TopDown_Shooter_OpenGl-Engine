@@ -32,8 +32,8 @@ public:
 	void ColWithDyn(const DynE* dE, GLfloat penDepth, glm::vec2 colAxis);
 
 protected:
+
 	virtual void UpdatePos(GLfloat dt);
-	virtual GLfloat CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec);
 
 	State state;
 	glm::vec3 vel; // velocity in m/s

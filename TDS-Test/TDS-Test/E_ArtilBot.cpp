@@ -19,7 +19,6 @@ E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position)
 	damage = 400;
 	attackSpeed = 0.2;
 	turnSpeed = 10;
-	gunTurnSpeed = 10;
 
 	accuracy = 0.1;
 
@@ -29,6 +28,7 @@ E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position)
 	hitComb = ResourceManager::GetEtex("ArtilBot").GetHitComb(this->size);
 
 	subEntities["gun"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
+	subEntities["gun"]->SetTurnSpeed(3);
 
 	renderOrder.push_back("gun");
 }
@@ -57,7 +57,7 @@ GLboolean E_ArtilBot::UpdateE(GLfloat dt)
 
 		this->gunDir = gPlayer->Get2DPos() - this->Get2DPos();
 
-		if (gPdist < 20) {
+		if (gPdist < 5) {
 			this->AddForce(glm::normalize(gunDir) * -movForce);
 			state = NO_DYN_FRIC;
 		}
@@ -66,28 +66,14 @@ GLboolean E_ArtilBot::UpdateE(GLfloat dt)
 			state = NO_DYN_FRIC;
 		}
 
-		SetGunAngle(dt);
+		subEntities["gun"]->LookAt(gunDir, dt);
+		LookAt(vel, dt);
 		UpdatePos(dt);
 		UpdateSubE(dt);
 		Shoot();
 		return glm::length(vel) > 0;
 	}
 	return GL_FALSE;
-}
-
-void E_ArtilBot::SetGunAngle(GLfloat dt) {
-	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-
-	subEntities["gun"]->SetRAngle(glm::mod<GLfloat>(subEntities["gun"]->GetRAngle(), 2 * glm::pi<GLfloat>()));
-	GLfloat dA = CalcMovAngle(subEntities["gun"]->GetRAngle() + angle, gunDir);
-	if (abs(dA) > 0) {
-		if (gunTurnSpeed * dt > abs(dA)) {
-			subEntities["gun"]->SetRAngle(subEntities["gun"]->GetRAngle() + dA);
-		}
-		else {
-			subEntities["gun"]->SetRAngle(subEntities["gun"]->GetRAngle() + dA / abs(dA) * gunTurnSpeed * dt);
-		}
-	}
 }
 
 void E_ArtilBot::Shoot() {

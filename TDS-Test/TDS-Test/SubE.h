@@ -5,6 +5,7 @@
 class SubE : public Entity
 {
 public:
+	SubE();
 	SubE(class CompE* masterE);
 	SubE(class CompE* masterE, glm::vec2 rPos);
 	SubE(class CompE* masterE, glm::vec2 rPos, const Etex* etex, GLfloat width, GLfloat height);
@@ -13,6 +14,8 @@ public:
 	virtual ~SubE();
 
 	class CompE* const masterE;
+	void LookAt(glm::vec2 goalVec, GLfloat dt);
+	void LookAt(GLfloat goalAngle, GLfloat dt);
 	GLboolean UpdateE(GLfloat dt);
 
 	glm::vec2 Get2DRPos() const;

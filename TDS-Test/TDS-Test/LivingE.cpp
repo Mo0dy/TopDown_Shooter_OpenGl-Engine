@@ -8,13 +8,23 @@ LivingE::~LivingE()
 {
 }
 
-GLboolean LivingE::UpdateE(GLfloat dt)
-{
+GLboolean LivingE::PreUpdate() {
 	if (this->health <= 0) {
 		death = GL_TRUE;
+	}
+	if (this->death) {
 		erase = GL_TRUE;
+		return GL_TRUE;
 	}
 	return GL_FALSE;
+}
+
+GLboolean LivingE::UpdateE(GLfloat dt)
+{
+	if (PreUpdate()) { return GL_FALSE; }
+	UpdatePos(dt);
+	UpdateSubE(dt);
+	return glm::length(vel) > 0;
 }
 
 void LivingE::GetAttacked(GLfloat damage) {

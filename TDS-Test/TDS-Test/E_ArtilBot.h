@@ -17,8 +17,6 @@ public:
 protected:
 	GLfloat accuracy;
 	void Shoot();
-	void SetGunAngle(GLfloat dt);
 	glm::vec2 gunDir;
-	GLfloat gunTurnSpeed;
 };
 

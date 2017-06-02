@@ -15,8 +15,14 @@ Entity::Entity(const Etex* etex, glm::vec3 size) : pos(glm::vec2(0), 1.0f), angl
 
 Entity::~Entity() {}
 
+GLboolean Entity::PreUpdate() {
+	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
+	return GL_FALSE;
+}
+
 GLboolean Entity::UpdateE(GLfloat dt) 
 {
+	PreUpdate();
 	if (animations[ani].GetNumber() > 0) {
 		UpdateAni();
 	}
@@ -34,6 +40,39 @@ void Entity::ColWithESubE(class SubE* e, GLfloat penDepth, glm::vec2 colAxis) { 
 void Entity::ColWithPSubE(class SubE* p, GLfloat penDepth, glm::vec2 colAxis) { ColWithDyn(p->masterE, penDepth, colAxis); }
 
 void Entity::GetAttacked(GLfloat damage) {}
+
+void Entity::LookAt(glm::vec2 goalVec, GLfloat dt) {
+	goalVec = glm::normalize(goalVec);
+	GLfloat goalAngle;
+	if (goalVec.x != 0) {
+		goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
+	}
+	else { // if goalVec.x == 0 you can either go exactly to the reight (goalAngle = 0) or to the left (goalAngle = PI)
+		if (goalVec.y > 0) {
+			goalAngle = 0;
+		} else { goalAngle = glm::pi<GLfloat>(); }
+	}
+	LookAt(goalAngle, dt);
+}
+
+void Entity::LookAt(GLfloat goalAngle, GLfloat dt) {
+	angle = glm::mod<GLfloat>(angle + glm::pi<GLfloat>() * 2, glm::pi<GLfloat>() * 2);
+	GLfloat dA = goalAngle - angle;
+	if (dA > glm::pi<GLfloat>()) {
+		dA -= 2 * glm::pi<GLfloat>();
+	}
+	else if (dA < -glm::pi<GLfloat>()) {
+		dA += 2 * glm::pi<GLfloat>();
+	}
+	if (abs(dA) > 0) {
+		if (turnSpeed * dt > abs(dA)) {
+			this->angle += dA;
+		}
+		else {
+			this->angle += dA / abs(dA) * turnSpeed * dt;
+		}
+	}
+}
 
 // Getters and setters
 GLboolean Entity::GetErase() const { return this->erase; }
@@ -55,3 +94,4 @@ void Entity::SetSize(GLfloat width) { this->size = glm::vec3(width, (GLfloat) th
 void Entity::SetSize(glm::vec3 size) { this->size = size; }
 void Entity::SetZSize(GLfloat zSize) { this->size.z = zSize; }
 void Entity::SetHitComb(HitComb hitComb) { this->hitComb = hitComb; }
+void Entity::SetTurnSpeed(GLfloat turnspeed) { this->turnSpeed = turnspeed; }

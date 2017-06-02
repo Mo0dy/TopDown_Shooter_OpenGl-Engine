@@ -24,6 +24,9 @@ public:
 	void shootBigB();
 
 private:
+
+	GLboolean PreUpdate();
+
 	glm::vec2 movDir;
 	glm::vec2 bodyDir;
 
@@ -35,14 +38,7 @@ private:
 	GLfloat shootDelayBigB;
 	GLfloat accuracy; // +- shooting angle;
 
-	// There should be in a body and track object
-	GLfloat bodyTurnSpeed;
-	GLfloat trackTurnSpeed;
-
 	MOV_STATE movState;
-
-	void SetBodyAngle(GLfloat dt);
-	void SetTrackAngle(GLfloat dt);
 
 	void SwitchToArtil();
 	void SwitchToNormal();

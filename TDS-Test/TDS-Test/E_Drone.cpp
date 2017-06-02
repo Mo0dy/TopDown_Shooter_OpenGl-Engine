@@ -17,8 +17,6 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 
 	damage = 400;
 	attackSpeed = 0.5;
-
-
 	turnSpeed = 10;
 
 	//Set animation
@@ -34,9 +32,7 @@ E_Drone::E_Drone(glm::vec2 position) : Enemy(position)
 }
 
 //Destructor
-E_Drone::~E_Drone()
-{
-}
+E_Drone::~E_Drone() {}
 
 //Update
 GLboolean E_Drone::UpdateE(GLfloat dt) {
@@ -77,7 +73,7 @@ GLboolean E_Drone::UpdateE(GLfloat dt) {
 		AddForce(glm::normalize(movDir) * movForce);
 		UpdatePos(dt);
 		color = glm::vec3(1.0f, health / maxHealth, 1.0f);
-		SetBodyAngle(dt);
+		LookAt(movDir, dt);
 
 		return glm::length(vel) > 0;
 	}

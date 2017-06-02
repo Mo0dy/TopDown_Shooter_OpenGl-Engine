@@ -16,8 +16,6 @@ public:
 	GLboolean attacking;
 	GLfloat damage;
 
-	void SetBodyAngle(GLfloat dt);
 	GLfloat movForce;
-	GLfloat turnSpeed;
 };
 

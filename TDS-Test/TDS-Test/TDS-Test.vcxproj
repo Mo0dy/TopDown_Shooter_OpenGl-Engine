@@ -151,6 +151,7 @@
     <ClInclude Include="P_Robot.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="SE_BodyPart.h" />
+    <ClInclude Include="SE_Gun.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="StaticEntity.h" />
     <ClInclude Include="SubE.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SE_BodyPart.cpp" />
+    <ClCompile Include="SE_Gun.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Source.cpp" />

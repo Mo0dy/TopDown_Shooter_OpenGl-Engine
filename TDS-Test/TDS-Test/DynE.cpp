@@ -11,6 +11,7 @@ DynE::DynE(glm::vec2 position, GLfloat angle, GLfloat vel) : Entity(position, an
 DynE::~DynE() {}
 
 GLboolean DynE::UpdateE(GLfloat dt) {
+	PreUpdate();
 	UpdatePos(dt);
 	return glm::length(vel) > 0;
 }
@@ -75,34 +76,6 @@ glm::vec3 DynE::AirRes() {
 	return glm::vec3(0);
 }
 
-GLfloat DynE::CalcMovAngle(GLfloat currAngle, glm::vec2 goalVec) {
-	goalVec = glm::normalize(goalVec);
-	GLfloat goalAngle;
-	if (goalVec.x != 0) {
-		goalAngle = glm::mod<float>(2 * glm::pi<GLfloat>() - glm::acos(goalVec.y) * goalVec.x / abs(goalVec.x), 2 * glm::pi<GLfloat>());
-	}
-	else { // if goalVec.x == 0 you can either go exactly to the reight (goalAngle = 0) or to the left (goalAngle = PI)
-		if (goalVec.y > 0) {
-			goalAngle = 0;
-		}
-		else {
-			goalAngle = glm::pi<GLfloat>();
-		}
-	}
-
-	GLfloat dA = goalAngle - currAngle;
-
-	if (abs(dA) > glm::pi<GLfloat>()) {
-		if (dA > 0) {
-			dA -= 2 * glm::pi<GLfloat>();
-		}
-		else {
-			dA += 2 * glm::pi<GLfloat>();
-		}
-	}
-	return dA;
-}
-
 void DynE::ColWithStat(const Entity* e, GLfloat penDepth, glm::vec2 colAxis) {
 	collision = GL_TRUE;
 	glm::vec2 n = glm::normalize(colAxis);
@@ -132,4 +105,3 @@ glm::vec2 DynE::Get2DVel() const { return glm::vec2(vel.x, vel.y);  }
 glm::vec3 DynE::GetVel() const { return vel;  }
 GLfloat DynE::GetAbsVel() const { return glm::length(vel);  }
 GLfloat DynE::GetMass() const { return mass; }
-

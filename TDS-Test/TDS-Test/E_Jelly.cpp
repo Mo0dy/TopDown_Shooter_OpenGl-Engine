@@ -99,7 +99,7 @@ GLboolean E_Jelly::UpdateE(GLfloat dt)
 			glm::vec2 movDir = gPlayer->Get2DPos() - this->Get2DPos();
 
 			AddForce(glm::normalize(movDir) * movForce);
-			SetBodyAngle(dt);
+			LookAt(movDir, dt);
 		}
 		else {
 			state = NO_DYN_FRIC;

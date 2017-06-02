@@ -40,6 +40,9 @@ public:
 
 	virtual void GetAttacked(GLfloat damage);
 
+	virtual void LookAt(glm::vec2 goalVec, GLfloat dt);
+	virtual void LookAt(GLfloat goalAngle, GLfloat dt);
+
 	GLboolean GetErase() const;
 	glm::vec2 Get2DPos() const;
 	glm::vec2 Get2DSize() const;
@@ -58,8 +61,11 @@ public:
 	void SetSize(glm::vec3 size);
 	void SetZSize(GLfloat zSize);
 	void SetHitComb(HitComb hitComb);
+	void SetTurnSpeed(GLfloat turnSpeed);
 
 protected:
+	virtual GLboolean PreUpdate();
+
 	HitComb hitComb;
 	const Texture2D *tex;
 	GLboolean erase;
@@ -67,5 +73,7 @@ protected:
 	glm::vec3 size;
 	GLfloat angle; // The angle of the entitie in radians
 	glm::vec3 color; // The color will be overlayed on the texture
+
+	GLfloat turnSpeed; // The angular Velocity the entity can turn with
 };
 

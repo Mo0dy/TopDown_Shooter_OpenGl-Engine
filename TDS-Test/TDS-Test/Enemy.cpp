@@ -27,16 +27,3 @@ void Enemy::ColWithPSubE(SubE* e, GLfloat colDepth, glm::vec2 colAxis) {
 	attacking = GL_FALSE;
 	lastAttack = 0;
 }
-
-void Enemy::SetBodyAngle(GLfloat dt) {
-	angle = glm::mod<GLfloat>(angle, 2 * glm::pi<GLfloat>());
-	GLfloat dA = CalcMovAngle(angle, vel);
-	if (abs(dA) > 0) {
-		if (turnSpeed * dt > abs(dA)) {
-			angle += dA;
-		}
-		else {
-			angle += dA / abs(dA) * turnSpeed * dt;
-		}
-	}
-}

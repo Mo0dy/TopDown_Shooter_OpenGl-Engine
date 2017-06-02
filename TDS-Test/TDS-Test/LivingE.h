@@ -16,11 +16,12 @@ public:
 	GLfloat GetInherentF() const;
 
 protected:
+	GLboolean PreUpdate();
+
 	GLfloat inherentF;
 	GLfloat maxHealth;
 	GLfloat health;
 	GLboolean death;
 	GLfloat inherentForce;
-	GLfloat turnSpeed;
 };
 

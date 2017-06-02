@@ -74,7 +74,7 @@ GLboolean E_Medic::UpdateE(GLfloat dt)
 
 		AddForce(glm::normalize(movDir) * movForce);
 
-		SetBodyAngle(dt);
+		LookAt(movDir, dt);
 
 		UpdatePos(dt);
 

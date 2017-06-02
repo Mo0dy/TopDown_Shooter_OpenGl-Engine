@@ -13,6 +13,7 @@ CompE::~CompE()
 
 GLboolean CompE::UpdateE(GLfloat dt)
 {
+	PreUpdate();
 	UpdatePos(dt);
 	UpdateSubE(dt);
 	return glm::length(vel) > 0;
