@@ -62,7 +62,7 @@ SightCalc::SightCalc() {}
 
 SightCalc::~SightCalc() {}
 
-void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstuctors, Camera* cam)
+void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<StaticEntity*> obstuctors, Camera* cam)
 {
 	sightVertices.clear();
 
@@ -90,13 +90,15 @@ void SightCalc::CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstu
 	tRays.push_back(tCamHb.GetVertices().front());
 
 	// adding all Lines and Rays for the obstructors
-	for (Entity* e : obstuctors)
+	for (StaticEntity* e : obstuctors)
 	{
-		for (HitPoly hP : e->GetHitComb().hitBoxes) {
-			AddHitPoly(hP, e, tPos, tLines, tRays, tCamHb);
-		}
-		for (HitPoly hP : e->GetHitComb().hitPolys) {
-			AddHitPoly(hP, e, tPos, tLines, tRays, tCamHb);
+		if (e->concealing) {
+			for (HitPoly hP : e->GetHitComb().hitBoxes) {
+				AddHitPoly(hP, e, tPos, tLines, tRays, tCamHb);
+			}
+			for (HitPoly hP : e->GetHitComb().hitPolys) {
+				AddHitPoly(hP, e, tPos, tLines, tRays, tCamHb);
+			}
 		}
 	}
 

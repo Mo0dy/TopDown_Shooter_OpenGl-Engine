@@ -9,7 +9,7 @@ GLboolean Util::KEYBOARD_SUPPORT = GL_TRUE;
 
 // Camera
 GLfloat Util::CAM_STANDARD_MIN_ZOOM = 10;
-GLfloat Util::CAM_ZOOM_SPEED = 0.2;
+GLfloat Util::CAM_ZOOM_SPEED = 60;
 #ifdef DEBUG
 GLfloat Util::CAM_MAX_ZOOM = 120;
 #else // !DEBUG
@@ -57,4 +57,18 @@ GLfloat Util::CalcAbsAngle(glm::vec2 v)
 {
 	v = glm::normalize(v);
 	return glm::mod<GLfloat>((glm::pi<GLfloat>() * 2 + glm::acos(v.y) * v.x / glm::abs(v.x)), glm::pi<GLfloat>() * 2);
+}
+
+GLboolean Util::CalcIntersection(glm::vec2 pointA, glm::vec2 vecA, glm::vec2 pointB, glm::vec2 vecB, glm::vec2 &result)
+{
+	// Check if the vectors are paralell
+	if (vecA.y == vecA.x * vecB.y / vecB.x) { return GL_FALSE; }
+
+	// Calculate scalar Muliplicators e & f for intersection with: A + ea = B + fb
+	GLfloat f;
+
+	f = (vecA.x * (pointB.y - pointA.y) + vecA.y * (pointA.x - pointB.x)) / (vecB.x * vecA.y - vecB.y * vecA.x);
+
+	result = pointB + f * vecB;
+	return GL_TRUE;
 }

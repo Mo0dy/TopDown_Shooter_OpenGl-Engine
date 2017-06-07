@@ -2,7 +2,7 @@
 #include "Util.h"
 #include <iostream>
 
-Camera::Camera():pos(-1.0f, -1.0f), minSizeHeight(10)
+Camera::Camera():pos(-1.0f, -1.0f), minSizeHeight(100)
 {
 }
 

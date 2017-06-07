@@ -10,8 +10,11 @@
 #include "LevelBanana.h"
 #include "E_Medic.h"
 #include "E_ArtilBot.h"
+#include "StaticEntity.h"
 
-std::vector<Entity*> Game::sStatEntities; // a vector that includes all static entities
+#include "Pathfinder.h"
+
+std::vector<StaticEntity*> Game::sStatEntities; // a vector that includes all static entities
 std::vector<DynE*> Game::sDynEntities; // a vector that includes all neutral
 std::vector<Enemy*> Game::sEnemies;
 std::vector<Player*> Game::sPlayers;
@@ -116,13 +119,13 @@ void Game::ProcessInput(GLfloat dt) {
 
 		for (int i = 0; i < controlledPlayers; i++) {
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-				camera->minSizeHeight -= Util::CAM_ZOOM_SPEED;
+				camera->minSizeHeight -= Util::CAM_ZOOM_SPEED * dt;
 				if (camera->minSizeHeight < 6) {
 					camera->minSizeHeight = 6;
 				}
 			}
 			if (cState[i]->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-				camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
+				camera->minSizeHeight += Util::CAM_ZOOM_SPEED * dt;
 				if (camera->minSizeHeight > Util::CAM_MAX_ZOOM) {
 					camera->minSizeHeight = Util::CAM_MAX_ZOOM;
 				}
@@ -204,6 +207,10 @@ void Game::Update(GLfloat dt) {
 #ifdef LOG_FPS
 	LOG("FPS = " << 1 / dt);
 #endif //LOG_FPS
+
+	// for testing
+	Pathfinder::CreatePathMap(sStatEntities, glm::sin(glfwGetTime() * 5 + 5));
+	//sDebugSteps -= 0.2;
 
 	camera->updatePos(Width, Height, sPlayers);
 
@@ -328,8 +335,6 @@ void Game::Render() {
 			renderer->RenderSprite(*p->subEntities[s], *camera, NORMAL);
 		}
 	}
-	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(0), glm::vec3(0)));
-	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(1), glm::vec3(0)));
 	renderer->RenderBuffer(*camera);
 	//renderer->RenderHud();
 }

@@ -29,14 +29,18 @@ struct housePos {
 };
 
 static const std::vector<housePos> TOWN {
-	housePos(10,40,80,15), 
-	housePos(20,33,50,5),
-	housePos(20,27,180,5),
-	housePos(15,20,310,5),
-	housePos(8,18,260,5),
-	housePos(0,22,210,5),
-	housePos(-2,30,180,5),
-	housePos(-10,25,120,5),
+	//housePos(10,40,80,15), 
+	//housePos(20,33,50,5),
+	//housePos(20,27,180,5),
+	//housePos(15,20,310,5),
+	//housePos(8,18,260,5),
+	//housePos(0,22,210,5),
+	//housePos(-2,30,180,5),
+	//housePos(-10,25,120,5),
+
+	housePos(5,0,0,5),
+	housePos(13,0,45,5),
+	housePos(20,0,0,5),
 };
 
 class LevelTest: public Level
