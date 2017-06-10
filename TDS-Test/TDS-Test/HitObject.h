@@ -2,10 +2,18 @@
 
 #include "Util.h"
 
+struct BoundingRectangle {
+	glm::vec2 maxCorner;
+	glm::vec2 minCorner;
+
+	GLboolean TestForIntersection(const BoundingRectangle &bRect);
+};
+
 class HitPoly 
 {
 public:
 	HitPoly();
+	HitPoly(const HitPoly &hitPoly);
 	HitPoly(const HitPoly &hitPoly, GLfloat angle);
 	HitPoly(const HitPoly &rHitPoly, glm::vec2 size);
 	HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle);
@@ -28,6 +36,12 @@ public:
 	HitPoly GetAbsPoly(class Entity* e) const;
 	HitPoly GetAbsPoly() const;
 
+	HitPoly GetMargin(GLfloat m) const;
+
+	BoundingRectangle GetBoundingRectangle() const;
+
+
+
 protected:
 	glm::vec2 pos; // vertices are describes relative to this point
 	GLfloat angle; // angle relative to the corresponding texture
@@ -38,6 +52,8 @@ protected:
 
 	void AddAxis(glm::vec2 axis);
 	GLboolean CheckAxis(glm::vec2 axis);
+
+	void CalcMarginPoints(HitPoly &margin, glm::vec2 a, glm::vec2 b, glm::vec2 c, GLfloat m) const;
 };
 
 class HitBox : public HitPoly

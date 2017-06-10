@@ -42,7 +42,7 @@ public:
 	void Render(); // Function to render objects
 
 	// These vectors hold all entities in the game
-	static std::vector<Entity*> sStatEntities; // neutral static entities
+	static std::vector<StaticEntity*> sStatEntities; // neutral static entities
 	static std::vector<DynE*> sDynEntities; // neutral dynamic (moving) entities
 	static std::vector<Player*> sPlayers; 
 	static std::vector<Bullet*> sBullets; 

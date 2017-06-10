@@ -81,7 +81,7 @@ void LevelTest::Reset() {
 	for (housePos hP : TOWN) {
 		Game::sStatEntities.push_back(new StaticEntity(hP.pos, hP.width, 5.0f, hP.angle, ResourceManager::GetEtex("House1"), GL_TRUE));
 	}
-	Game::sStatEntities.push_back(new StaticEntity(glm::vec2(8, 27), 3, 0, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
+	//Game::sStatEntities.push_back(new StaticEntity(glm::vec2(8, 27), 3, 0, 0, ResourceManager::GetEtex("Well"), GL_FALSE));
 
 	spawnNextWave();
 

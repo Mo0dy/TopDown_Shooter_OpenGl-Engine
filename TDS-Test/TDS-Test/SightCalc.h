@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "HitObject.h"
 
+#include "StaticEntity.h"
+
 struct Line {
 	Line();
 	Line(glm::vec2 v1, glm::vec2 v2);
@@ -38,7 +40,7 @@ public:
 	SightCalc();
 	~SightCalc();
 
-	void CalcObs(std::vector<Entity*> viewers, std::vector<Entity*> obstuctors, Camera* cam);
+	void CalcObs(std::vector<Entity*> viewers, std::vector<StaticEntity*> obstuctors, Camera* cam);
 
 	const std::vector<glm::vec2> &GetSightTriangles() const;
 

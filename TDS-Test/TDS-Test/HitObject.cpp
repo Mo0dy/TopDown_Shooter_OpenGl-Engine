@@ -1,13 +1,27 @@
 #include "HitObject.h"
 #include "Entity.h"
 
+// Bounding Rectangle
+GLboolean BoundingRectangle::TestForIntersection(const BoundingRectangle &bRect)
+{
+	if (this->maxCorner.x > bRect.maxCorner.x && this->minCorner.x > bRect.maxCorner.x) { return GL_FALSE; }
+	if (this->maxCorner.x < bRect.maxCorner.x && this->maxCorner.x < bRect.minCorner.x) { return GL_FALSE; }
+	if (this->maxCorner.y > bRect.maxCorner.y && this->minCorner.y > bRect.maxCorner.y) { return GL_FALSE; }
+	if (this->maxCorner.y < bRect.maxCorner.y && this->maxCorner.y < bRect.minCorner.y) { return GL_FALSE; }
+	return GL_TRUE;
+}
+
 // Hit poly
-HitPoly::HitPoly(): angle(0), pos(glm::vec2(0)) {}
-HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : angle(0), pos(glm::vec2(0)), vertices(hitPoly.GetVertices()), axes(hitPoly.GetAxes()) { this->Rotate(angle); }
-HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : angle(0), pos(glm::vec2(0)), vertices(rHitPoly.GetVertices()), axes(rHitPoly.GetAxes()), maxDist(rHitPoly.GetMaxDist()) { this->Scale(size); this->Update(); }
+HitPoly::HitPoly() : angle(0), pos(glm::vec2(0)) {}
+HitPoly::HitPoly(const HitPoly &hitPoly) : angle(hitPoly.angle), pos(hitPoly.pos), vertices(hitPoly.vertices), axes(hitPoly.axes), maxDist(hitPoly.maxDist) {}
+HitPoly::HitPoly(const HitPoly &hitPoly, GLfloat angle) : angle(0), pos(glm::vec2(0)), vertices(hitPoly.vertices), axes(hitPoly.axes) { this->Rotate(angle); }
+HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size) : angle(0), pos(glm::vec2(0)), vertices(rHitPoly.vertices), axes(rHitPoly.axes), maxDist(rHitPoly.maxDist) {
+	this->Scale(size);
+	this->Update();
+}
 HitPoly::HitPoly(const HitPoly &rHitPoly, glm::vec2 size, GLfloat angle) : HitPoly(rHitPoly, size) { this->Rotate(angle); }
 
-void HitPoly::Update() 
+void HitPoly::Update()
 {
 	glm::vec2 vCon;
 	axes.clear();
@@ -67,6 +81,75 @@ void HitPoly::Scale(glm::vec2 scaleV)
 }
 void HitPoly::Translate(glm::vec2 sV) {
 	for (glm::vec2 &v : this->vertices) { v += sV; }
+}
+
+HitPoly HitPoly::GetMargin(GLfloat m) const
+{
+	HitPoly *margin = new HitPoly;
+
+	for (int i = 2; i < this->vertices.size(); i++) {
+		CalcMarginPoints(*margin, vertices[i - 2], vertices[i - 1], vertices[i], m);
+	}
+	CalcMarginPoints(*margin, vertices[vertices.size() - 2], vertices[vertices.size() - 1], vertices.front(), m);
+	CalcMarginPoints(*margin, vertices[vertices.size() - 1], vertices.front(), vertices[1], m);
+
+	return *margin;
+}
+
+void HitPoly::CalcMarginPoints(HitPoly &margin, glm::vec2 a, glm::vec2 b, glm::vec2 c, GLfloat m) const
+{
+	// the vectors building the corner
+	glm::vec2 e = b - a;
+	glm::vec2 f = c - b;
+
+	// the outward normal vectors of the edges with length m
+	glm::vec2 j(-e.y, e.x);
+	j = j * m / glm::length(j);
+	glm::vec2 k(-f.y, f.x);
+	k = k * m / glm::length(k);
+
+	// the offset points c and a
+	glm::vec2 cPrime = c + k;
+	glm::vec2 aPrime = a + j;
+
+	// the angle seperating vector with length m
+	glm::vec2 w = j + k;
+	w = w * m / glm::length(w);
+
+	// G is the point on w with dist m to b
+	glm::vec2 G = b + w;
+
+	// g is orthogonal to w
+	glm::vec2 g(-w.y, w.x);
+
+	// adding the intersections of the lines: aPrime + Re, G + Rg and cPrime + Rf to the margin polygon
+	glm::vec2 tResult;
+	Util::CalcIntersection(aPrime, e, G, g, tResult);
+	margin.AddVertex(tResult);
+	Util::CalcIntersection(cPrime, f, G, g, tResult);
+	margin.AddVertex(tResult);
+}
+
+BoundingRectangle HitPoly::GetBoundingRectangle() const
+{
+	BoundingRectangle *bRect = new BoundingRectangle;
+	bRect->maxCorner = bRect->minCorner = vertices.front();
+
+	for (int i = 1; i < vertices.size(); i++) {
+		if (vertices[i].x > bRect->maxCorner.x) {
+			bRect->maxCorner.x = vertices[i].x;
+		}
+		else if (vertices[i].x < bRect->minCorner.x) {
+			bRect->minCorner.x = vertices[i].x;
+		}
+		if (vertices[i].y > bRect->maxCorner.y) {
+			bRect->maxCorner.y = vertices[i].y;
+		}
+		else if (vertices[i].y < bRect->minCorner.y) {
+			bRect->minCorner.y = vertices[i].y;
+		}
+	}
+	return *bRect;
 }
 
 std::vector<glm::vec2> HitPoly::GetAxes() const { return axes; }
