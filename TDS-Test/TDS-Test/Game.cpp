@@ -200,6 +200,7 @@ void Game::ProcessInput(GLfloat dt) {
 }
 
 void Game::Update(GLfloat dt) {
+	SpawnEntities();
 
 #ifdef LOG_FPS
 	LOG("FPS = " << 1 / dt);
@@ -223,10 +224,53 @@ void Game::Update(GLfloat dt) {
 	}
 	level->UpdateL(dt);
 
+	// Doing Sight Calculations
 	std::vector<Entity*> tPlayers;
 	for (Entity* e : sPlayers) { tPlayers.push_back(e); }
 	sightCalc->CalcObs(tPlayers, sStatEntities, camera);
 
+	DoCCheck();
+
+	sMovedE.clear();
+	CheckForErase();
+}
+
+void Game::Render() {
+	// combine this in one function (by combining all vectors)
+	const std::vector<glm::vec2> &tVertices = this->sightCalc->GetSightTriangles();
+	//for (glm::vec2 v : tVertices) { Renderer::sDrawTriangleBuffer.push_back(myVertex(v, glm::vec3(0.5f, 1.0f, 1.0f))); }
+	renderer->RenderSightMap(*camera, tVertices);
+	renderer->RenderSprite(level->background, *camera, NORMAL);
+
+	for (Entity* e : sStatEntities) {
+		renderer->RenderSprite(*e, *camera, IGNORE_SIGHT);
+	}
+	for (Entity* e : sBullets) {
+		renderer->RenderSprite(*e, *camera, HIDE);
+	}
+	for (Entity* e : sDynEntities) {
+		renderer->RenderSprite(*e, *camera, NORMAL);
+	}
+	for (Enemy* e : sEnemies) {
+		renderer->RenderSprite(*e, *camera, HIDE);
+		for (std::string s : e->renderOrder) {
+			renderer->RenderSprite(*e->subEntities[s], *camera, HIDE);
+		}
+	}
+	for (Player* p : sPlayers) {
+		for (std::string s : p->renderOrder) {
+			renderer->RenderSprite(*p->subEntities[s], *camera, NORMAL);
+		}
+	}
+	renderer->RenderBuffer(*camera);
+	//renderer->RenderHud();
+}
+
+void Game::Reset() {
+	level->Reset();
+}
+
+void Game::DoCCheck() {
 	// Collision detection
 	GLfloat penDepth;
 	glm::vec2 colAxis;
@@ -296,52 +340,6 @@ void Game::Update(GLfloat dt) {
 			}
 		}
 	}
-
-	sMovedE.clear();
-	CheckForErase();
-}
-
-void Game::Render() {
-	// combine this in one function (by combining all vectors)
-	const std::vector<glm::vec2> &tVertices = this->sightCalc->GetSightTriangles();
-	//for (glm::vec2 v : tVertices) { Renderer::sDrawTriangleBuffer.push_back(myVertex(v, glm::vec3(0.5f, 1.0f, 1.0f))); }
-	renderer->RenderSightMap(*camera, tVertices);
-	renderer->RenderSprite(level->background, *camera, NORMAL);
-
-	for (Entity* e : sStatEntities) {
-		renderer->RenderSprite(*e, *camera, IGNORE_SIGHT);
-	}
-	for (Entity* e : sBullets) {
-		renderer->RenderSprite(*e, *camera, HIDE);
-	}
-	for (Entity* e : sDynEntities) {
-		renderer->RenderSprite(*e, *camera, NORMAL);
-	}
-	for (Enemy* e : sEnemies) {
-		renderer->RenderSprite(*e, *camera, HIDE);
-		for (std::string s : e->renderOrder) {
-			renderer->RenderSprite(*e->subEntities[s], *camera, HIDE);
-		}
-	}
-	for (Player* p : sPlayers) {
-		for (std::string s : p->renderOrder) {
-			renderer->RenderSprite(*p->subEntities[s], *camera, NORMAL);
-		}
-	}
-	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(0), glm::vec3(0)));
-	Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(1), glm::vec3(0)));
-	renderer->RenderBuffer(*camera);
-	//renderer->RenderHud();
-}
-
-// Utility
-DWORD Game::getController(GLint index, XINPUT_STATE* state) {
-	ZeroMemory(state, sizeof(XINPUT_STATE));
-	return XInputGetState(index, state);
-}
-
-void Game::Reset() {
-	level->Reset();
 }
 
 void Game::CheckForErase() {
@@ -369,6 +367,28 @@ void Game::CheckForErase() {
 			sEnemies.erase(sEnemies.begin() + i);
 		}
 	}
+}
+
+GLboolean Game::CheckForOutOfBounds(Entity *e)
+{
+	glm::vec2 tEPos = e->Get2DPos();
+	glm::vec2 tLSize = level->size * 0.5f;
+	return tEPos.x > tLSize.x || tEPos.x < -tLSize.x || tEPos.y > tLSize.y || tEPos.y < -tLSize.y;
+}
+
+void Game::SpawnEntities() {
+	for (Entity*e : sSpawnE)  {
+		if (dynamic_cast<Bullet*>(e) != NULL) {
+			sBullets.push_back(dynamic_cast<Bullet*>(e));
+		}
+		else if (dynamic_cast<Enemy*>(e) != NULL) {
+			sEnemies.push_back(dynamic_cast<Enemy*>(e));
+		}
+		else if (dynamic_cast<Player*>(e) != NULL) {
+			sPlayers.push_back(dynamic_cast<Player*>(e));
+		}
+	}
+	sSpawnE.clear();
 }
 
 void Game::deleteEntities() {
@@ -399,9 +419,8 @@ void Game::clearEntities() {
 	sSpawnE.clear();
 }
 
-GLboolean Game::CheckForOutOfBounds(Entity *e)
-{
-	glm::vec2 tEPos = e->Get2DPos();
-	glm::vec2 tLSize = level->size * 0.5f;
-	return tEPos.x > tLSize.x || tEPos.x < -tLSize.x || tEPos.y > tLSize.y || tEPos.y < -tLSize.y;
+// Utility
+DWORD Game::getController(GLint index, XINPUT_STATE* state) {
+	ZeroMemory(state, sizeof(XINPUT_STATE));
+	return XInputGetState(index, state);
 }

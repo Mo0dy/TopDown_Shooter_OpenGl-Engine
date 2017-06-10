@@ -1,5 +1,6 @@
 #include "E_ArtilBot.h"
 #include "Game.h"
+#include "SE_Gun.h"
 
 void E_ArtilBot::Load_E_ArtilBot() {
 	ResourceManager::LoadEtex("Textures", "ArtilBot", ".png", GL_TRUE, "ArtilBot", HBOX_AUTOFIT);
@@ -27,7 +28,10 @@ E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position)
 	tex = ResourceManager::GetEtex("ArtilBot").GetTex();
 	hitComb = ResourceManager::GetEtex("ArtilBot").GetHitComb(this->size);
 
-	subEntities["gun"] = new SE_BodyPart(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
+	Enemy* e = new Enemy(glm::vec2(0));
+	Entity* en = dynamic_cast<Entity*>(e);
+
+	subEntities["gun"] = new SE_Gun(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
 	subEntities["gun"]->SetTurnSpeed(3);
 
 	renderOrder.push_back("gun");
@@ -66,11 +70,11 @@ GLboolean E_ArtilBot::UpdateE(GLfloat dt)
 			state = NO_DYN_FRIC;
 		}
 
-		subEntities["gun"]->LookAt(gunDir, dt);
+		//subEntities["gun"]->LookAt(gunDir, dt);
 		LookAt(vel, dt);
 		UpdatePos(dt);
 		UpdateSubE(dt);
-		Shoot();
+		//Shoot();
 		return glm::length(vel) > 0;
 	}
 	return GL_FALSE;

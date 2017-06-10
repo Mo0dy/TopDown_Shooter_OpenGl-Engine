@@ -48,21 +48,39 @@ E_Jelly::~E_Jelly()
 {
 }
 
+
+
+GLboolean E_Jelly::PreUpdate() {
+
+	if (this->health <= 0) {
+		death = GL_TRUE;
+	}
+	if (this->death) {
+		if (jellySize > 0.7)
+		{
+			Game::sSpawnE.push_back(new E_Jelly(this->Get2DPos() + glm::vec2(1), this->jellySize / glm::sqrt(2)));
+			Game::sSpawnE.push_back(new E_Jelly(this->Get2DPos() + glm::vec2(1.5), this->jellySize / glm::sqrt(2)));
+		}
+
+		erase = GL_TRUE;
+		return GL_TRUE;
+	}
+	return GL_FALSE;
+}
+
 //Update
 GLboolean E_Jelly::UpdateE(GLfloat dt)
 {
 	//Only update if alive
-	if (!death) {
+	if (PreUpdate()) {
+		return GL_FALSE;
+	}
 		//Check if it died
-		if (health <= 0) {
-			death = GL_TRUE;
-			return GL_FALSE;
-		}
 		lastJump += dt;
+		lastAttack += dt;
 		SetColor(glm::vec3(1 - health / maxHealth, color.y * health / maxHealth, color.z * health / maxHealth));
 
 		//Check if attack is possible
-		lastAttack += dt;
 		if (!attacking && lastAttack > attackSpeed) {
 			attacking = GL_TRUE;
 		}
@@ -110,7 +128,4 @@ GLboolean E_Jelly::UpdateE(GLfloat dt)
 		UpdatePos(dt);
 
 		return glm::length(vel) > 0;
-	}
-	erase = GL_TRUE;
-	return GL_FALSE;
 }

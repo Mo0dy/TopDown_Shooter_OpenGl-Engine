@@ -14,6 +14,7 @@ public:
 	E_Jelly(glm::vec2 position, GLfloat size);
 	~E_Jelly();
 
+	GLboolean PreUpdate();
 	GLboolean UpdateE(GLfloat dt);
 	GLfloat jellySize;
 	

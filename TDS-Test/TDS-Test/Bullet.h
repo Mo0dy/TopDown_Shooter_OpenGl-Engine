@@ -6,6 +6,7 @@
 class Bullet : public DynE
 {
 public:
+	Bullet(GLfloat vel, std::vector<Entity*> damageWhitelist);
 	Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const Entity*> damageWhitelist);
 	virtual ~Bullet();
 

@@ -1,5 +1,10 @@
 #include "Bullet.h"
 
+Bullet::Bullet(GLfloat vel, std::vector<Entity*> damageWhitelist) : DynE(glm::vec2(0), 0, vel), damageWhitelist(damageWhitelist)
+{
+	this->state = NO_DYN_FRIC;
+}
+
 Bullet::Bullet(glm::vec2 position, GLfloat angle, GLfloat vel, std::vector<const Entity*> damageWhitelist) : DynE(position, angle, vel), damageWhitelist(damageWhitelist)
 {
 	this->state = NO_DYN_FRIC;

@@ -45,20 +45,6 @@ void LevelTest::UpdateL(GLfloat dt) {
 		}
 	}
 
-	// Multiplying jelly
-	for (int i = 0; i < Game::sEnemies.size(); i++) {
-		E_Jelly* testJelly = dynamic_cast<E_Jelly*>(Game::sEnemies[i]);
-		if (testJelly != NULL) {
-			if (testJelly->GetDeath()) {
-				if (testJelly->jellySize > 0.4)
-				{
-					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1), testJelly->jellySize / glm::sqrt(2)));
-					Game::sEnemies.push_back(new E_Jelly(testJelly->Get2DPos() + glm::vec2(1.5), testJelly->jellySize / glm::sqrt(2)));
-				}
-			}
-		}
-	}
-
 	if (Game::sEnemies.size() == 0) {
 		if (wavecounter < MAX_WAVE) {
 			spawnNextWave();
@@ -104,7 +90,7 @@ void LevelTest::Reset() {
 		Game::sPlayers.back()->SetColor(Util::PLAYER_COLORS[i]);
 	}
 		
-	Game::sEnemies.push_back(new E_ArtilBot(glm::vec2(2)));
+	//Game::sEnemies.push_back(new E_ArtilBot(glm::vec2(2)));
 
 	////glm::vec2 motherDrone_SpawnPos;
 

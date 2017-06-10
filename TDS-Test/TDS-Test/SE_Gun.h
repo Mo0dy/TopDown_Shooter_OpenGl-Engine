@@ -6,7 +6,7 @@
 class SE_Gun : public SubE
 {
 public:
-	SE_Gun(class CompE* masterE, glm::vec2 rPos, Bullet bullet, GLfloat shootDelay, GLfloat recoil);
+	SE_Gun(class CompE* masterE, glm::vec2 rPos, Etex* etex, GLfloat width, GLfloat height, Bullet bullet, GLfloat shootDelay, GLfloat recoil, GLfloat accuracy, const std::vector<Enemy*> &damageWhitelist);
 	~SE_Gun();
 
 	void Shoot();
@@ -17,7 +17,10 @@ protected:
 	GLfloat magSize;
 	GLfloat shootDelay;
 	GLfloat recoil;
+	GLfloat accuracy;
 	Bullet bullet;
+
+	const std::vector<Entity*> &damageWhitelist;
 
 	GLfloat bullets; // the bullets that are currently in the mag
 	GLfloat lastShot;

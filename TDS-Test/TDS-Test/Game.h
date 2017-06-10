@@ -64,6 +64,8 @@ private:
 
 // Utility
 	DWORD getController(GLint index, XINPUT_STATE* state);
+	void SpawnEntities();
+	void DoCCheck();
 	void Reset();
 	void CheckForErase();
 	GLboolean CheckForOutOfBounds(Entity *e);
