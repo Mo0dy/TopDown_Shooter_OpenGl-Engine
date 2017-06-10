@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Util.h"
+#include "Renderer.h"
 
 // Settings
 // Controles
@@ -71,4 +72,20 @@ GLboolean Util::CalcIntersection(glm::vec2 pointA, glm::vec2 vecA, glm::vec2 poi
 
 	result = pointB + f * vecB;
 	return GL_TRUE;
+}
+
+void Util::DrawGrid()
+{
+	GLfloat lineXEnd = 50;
+	GLfloat lineXBegin = -50;
+	GLfloat lineYBegin = -25;
+	GLfloat lineYEnd = 150;
+
+	glm::vec3 color(0.7f, 0.7f, 0.7f);
+
+	while (lineYBegin < lineYEnd) {
+		Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(lineXBegin, lineYBegin), color));
+		Renderer::sDrawLineBuffer.push_back(myVertex(glm::vec2(lineXEnd, lineYBegin) ,color));
+		lineYBegin += 1;
+	}
 }

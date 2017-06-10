@@ -209,7 +209,7 @@ void Game::Update(GLfloat dt) {
 #endif //LOG_FPS
 
 	// for testing
-	Pathfinder::CreatePathMap(sStatEntities, glm::sin(glfwGetTime() * 5 + 5));
+	Pathfinder::CreatePathMap(sStatEntities, glm::sin(glfwGetTime() * 0.5f) * 2 + 2);
 	//sDebugSteps -= 0.2;
 
 	camera->updatePos(Width, Height, sPlayers);
@@ -335,6 +335,7 @@ void Game::Render() {
 			renderer->RenderSprite(*p->subEntities[s], *camera, NORMAL);
 		}
 	}
+	//Util::DrawGrid();
 	renderer->RenderBuffer(*camera);
 	//renderer->RenderHud();
 }

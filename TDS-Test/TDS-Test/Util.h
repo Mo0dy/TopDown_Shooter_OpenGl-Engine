@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-
+//#include "Renderer.h"
 
 // utility funciton
 class Util {
@@ -55,6 +55,8 @@ public:
 	static GLfloat CalcAbsAngle(glm::vec2 v); // Calculates the absolute Angle (0 - 2Pi) of v1 wco coordiates
 
 	static GLboolean CalcIntersection(glm::vec2 pointA, glm::vec2 vecA, glm::vec2 pointB, glm::vec2 vecB, glm::vec2 &result);
+
+	static void DrawGrid();
 };
 
 
@@ -68,6 +70,10 @@ public:
 //#define DEBUG_SIGHT
 #define DEBUG_PATHFINDING
 #define LOG(x) std::cout << x << std::endl
+#define DRAWPOINT(x,y) Renderer::sDrawPointBuffer.push_back(myVertex(x, y))
+#define COLORRED glm::vec3(1.0f, 0.0f, 0.0f)
+#define COLORGREEN glm::vec3(0.0f, 1.0f, 0.0f)
+#define COLORBLUE glm::vec3(0.0f, 0.0f, 1.0f)
 #endif
 
 #ifdef DEBUG_FORCES

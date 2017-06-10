@@ -61,5 +61,6 @@ private:
 	static GLboolean CheckSinglePoints(std::vector<SinglePoint> &singlePoints, const HitPoly &hP);
 	static GLboolean CheckPointList(const std::vector<SinglePoint> &singlePoints, GLuint index);
 	static PathMap* CreateConnections(std::vector<HitPoly> &tHitPolys);
-	static void CombineHitPolys(HitPoly hP1, HitPoly hP2, std::vector<SinglePoint> sP1, std::vector<SinglePoint> sP2, HitPoly &result);
+	static void CombineHitPolys(HitPoly hP1, HitPoly hP2, std::vector<SinglePoint> sP1, std::vector<SinglePoint> sP2, GLboolean col1, GLboolean col2, HitPoly &result);
+	static void MakePolyConvex(HitPoly &poly);
 };

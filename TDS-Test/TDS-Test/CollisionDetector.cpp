@@ -192,7 +192,7 @@ GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector
 			tVerticesSize = tVertices.size();
 			for (GLint i = 1; i < tVerticesSize; i++) {
 				result = DoSingleHitscan(pos, dir, tVertices[i - 1], tVertices[i]);
-				if ((dist > 0 && result < dist && result > 0)  || (dist < 0 && result > 0)) {
+				if ((dist > 0 && result < dist && result > 0) || (dist < 0 && result > 0)) {
 					dist = result;
 				}
 			}
@@ -228,7 +228,7 @@ GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector
 	}
 }
 
-GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector <HitPoly> hitPolys, GLfloat *resDist) 
+GLboolean CollisionDetector::DoHitscan(glm::vec2 pos, glm::vec2 dir, std::vector <HitPoly> hitPolys, GLfloat *resDist)
 {
 	GLfloat dist = -1;
 	GLfloat result;
@@ -273,11 +273,29 @@ GLboolean CollisionDetector::HitscanInBetween(glm::vec2 pos1, glm::vec2 pos2, st
 		tVerticesSize = tVertices.size();
 		for (GLint i = 1; i < tVerticesSize; i++) {
 			tResult = DoSingleHitscan(pos1, pos2 - pos1, tVertices[i - 1], tVertices[i]);
-			if ( tResult > 0 && tResult < 1) { return GL_TRUE; }
+			if (tResult > 0 && tResult < 1) { return GL_TRUE; }
 		}
 		tResult = DoSingleHitscan(pos1, pos2 - pos1, tVertices.back(), tVertices.front());
 		if (tResult > 0 && tResult < 1) { return GL_TRUE; }
 	}
+	return GL_FALSE;
+}
+
+GLboolean CollisionDetector::SingleHitscanInBetween(glm::vec2 pos1, glm::vec2 pos2, HitPoly hitPoly)
+{
+	GLfloat tResult;
+
+	std::vector<glm::vec2> tVertices;
+	GLuint tVerticesSize;
+
+	tVertices = hitPoly.GetVertices();
+	tVerticesSize = tVertices.size();
+	for (GLint i = 1; i < tVerticesSize; i++) {
+		tResult = DoSingleHitscan(pos1, pos2 - pos1, tVertices[i - 1], tVertices[i]);
+		if (tResult > 0 && tResult < 1) { return GL_TRUE; }
+	}
+	tResult = DoSingleHitscan(pos1, pos2 - pos1, tVertices.back(), tVertices.front());
+	if (tResult > 0 && tResult < 1) { return GL_TRUE; }
 	return GL_FALSE;
 }
 
@@ -286,7 +304,7 @@ GLfloat CollisionDetector::DoSingleHitscan(glm::vec2 pos, glm::vec2 dir, glm::ve
 	//GLfloat tAngleV1 = Util::CalcAbsAngle(v1);
 	//GLfloat tAngleV2 = Util::CalcAbsAngle(v2);
 	//GLfloat tAngleDir = Util::CalcAbsAngle(dir);
-	
+
 
 	//if ((tAngleDir > tAngleV1 && tAngleDir < tAngleV2) || (tAngleDir < tAngleV1 && tAngleDir > tAngleV2)) { return GL_TRUE; }
 	glm::vec2 c = v2 - v1;
@@ -304,4 +322,10 @@ GLfloat CollisionDetector::DoSingleHitscan(glm::vec2 pos, glm::vec2 dir, glm::ve
 	else {
 		return -1;
 	}
+}
+
+GLfloat CollisionDetector::DoSingleHitscanInBetween(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2)
+{
+	GLfloat result = DoSingleHitscan(a1, a2 - a1, b1, b2);
+	return result >= 0 && result <= 1;
 }
