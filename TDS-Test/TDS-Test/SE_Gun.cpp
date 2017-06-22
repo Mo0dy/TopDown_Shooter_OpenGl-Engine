@@ -1,5 +1,7 @@
 #include "SE_Gun.h"
 
+#include "Game.h"
+
 SE_Gun::SE_Gun(class CompE* masterE, glm::vec2 rPos, Etex* etex, GLfloat width, GLfloat height, Bullet bullet, GLfloat shootDelay, GLfloat recoil, GLfloat accuracy, const std::vector<Enemy*> &damageWhitelist) : SubE(masterE, rPos, etex, width, height), bullet(bullet), shootDelay(shootDelay), recoil(recoil), lastShot(shootDelay), accuracy(accuracy), damageWhitelist(damageWhitelist) {}
 
 SE_Gun::~SE_Gun() {}
