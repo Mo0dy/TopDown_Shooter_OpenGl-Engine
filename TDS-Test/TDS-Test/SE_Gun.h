@@ -20,7 +20,8 @@ protected:
 	GLfloat accuracy;
 	Bullet bullet;
 
-	const std::vector<Entity*> &damageWhitelist;
+	std::vector<const Entity*> damageWhitelist;
+	std::vector<const Entity*> colWhitelist;
 
 	GLfloat bullets; // the bullets that are currently in the mag
 	GLfloat lastShot;

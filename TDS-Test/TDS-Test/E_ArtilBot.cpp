@@ -31,7 +31,7 @@ E_ArtilBot::E_ArtilBot(glm::vec2 position) : Enemy(position)
 	Enemy* e = new Enemy(glm::vec2(0));
 	Entity* en = dynamic_cast<Entity*>(e);
 
-	subEntities["gun"] = new SE_Gun(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
+	//subEntities["gun"] = new SE_Gun(this, glm::vec2(0), &ResourceManager::GetEtex("ArtilGun"), 0.4f, 0.5f);
 	subEntities["gun"]->SetTurnSpeed(3);
 
 	renderOrder.push_back("gun");

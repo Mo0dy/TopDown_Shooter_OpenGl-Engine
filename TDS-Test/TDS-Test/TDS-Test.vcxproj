@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\MyDocuments\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\MyDocuments\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\jonat_000\Documents\GItRepos\TDS-Test\OpenGlRecources64Bit\include;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\jonat_000\Documents\GItRepos\OpenGlRecources64Bit\lib;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\MyDocuments\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\jonat_000\Documents\GItRepos\TDS-Test\OpenGlRecources64Bit\include;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\MyDocuments\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\jonat_000\Documents\GItRepos\OpenGlRecources64Bit\lib;D:\progs\Git\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\lib;C:\MyDocuments\Code\VisualStudio_C\TDS-Test\OpenGlRecources64Bit\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\felix\Documents\Code\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;C:\MyDocuments\Code\GitHub\TopDown_Shooter_OpenGl-Engine\TDS-Test\OpenGlRecources64Bit\include;$(IncludePath)</IncludePath>
