@@ -133,13 +133,13 @@ void LevelTest::spawnNextWave() {
 	}
 
 	for (int i = 0; i < WAVES[wavecounter][DRONE]; i++) {
-		Game::sEnemies.push_back(new E_Drone(wave_SpawnPos));
+		Game::sSpawnE.push_back(new E_Drone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][MOTHER_DRONE]; i++) {
-		Game::sEnemies.push_back(new E_MotherDrone(wave_SpawnPos));
+		Game::sSpawnE.push_back(new E_MotherDrone(wave_SpawnPos));
 	}
 	for (int i = 0; i < WAVES[wavecounter][SLIME]; i++) {
-		Game::sEnemies.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
+		Game::sSpawnE.push_back(new E_Jelly(wave_SpawnPos, JELLY_START_SIZE));
 	}
 	wavecounter++;
 }

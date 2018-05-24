@@ -1,8 +1,7 @@
 #include "E_MotherDrone.h"
 
 //Constructor
-E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position), lastSpawn(9999), spawning(GL_TRUE), spawnSpeed(3.5)
-{
+E_MotherDrone::E_MotherDrone(glm::vec2 position): E_Drone(position), lastSpawn(9999), spawning(GL_TRUE), spawnSpeed(3.5) {
 	animations[ani].EnforceWidth(5);
 	maxHealth = 2500;
 	health = maxHealth;

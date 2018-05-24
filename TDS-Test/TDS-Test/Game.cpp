@@ -21,6 +21,7 @@ std::vector<Player*> Game::sPlayers;
 std::vector<Bullet*> Game::sBullets;
 std::vector<DynE*> Game::sMovedE;
 
+// a vector that stores all entities that will be spawned during the next update loop
 std::vector<Entity*> Game::sSpawnE;
 
 Game::Game(GLuint width, GLuint height) : State(GAME_ACTIVE), Width(width), Height(height)
@@ -69,11 +70,14 @@ GLboolean Press_O_Flag = GL_FALSE;
 #endif // KEYBOARD_SUPPORT
 
 // UTIL
-GLboolean Press_R_Flag = GL_FALSE;
-GLboolean Press_M_Flag = GL_FALSE;
+#ifdef DEBUG
+	GLboolean Press_R_Flag = GL_FALSE;
+	GLboolean Press_M_Flag = GL_FALSE;
+#endif //DEBUG
 
 void Game::ProcessInput(GLfloat dt) {
 
+	// some debugging controles (zoom / reset etc.)
 #ifdef DEBUG
 	// Util
 	if (Keys[GLFW_KEY_R]) {
@@ -97,7 +101,7 @@ void Game::ProcessInput(GLfloat dt) {
 		camera->minSizeHeight += Util::CAM_ZOOM_SPEED;
 	}
 
-#endif // DEBUG
+#endif //DEBUG
 
 	if (Util::CONTROLLER_SUPPORT) {
 		XINPUT_STATE* cState[4];
@@ -135,6 +139,7 @@ void Game::ProcessInput(GLfloat dt) {
 			}
 		}
 
+		// forwards the control information to the player objects
 		for (GLuint i = 0; i < controlledPlayers; i++) {
 			sPlayers[i]->SetGamepad(cState[i]->Gamepad);
 		}
@@ -209,7 +214,7 @@ void Game::Update(GLfloat dt) {
 #endif //LOG_FPS
 
 	// for testing
-	Pathfinder::CreatePathMap(sStatEntities, glm::sin(glfwGetTime() * 0.5f) * 2 + 2);
+	// Pathfinder::CreatePathMap(sStatEntities, glm::sin(glfwGetTime() * 0.5f) * 2 + 2);
 	//sDebugSteps -= 0.2;
 
 	camera->updatePos(Width, Height, sPlayers);
@@ -346,6 +351,7 @@ DWORD Game::getController(GLint index, XINPUT_STATE* state) {
 	return XInputGetState(index, state);
 }
 
+// restarts the game
 void Game::Reset() {
 	level->Reset();
 }

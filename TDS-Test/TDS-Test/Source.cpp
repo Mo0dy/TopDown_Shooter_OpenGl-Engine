@@ -17,6 +17,7 @@ GLuint screenHeight = Util::SCREEN_HEIGHT;
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+// creates a new game object. this is where everything happens
 Game TDS(screenWidth, screenHeight);
 
 int main(int argc, char *argv[]) {
@@ -50,15 +51,16 @@ int main(int argc, char *argv[]) {
 
 	// OpenGL configuration
 	glViewport(0, 0, screenWidth, screenHeight);
+	// initiates the game --> loads shaders and textures. Creates renderer and other objects
 	TDS.Init();
 
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastFrame = 0.0f;
 
-
+	// the main loop. calculates dt and calles update function
 	while (!glfwWindowShouldClose(window))
 	{
-		// Calculate delta time
+		// Calculate dt
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
